@@ -2,44 +2,57 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>KANBULO BAKERY POS</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
   background:#fff8f5;
   color:#351015;
 }
+
 header{
   background:#700d1d;
   color:white;
-  padding:18px 14px;
+  padding:17px 12px;
   text-align:center;
 }
+
 header h1{margin:0;font-size:24px}
-header p{margin:5px 0 0;font-size:13px;opacity:.9}
+header p{margin:5px 0 0;font-size:13px}
 
 nav{
   display:flex;
   overflow-x:auto;
   background:#4d0713;
 }
+
 nav button{
   flex:1;
-  min-width:90px;
+  min-width:85px;
   padding:13px 8px;
   border:0;
   background:transparent;
   color:white;
   font-weight:bold;
 }
-nav button.active{background:#9b1c31}
 
-.page{display:none;padding:14px}
-.page.active{display:block}
+nav button.active{
+  background:#9b1c31;
+}
+
+.page{
+  display:none;
+  padding:14px;
+}
+
+.page.active{
+  display:block;
+}
 
 .card{
   background:white;
@@ -49,7 +62,10 @@ nav button.active{background:#9b1c31}
   box-shadow:0 3px 12px rgba(80,0,0,.08);
 }
 
-h2,h3{margin-top:0;color:#700d1d}
+h2,h3{
+  margin-top:0;
+  color:#700d1d;
+}
 
 button{
   border:0;
@@ -59,10 +75,25 @@ button{
   cursor:pointer;
 }
 
-.primary{background:#700d1d;color:white}
-.secondary{background:#f1d8dc;color:#700d1d}
-.danger{background:#b51d35;color:white}
-.success{background:#19734a;color:white}
+.primary{
+  background:#700d1d;
+  color:white;
+}
+
+.secondary{
+  background:#f1d8dc;
+  color:#700d1d;
+}
+
+.danger{
+  background:#b51d35;
+  color:white;
+}
+
+.success{
+  background:#19734a;
+  color:white;
+}
 
 input,select{
   width:100%;
@@ -80,8 +111,28 @@ label{
   margin-bottom:10px;
 }
 
-.search{
-  margin-bottom:10px;
+.sales-tabs{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:9px;
+}
+
+.sale-tab{
+  white-space:nowrap;
+  background:#f1d8dc;
+  color:#700d1d;
+}
+
+.sale-tab.active{
+  background:#700d1d;
+  color:white;
+}
+
+.new-sale{
+  background:#19734a;
+  color:white;
+  white-space:nowrap;
 }
 
 .categories{
@@ -90,11 +141,13 @@ label{
   overflow-x:auto;
   padding-bottom:8px;
 }
+
 .categories button{
   white-space:nowrap;
   background:#f1d8dc;
   color:#700d1d;
 }
+
 .categories button.active{
   background:#700d1d;
   color:white;
@@ -112,10 +165,24 @@ label{
   border-radius:13px;
   padding:12px;
 }
-.product .emoji{font-size:30px}
-.product h3{font-size:16px;margin:7px 0 4px}
-.product .price{font-weight:bold;color:#700d1d}
-.product small{color:#777}
+
+.product .emoji{
+  font-size:30px;
+}
+
+.product h3{
+  font-size:16px;
+  margin:7px 0 4px;
+}
+
+.product .price{
+  font-weight:bold;
+  color:#700d1d;
+}
+
+.product small{
+  color:#777;
+}
 
 .cart-item{
   display:flex;
@@ -125,11 +192,13 @@ label{
   border-bottom:1px solid #eee;
   padding:10px 0;
 }
+
 .qty{
   display:flex;
   align-items:center;
   gap:5px;
 }
+
 .qty button{
   padding:5px 9px;
   background:#f1d8dc;
@@ -144,15 +213,37 @@ label{
   margin:15px 0;
 }
 
+.cash-box{
+  background:#fff4ef;
+  border:1px solid #e7c7cd;
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+
+.change-display{
+  font-size:22px;
+  font-weight:bold;
+  color:#19734a;
+  text-align:right;
+  margin-top:8px;
+}
+
+.insufficient{
+  color:#b51d35;
+}
+
 .payments{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
 }
+
 .payments button{
   background:#f1d8dc;
   color:#700d1d;
 }
+
 .payments button.active{
   background:#700d1d;
   color:white;
@@ -190,12 +281,14 @@ label{
   grid-template-columns:repeat(2,1fr);
   gap:10px;
 }
+
 .stat{
   background:#fff;
   padding:14px;
   border-radius:12px;
   box-shadow:0 2px 8px rgba(80,0,0,.07);
 }
+
 .stat strong{
   display:block;
   font-size:21px;
@@ -208,6 +301,7 @@ table{
   border-collapse:collapse;
   font-size:13px;
 }
+
 td,th{
   padding:8px 5px;
   border-bottom:1px solid #eee;
@@ -224,7 +318,11 @@ td,th{
   padding:15px;
   z-index:100;
 }
-.modal.show{display:flex}
+
+.modal.show{
+  display:flex;
+}
+
 .modal-box{
   background:white;
   width:100%;
@@ -241,9 +339,21 @@ td,th{
   color:#777;
 }
 
+.history-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
 @media(min-width:700px){
-  .products{grid-template-columns:repeat(4,1fr)}
-  .page{max-width:1000px;margin:auto}
+  .products{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .page{
+    max-width:1000px;
+    margin:auto;
+  }
 }
 </style>
 </head>
@@ -263,19 +373,35 @@ td,th{
   <button onclick="showPage('history',this)">History</button>
 </nav>
 
-<!-- POS -->
+
+<!-- ================= POS ================= -->
+
 <section id="pos" class="page active">
 
   <div class="card">
-    <input id="search" class="search" placeholder="🔎 Search products..." oninput="renderProducts()">
+
+    <div class="sales-tabs" id="salesTabs"></div>
+
+  </div>
+
+  <div class="card">
+
+    <input
+      id="search"
+      placeholder="🔎 Search products..."
+      oninput="renderProducts()"
+    >
 
     <div id="categoryButtons" class="categories"></div>
 
     <div id="products" class="products"></div>
+
   </div>
 
   <div class="card">
-    <h2>🛒 Cart</h2>
+
+    <h2 id="currentSaleTitle">🛒 Sale 1</h2>
+
     <div id="cart"></div>
 
     <div class="total">
@@ -283,30 +409,73 @@ td,th{
     </div>
 
     <div class="payments">
-      <button onclick="selectPayment('Cash')" id="payCash">💵 Cash</button>
-      <button onclick="selectPayment('Card')" id="payCard">💳 Card</button>
-      <button onclick="selectPayment('Transfer')" id="payTransfer">🏦 Transfer</button>
+
+      <button id="payCash" onclick="selectPayment('Cash')">
+        💵 Cash
+      </button>
+
+      <button id="payCard" onclick="selectPayment('Card')">
+        💳 Card
+      </button>
+
+      <button id="payTransfer" onclick="selectPayment('Transfer')">
+        🏦 Transfer
+      </button>
+
+    </div>
+
+    <div id="cashBox" class="cash-box">
+
+      <label>
+        Customer Gives (MVR)
+
+        <input
+          id="cashReceived"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="Example: 500"
+          oninput="calculateChange()"
+        >
+      </label>
+
+      <div class="change-display">
+        Change:
+        MVR <span id="changeAmount">0.00</span>
+      </div>
+
     </div>
 
     <br>
 
-    <button class="primary" style="width:100%" onclick="completeOrder()">
-      ✅ Complete Order
+    <button
+      class="primary"
+      style="width:100%"
+      onclick="completeOrder()"
+    >
+      ✅ Complete Sale
     </button>
+
   </div>
 
 </section>
 
-<!-- ADMIN -->
+
+<!-- ================= ADMIN ================= -->
+
 <section id="admin" class="page">
 
-  <!-- CATEGORY MANAGEMENT -->
   <div class="card">
+
     <h2>🏷️ Category Management</h2>
 
     <label>
       New Category
-      <input id="newCategory" placeholder="Example: Pizza">
+
+      <input
+        id="newCategory"
+        placeholder="Example: Pizza"
+      >
     </label>
 
     <button class="primary" onclick="addCategory()">
@@ -318,59 +487,94 @@ td,th{
     <h3>Existing Categories</h3>
 
     <div id="categoryManager"></div>
+
   </div>
 
-  <!-- PRODUCT MANAGEMENT -->
+
   <div class="card">
+
     <h2>📦 Product Management</h2>
 
     <label>
       Product Name
-      <input id="newProductName" placeholder="Example: Chicken Pizza">
+
+      <input
+        id="newProductName"
+        placeholder="Example: Chicken Pizza"
+      >
     </label>
 
     <label>
       Price (MVR)
-      <input id="newProductPrice" type="number" placeholder="150">
+
+      <input
+        id="newProductPrice"
+        type="number"
+        placeholder="150"
+      >
     </label>
 
     <label>
       Category
+
       <select id="newProductCategory"></select>
     </label>
 
     <label>
       Emoji
-      <input id="newProductEmoji" placeholder="🍕">
+
+      <input
+        id="newProductEmoji"
+        placeholder="🍕"
+      >
     </label>
 
     <button class="primary" onclick="addProduct()">
       ＋ Add Product
     </button>
+
   </div>
 
+
   <div class="card">
+
     <h2>✏️ Edit Products</h2>
+
     <div id="adminProducts"></div>
+
   </div>
 
-  <!-- EXPENSES -->
+
   <div class="card">
+
     <h2>💸 Expenses</h2>
 
     <label>
       Expense Name
-      <input id="expenseName" placeholder="Example: Ingredients">
+
+      <input
+        id="expenseName"
+        placeholder="Example: Ingredients"
+      >
     </label>
 
     <label>
       Amount (MVR)
-      <input id="expenseAmount" type="number" placeholder="500">
+
+      <input
+        id="expenseAmount"
+        type="number"
+        placeholder="500"
+      >
     </label>
 
     <label>
       Date
-      <input id="expenseDate" type="date">
+
+      <input
+        id="expenseDate"
+        type="date"
+      >
     </label>
 
     <button class="primary" onclick="addExpense()">
@@ -380,20 +584,27 @@ td,th{
     <hr style="border:0;border-top:1px solid #eee;margin:18px 0">
 
     <div id="expenseList"></div>
+
   </div>
 
 </section>
 
-<!-- DASHBOARD -->
+
+<!-- ================= DASHBOARD ================= -->
+
 <section id="dashboard" class="page">
 
   <div class="card">
+
     <h2>📊 Today's Dashboard</h2>
 
     <div class="stat-grid">
+
       <div class="stat">
         Sales
-        <strong>MVR <span id="dashSales">0.00</span></strong>
+        <strong>
+          MVR <span id="dashSales">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
@@ -403,44 +614,60 @@ td,th{
 
       <div class="stat">
         Cash
-        <strong>MVR <span id="dashCash">0.00</span></strong>
+        <strong>
+          MVR <span id="dashCash">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
         Card
-        <strong>MVR <span id="dashCard">0.00</span></strong>
+        <strong>
+          MVR <span id="dashCard">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
         Transfer
-        <strong>MVR <span id="dashTransfer">0.00</span></strong>
+        <strong>
+          MVR <span id="dashTransfer">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
         Products
         <strong id="dashProducts">0</strong>
       </div>
+
     </div>
+
   </div>
 
 </section>
 
-<!-- REPORTS -->
+
+<!-- ================= REPORTS ================= -->
+
 <section id="reports" class="page">
 
   <div class="card">
+
     <h2>📈 Reports</h2>
 
     <select id="reportPeriod" onchange="renderReports()">
+
       <option value="day">Today</option>
       <option value="week">This Week</option>
       <option value="month">This Month</option>
+
     </select>
 
     <div class="stat-grid" style="margin-top:12px">
+
       <div class="stat">
         Gross Sales
-        <strong>MVR <span id="reportSales">0.00</span></strong>
+        <strong>
+          MVR <span id="reportSales">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
@@ -450,31 +677,46 @@ td,th{
 
       <div class="stat">
         Expenses
-        <strong>MVR <span id="reportExpenses">0.00</span></strong>
+        <strong>
+          MVR <span id="reportExpenses">0.00</span>
+        </strong>
       </div>
 
       <div class="stat">
         Net Profit
-        <strong>MVR <span id="reportProfit">0.00</span></strong>
+        <strong>
+          MVR <span id="reportProfit">0.00</span>
+        </strong>
       </div>
+
     </div>
+
   </div>
 
 </section>
 
-<!-- HISTORY -->
+
+<!-- ================= HISTORY ================= -->
+
 <section id="history" class="page">
 
   <div class="card">
+
     <h2>🧾 Order History</h2>
+
     <div id="orderHistory"></div>
+
   </div>
 
 </section>
 
-<!-- RECEIPT MODAL -->
+
+<!-- ================= RECEIPT ================= -->
+
 <div class="modal" id="receiptModal">
+
   <div class="modal-box">
+
     <div id="receiptContent"></div>
 
     <br>
@@ -486,17 +728,23 @@ td,th{
     <button class="secondary" onclick="closeReceipt()">
       Close
     </button>
+
   </div>
+
 </div>
+
 
 <script>
 
-const categoryKey = "kanbuloCategories";
-const productKey = "bakeryProducts";
-const orderKey = "bakeryOrders";
-const expenseKey = "bakeryExpenses";
+const categoryKey="kanbuloCategories";
+const productKey="bakeryProducts";
+const orderKey="bakeryOrders";
+const expenseKey="bakeryExpenses";
+const tabsKey="kanbuloSaleTabs";
 
-let categories = JSON.parse(localStorage.getItem(categoryKey)) || [
+let categories=
+JSON.parse(localStorage.getItem(categoryKey))||
+[
   "Pizza",
   "Cakes",
   "Bakery",
@@ -505,7 +753,9 @@ let categories = JSON.parse(localStorage.getItem(categoryKey)) || [
   "Drinks"
 ];
 
-let products = JSON.parse(localStorage.getItem(productKey)) || [
+let products=
+JSON.parse(localStorage.getItem(productKey))||
+[
   {id:1,name:"Chicken Pizza",price:150,category:"Pizza",emoji:"🍕",available:true},
   {id:2,name:"Beef Pizza",price:160,category:"Pizza",emoji:"🍕",available:true},
   {id:3,name:"Tuna Pizza",price:150,category:"Pizza",emoji:"🍕",available:true},
@@ -517,270 +767,1061 @@ let products = JSON.parse(localStorage.getItem(productKey)) || [
   {id:9,name:"Fresh Juice",price:50,category:"Drinks",emoji:"🥤",available:true}
 ];
 
-let orders = JSON.parse(localStorage.getItem(orderKey)) || [];
-let expenses = JSON.parse(localStorage.getItem(expenseKey)) || [];
+let orders=
+JSON.parse(localStorage.getItem(orderKey))||[];
 
-let cart = [];
-let selectedCategory = "All";
-let payment = "Cash";
+let expenses=
+JSON.parse(localStorage.getItem(expenseKey))||[];
+
+
+/* =========================
+   MULTIPLE SALES
+========================= */
+
+let saleTabs=
+JSON.parse(localStorage.getItem(tabsKey))||[];
+
+let activeSaleId=null;
+
+let selectedCategory="All";
+
+let editingOrderId=null;
+
+
+/*
+  Convert old cart/payment variables
+  into the new multi-sale system.
+*/
+
+function createSale(){
+
+  return {
+    id:Date.now()+Math.floor(Math.random()*1000),
+    name:"Sale "+(saleTabs.length+1),
+    cart:[],
+    payment:"Cash",
+    cashReceived:0
+  };
+}
+
+function ensureSale(){
+
+  if(!saleTabs.length){
+
+    const sale=createSale();
+
+    saleTabs.push(sale);
+
+    activeSaleId=sale.id;
+
+    saveAll();
+
+  }else if(!activeSaleId){
+
+    activeSaleId=saleTabs[0].id;
+
+  }
+
+}
+
+function activeSale(){
+
+  ensureSale();
+
+  return saleTabs.find(
+    s=>s.id===activeSaleId
+  );
+}
 
 function saveAll(){
-  localStorage.setItem(categoryKey,JSON.stringify(categories));
-  localStorage.setItem(productKey,JSON.stringify(products));
-  localStorage.setItem(orderKey,JSON.stringify(orders));
-  localStorage.setItem(expenseKey,JSON.stringify(expenses));
+
+  localStorage.setItem(
+    categoryKey,
+    JSON.stringify(categories)
+  );
+
+  localStorage.setItem(
+    productKey,
+    JSON.stringify(products)
+  );
+
+  localStorage.setItem(
+    orderKey,
+    JSON.stringify(orders)
+  );
+
+  localStorage.setItem(
+    expenseKey,
+    JSON.stringify(expenses)
+  );
+
+  localStorage.setItem(
+    tabsKey,
+    JSON.stringify(saleTabs)
+  );
 }
+
+
+/* =========================
+   NAVIGATION
+========================= */
 
 function showPage(page,button){
 
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("active");
-  });
+  document.querySelectorAll(".page")
+  .forEach(p=>p.classList.remove("active"));
 
-  document.getElementById(page).classList.add("active");
+  document.getElementById(page)
+  .classList.add("active");
 
-  document.querySelectorAll("nav button").forEach(b=>{
-    b.classList.remove("active");
-  });
+  document.querySelectorAll("nav button")
+  .forEach(b=>b.classList.remove("active"));
 
-  if(button) button.classList.add("active");
+  if(button){
+    button.classList.add("active");
+  }
 
   refresh();
 }
 
+
+/* =========================
+   REFRESH
+========================= */
+
 function refresh(){
+
+  ensureSale();
+
+  renderSalesTabs();
+
   renderCategoryButtons();
+
   renderProducts();
+
   renderCart();
+
   renderAdminCategories();
+
   renderAdminProducts();
+
   renderCategorySelect();
+
   renderExpenses();
+
   renderDashboard();
+
   renderReports();
+
   renderHistory();
+
+  calculateChange();
+
 }
 
-function renderCategoryButtons(){
 
-  const box=document.getElementById("categoryButtons");
+/* =========================
+   SALE TABS
+========================= */
+
+function renderSalesTabs(){
+
+  const box=
+    document.getElementById("salesTabs");
 
   box.innerHTML="";
 
-  const all=document.createElement("button");
+  saleTabs.forEach((sale,index)=>{
+
+    const button=
+      document.createElement("button");
+
+    button.className=
+      "sale-tab"+
+      (sale.id===activeSaleId ? " active":"");
+
+    button.textContent=
+      sale.name+
+      (sale.cart.length ? " • "+sale.cart.length : "");
+
+    button.onclick=()=>{
+      switchSale(sale.id);
+    };
+
+    box.appendChild(button);
+
+  });
+
+  const newButton=
+    document.createElement("button");
+
+  newButton.className="new-sale";
+
+  newButton.textContent="＋ New Sale";
+
+  newButton.onclick=()=>{
+    newSale();
+  };
+
+  box.appendChild(newButton);
+}
+
+function newSale(){
+
+  const sale=createSale();
+
+  saleTabs.push(sale);
+
+  activeSaleId=sale.id;
+
+  editingOrderId=null;
+
+  saveAll();
+
+  refresh();
+}
+
+function switchSale(id){
+
+  activeSaleId=id;
+
+  editingOrderId=null;
+
+  saveAll();
+
+  refresh();
+}
+
+function deleteSale(id){
+
+  if(saleTabs.length<=1){
+
+    alert("You must keep at least one sale open.");
+
+    return;
+  }
+
+  const sale=saleTabs.find(s=>s.id===id);
+
+  if(
+    sale &&
+    sale.cart.length &&
+    !confirm("This sale has items. Close it?")
+  ){
+    return;
+  }
+
+  saleTabs=
+    saleTabs.filter(s=>s.id!==id);
+
+  if(activeSaleId===id){
+
+    activeSaleId=
+      saleTabs[0].id;
+  }
+
+  saveAll();
+
+  refresh();
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+function renderCategoryButtons(){
+
+  const box=
+    document.getElementById("categoryButtons");
+
+  box.innerHTML="";
+
+  const all=
+    document.createElement("button");
+
   all.textContent="All";
-  all.className=selectedCategory==="All" ? "active" : "";
+
+  all.className=
+    selectedCategory==="All" ? "active":"";
+
   all.onclick=()=>{
+
     selectedCategory="All";
+
     renderCategoryButtons();
     renderProducts();
+
   };
+
   box.appendChild(all);
 
   categories.forEach(cat=>{
 
-    const b=document.createElement("button");
+    const b=
+      document.createElement("button");
 
     b.textContent=cat;
-    b.className=selectedCategory===cat ? "active" : "";
+
+    b.className=
+      selectedCategory===cat ? "active":"";
 
     b.onclick=()=>{
+
       selectedCategory=cat;
+
       renderCategoryButtons();
       renderProducts();
+
     };
 
     box.appendChild(b);
+
   });
 }
 
+function renderAdminCategories(){
+
+  const box=
+    document.getElementById("categoryManager");
+
+  box.innerHTML="";
+
+  if(!categories.length){
+
+    box.innerHTML=
+      '<div class="empty">No categories yet.</div>';
+
+    return;
+  }
+
+  categories.forEach((cat,index)=>{
+
+    const row=
+      document.createElement("div");
+
+    row.className="category-row";
+
+    const input=
+      document.createElement("input");
+
+    input.value=cat;
+
+    const save=
+      document.createElement("button");
+
+    save.className="secondary";
+    save.textContent="💾";
+
+    save.onclick=()=>{
+      renameCategory(index,input.value);
+    };
+
+    const del=
+      document.createElement("button");
+
+    del.className="danger";
+    del.textContent="🗑";
+
+    del.onclick=()=>{
+      deleteCategory(index);
+    };
+
+    row.appendChild(input);
+    row.appendChild(save);
+    row.appendChild(del);
+
+    box.appendChild(row);
+
+  });
+}
+
+function addCategory(){
+
+  const input=
+    document.getElementById("newCategory");
+
+  const name=
+    input.value.trim();
+
+  if(!name){
+
+    alert("Please enter a category name.");
+
+    return;
+  }
+
+  if(
+    categories.some(
+      c=>c.toLowerCase()===name.toLowerCase()
+    )
+  ){
+
+    alert("This category already exists.");
+
+    return;
+  }
+
+  categories.push(name);
+
+  input.value="";
+
+  saveAll();
+
+  refresh();
+}
+
+function renameCategory(index,newName){
+
+  newName=newName.trim();
+
+  if(!newName){
+
+    alert("Category name cannot be empty.");
+
+    renderAdminCategories();
+
+    return;
+  }
+
+  const oldName=
+    categories[index];
+
+  const duplicate=
+    categories.some(
+      (c,i)=>
+        i!==index &&
+        c.toLowerCase()===newName.toLowerCase()
+    );
+
+  if(duplicate){
+
+    alert("Another category already has this name.");
+
+    renderAdminCategories();
+
+    return;
+  }
+
+  categories[index]=newName;
+
+  products.forEach(p=>{
+
+    if(p.category===oldName){
+      p.category=newName;
+    }
+
+  });
+
+  if(selectedCategory===oldName){
+    selectedCategory=newName;
+  }
+
+  saveAll();
+
+  refresh();
+}
+
+function deleteCategory(index){
+
+  const category=
+    categories[index];
+
+  const used=
+    products.filter(
+      p=>p.category===category
+    );
+
+  if(used.length){
+
+    alert(
+      `Cannot delete "${category}".\n\n`+
+      `${used.length} product(s) are using it.\n\n`+
+      `Change those products to another category first.`
+    );
+
+    return;
+  }
+
+  if(!confirm(
+    `Delete category "${category}"?`
+  )){
+    return;
+  }
+
+  categories.splice(index,1);
+
+  if(selectedCategory===category){
+    selectedCategory="All";
+  }
+
+  saveAll();
+
+  refresh();
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
 function renderProducts(){
 
-  const box=document.getElementById("products");
-  const search=(document.getElementById("search").value || "").toLowerCase();
+  const box=
+    document.getElementById("products");
 
-  let list=products.filter(p=>{
+  const search=
+    (
+      document.getElementById("search").value||
+      ""
+    ).toLowerCase();
 
-    const matchesCategory =
-      selectedCategory==="All" ||
-      p.category===selectedCategory;
+  const list=
+    products.filter(p=>{
 
-    const matchesSearch =
-      p.name.toLowerCase().includes(search);
+      const cat=
+        selectedCategory==="All"||
+        p.category===selectedCategory;
 
-    return matchesCategory && matchesSearch;
-  });
+      const text=
+        p.name.toLowerCase()
+        .includes(search);
+
+      return cat&&text;
+
+    });
 
   box.innerHTML="";
 
   if(!list.length){
-    box.innerHTML='<div class="empty">No products found.</div>';
+
+    box.innerHTML=
+      '<div class="empty">No products found.</div>';
+
     return;
   }
 
   list.forEach(p=>{
 
-    const div=document.createElement("div");
+    const div=
+      document.createElement("div");
+
     div.className="product";
 
     div.innerHTML=`
+
       <div class="emoji">${p.emoji}</div>
+
       <h3>${escapeHtml(p.name)}</h3>
+
       <small>${escapeHtml(p.category)}</small>
-      <div class="price">MVR ${Number(p.price).toFixed(2)}</div>
+
+      <div class="price">
+        MVR ${Number(p.price).toFixed(2)}
+      </div>
+
       <br>
+
       ${
         p.available
-        ? `<button class="primary" style="width:100%" onclick="addToCart(${p.id})">Add</button>`
-        : `<button disabled style="width:100%">Sold Out</button>`
+
+        ?
+
+        `<button
+          class="primary"
+          style="width:100%"
+          onclick="addToCart(${p.id})">
+          Add
+        </button>`
+
+        :
+
+        `<button
+          disabled
+          style="width:100%">
+          Sold Out
+        </button>`
       }
+
     `;
 
     box.appendChild(div);
+
   });
 }
 
 function addToCart(id){
 
-  const p=products.find(x=>x.id===id);
+  const p=
+    products.find(x=>x.id===id);
 
-  if(!p || !p.available) return;
+  if(!p||!p.available)return;
 
-  const existing=cart.find(x=>x.id===id);
+  const sale=activeSale();
+
+  const existing=
+    sale.cart.find(x=>x.id===id);
 
   if(existing){
+
     existing.qty++;
+
   }else{
-    cart.push({
+
+    sale.cart.push({
+
       id:p.id,
       name:p.name,
       price:Number(p.price),
       qty:1
+
     });
+
   }
 
+  saveAll();
+
+  renderSalesTabs();
   renderCart();
+  calculateChange();
 }
 
 function changeQty(id,amount){
 
-  const item=cart.find(x=>x.id===id);
+  const sale=activeSale();
 
-  if(!item) return;
+  const item=
+    sale.cart.find(x=>x.id===id);
+
+  if(!item)return;
 
   item.qty+=amount;
 
   if(item.qty<=0){
-    cart=cart.filter(x=>x.id!==id);
+
+    sale.cart=
+      sale.cart.filter(x=>x.id!==id);
+
   }
 
+  saveAll();
+
+  renderSalesTabs();
   renderCart();
+  calculateChange();
 }
+
+
+/* =========================
+   CART
+========================= */
 
 function renderCart(){
 
-  const box=document.getElementById("cart");
+  const sale=activeSale();
+
+  const box=
+    document.getElementById("cart");
+
   box.innerHTML="";
 
-  let total=0;
+  document.getElementById(
+    "currentSaleTitle"
+  ).textContent=
+    "🛒 "+sale.name+
+    (editingOrderId ? " ✏️ EDITING":"");
 
-  if(!cart.length){
-    box.innerHTML='<div class="empty">Cart is empty.</div>';
+  if(!sale.cart.length){
+
+    box.innerHTML=
+      '<div class="empty">Cart is empty.</div>';
+
   }
 
-  cart.forEach(item=>{
+  sale.cart.forEach(item=>{
 
-    const line=item.price*item.qty;
-    total+=line;
+    const div=
+      document.createElement("div");
 
-    const div=document.createElement("div");
     div.className="cart-item";
 
     div.innerHTML=`
+
       <div>
         <strong>${escapeHtml(item.name)}</strong><br>
         MVR ${item.price.toFixed(2)}
       </div>
 
       <div class="qty">
-        <button onclick="changeQty(${item.id},-1)">−</button>
+
+        <button
+          onclick="changeQty(${item.id},-1)">
+          −
+        </button>
+
         <strong>${item.qty}</strong>
-        <button onclick="changeQty(${item.id},1)">+</button>
+
+        <button
+          onclick="changeQty(${item.id},1)">
+          +
+        </button>
+
       </div>
+
     `;
 
     box.appendChild(div);
+
   });
 
-  document.getElementById("cartTotal").textContent=total.toFixed(2);
+  const total=
+    sale.cart.reduce(
+      (sum,item)=>
+        sum+(item.price*item.qty),
+      0
+    );
+
+  document.getElementById(
+    "cartTotal"
+  ).textContent=
+    total.toFixed(2);
+
+  document.getElementById(
+    "cashReceived"
+  ).value=
+    sale.cashReceived||"";
+
+  document.querySelectorAll(
+    ".payments button"
+  ).forEach(b=>
+    b.classList.remove("active")
+  );
+
+  if(sale.payment==="Cash"){
+    document.getElementById(
+      "payCash"
+    ).classList.add("active");
+  }
+
+  if(sale.payment==="Card"){
+    document.getElementById(
+      "payCard"
+    ).classList.add("active");
+  }
+
+  if(sale.payment==="Transfer"){
+    document.getElementById(
+      "payTransfer"
+    ).classList.add("active");
+  }
+
+  document.getElementById(
+    "cashBox"
+  ).style.display=
+    sale.payment==="Cash"
+      ? "block"
+      : "none";
+}
+
+
+/* =========================
+   CASH / CHANGE
+========================= */
+
+function calculateChange(){
+
+  const sale=activeSale();
+
+  const total=
+    sale.cart.reduce(
+      (sum,item)=>
+        sum+(item.price*item.qty),
+      0
+    );
+
+  const input=
+    document.getElementById("cashReceived");
+
+  let received=
+    Number(input.value)||0;
+
+  sale.cashReceived=received;
+
+  const change=
+    received-total;
+
+  const display=
+    document.getElementById(
+      "changeAmount"
+    );
+
+  display.textContent=
+    Math.max(change,0).toFixed(2);
+
+  display.classList.remove(
+    "insufficient"
+  );
+
+  if(received>0 && received<total){
+
+    display.classList.add(
+      "insufficient"
+    );
+
+    display.textContent=
+      "Need "+(total-received).toFixed(2)+" more";
+  }
+
+  saveAll();
 }
 
 function selectPayment(type){
 
-  payment=type;
+  const sale=activeSale();
 
-  document.querySelectorAll(".payments button").forEach(b=>{
-    b.classList.remove("active");
-  });
+  sale.payment=type;
 
-  if(type==="Cash") document.getElementById("payCash").classList.add("active");
-  if(type==="Card") document.getElementById("payCard").classList.add("active");
-  if(type==="Transfer") document.getElementById("payTransfer").classList.add("active");
+  saveAll();
+
+  renderCart();
+
+  calculateChange();
 }
+
+
+/* =========================
+   COMPLETE SALE
+========================= */
 
 function completeOrder(){
 
-  if(!cart.length){
+  const sale=activeSale();
+
+  if(!sale.cart.length){
+
     alert("Cart is empty.");
+
     return;
   }
 
-  let total=cart.reduce((sum,item)=>{
-    return sum+(item.price*item.qty);
-  },0);
+  const total=
+    sale.cart.reduce(
+      (sum,item)=>
+        sum+(item.price*item.qty),
+      0
+    );
+
+  if(sale.payment==="Cash"){
+
+    const received=
+      Number(sale.cashReceived)||0;
+
+    if(received<total){
+
+      alert(
+        "Customer has not given enough cash.\n\n"+
+        "Total: MVR "+total.toFixed(2)+"\n"+
+        "Received: MVR "+received.toFixed(2)+"\n"+
+        "Still needed: MVR "+
+        (total-received).toFixed(2)
+      );
+
+      return;
+    }
+  }
+
+
+  /* EDIT EXISTING ORDER */
+
+  if(editingOrderId){
+
+    const order=
+      orders.find(
+        o=>o.id===editingOrderId
+      );
+
+    if(order){
+
+      order.items=
+        JSON.parse(
+          JSON.stringify(sale.cart)
+        );
+
+      order.total=total;
+
+      order.payment=
+        sale.payment;
+
+      order.cashReceived=
+        Number(sale.cashReceived)||0;
+
+      order.change=
+        sale.payment==="Cash"
+          ? Math.max(
+              0,
+              sale.cashReceived-total
+            )
+          : 0;
+
+      order.editedAt=
+        new Date().toISOString();
+
+      showReceipt(order);
+
+      editingOrderId=null;
+
+      sale.cart=[];
+      sale.payment="Cash";
+      sale.cashReceived=0;
+
+      saveAll();
+
+      renderHistory();
+      renderDashboard();
+      renderReports();
+      renderCart();
+      renderSalesTabs();
+
+      return;
+    }
+  }
+
+
+  /* NEW ORDER */
 
   const order={
+
     id:Date.now(),
-    number:"KB-"+String(orders.length+1).padStart(4,"0"),
-    date:new Date().toISOString(),
-    items:JSON.parse(JSON.stringify(cart)),
+
+    number:
+      "KB-"+String(
+        orders.length+1
+      ).padStart(4,"0"),
+
+    date:
+      new Date().toISOString(),
+
+    items:
+      JSON.parse(
+        JSON.stringify(sale.cart)
+      ),
+
     total:total,
-    payment:payment
+
+    payment:
+      sale.payment,
+
+    cashReceived:
+      Number(sale.cashReceived)||0,
+
+    change:
+      sale.payment==="Cash"
+        ? Math.max(
+            0,
+            sale.cashReceived-total
+          )
+        : 0
+
   };
 
   orders.unshift(order);
 
+  showReceipt(order);
+
+  sale.cart=[];
+  sale.payment="Cash";
+  sale.cashReceived=0;
+
   saveAll();
 
-  cart=[];
+  renderSalesTabs();
   renderCart();
   renderDashboard();
+  renderReports();
   renderHistory();
-
-  showReceipt(order);
 }
+
+
+/* =========================
+   RECEIPT
+========================= */
 
 function showReceipt(order){
 
-  const box=document.getElementById("receiptContent");
+  const box=
+    document.getElementById(
+      "receiptContent"
+    );
 
   let rows="";
 
   order.items.forEach(item=>{
+
     rows+=`
+
       <tr>
-        <td>${escapeHtml(item.name)} x${item.qty}</td>
-        <td>MVR ${(item.price*item.qty).toFixed(2)}</td>
+
+        <td>
+          ${escapeHtml(item.name)}
+          x${item.qty}
+        </td>
+
+        <td>
+          MVR
+          ${(item.price*item.qty).toFixed(2)}
+        </td>
+
       </tr>
+
     `;
+
   });
 
+  let cashInfo="";
+
+  if(order.payment==="Cash"){
+
+    cashInfo=`
+
+      <p>
+        Cash Received:
+        <strong>
+          MVR ${Number(
+            order.cashReceived||0
+          ).toFixed(2)}
+        </strong>
+      </p>
+
+      <p>
+        Change:
+        <strong>
+          MVR ${Number(
+            order.change||0
+          ).toFixed(2)}
+        </strong>
+      </p>
+
+    `;
+  }
+
   box.innerHTML=`
+
     <div style="text-align:center">
+
       <h2>KANBULO BAKERY</h2>
-      <small>${new Date(order.date).toLocaleString()}</small>
+
+      <small>
+        ${new Date(
+          order.date
+        ).toLocaleString()}
+      </small>
+
       <br>
-      <strong>${order.number}</strong>
+
+      <strong>
+        ${order.number}
+      </strong>
+
     </div>
 
     <hr>
@@ -792,311 +1833,296 @@ function showReceipt(order){
     <hr>
 
     <h3 style="text-align:right">
-      Total: MVR ${order.total.toFixed(2)}
+      Total:
+      MVR ${order.total.toFixed(2)}
     </h3>
 
     <p>
-      Payment: <strong>${order.payment}</strong>
+      Payment:
+      <strong>${order.payment}</strong>
     </p>
+
+    ${cashInfo}
 
     <p style="text-align:center">
       Thank you!
     </p>
+
   `;
 
-  document.getElementById("receiptModal").classList.add("show");
+  document
+    .getElementById("receiptModal")
+    .classList.add("show");
 }
 
 function closeReceipt(){
-  document.getElementById("receiptModal").classList.remove("show");
+
+  document
+    .getElementById("receiptModal")
+    .classList.remove("show");
 }
 
 
 /* =========================
-   CATEGORY MANAGEMENT
-========================= */
-
-function renderAdminCategories(){
-
-  const box=document.getElementById("categoryManager");
-
-  box.innerHTML="";
-
-  if(!categories.length){
-    box.innerHTML='<div class="empty">No categories yet. Add your first category above.</div>';
-    return;
-  }
-
-  categories.forEach((cat,index)=>{
-
-    const row=document.createElement("div");
-    row.className="category-row";
-
-    const input=document.createElement("input");
-    input.value=cat;
-
-    input.onchange=()=>{
-      renameCategory(index,input.value);
-    };
-
-    const save=document.createElement("button");
-    save.className="secondary";
-    save.textContent="💾";
-    save.title="Save category";
-    save.onclick=()=>{
-      renameCategory(index,input.value);
-    };
-
-    const del=document.createElement("button");
-    del.className="danger";
-    del.textContent="🗑";
-    del.title="Delete category";
-    del.onclick=()=>{
-      deleteCategory(index);
-    };
-
-    row.appendChild(input);
-    row.appendChild(save);
-    row.appendChild(del);
-
-    box.appendChild(row);
-  });
-}
-
-function addCategory(){
-
-  const input=document.getElementById("newCategory");
-
-  const name=input.value.trim();
-
-  if(!name){
-    alert("Please enter a category name.");
-    return;
-  }
-
-  const exists=categories.some(
-    c=>c.toLowerCase()===name.toLowerCase()
-  );
-
-  if(exists){
-    alert("This category already exists.");
-    return;
-  }
-
-  categories.push(name);
-
-  input.value="";
-
-  saveAll();
-  refresh();
-}
-
-function renameCategory(index,newName){
-
-  newName=newName.trim();
-
-  if(!newName){
-    alert("Category name cannot be empty.");
-    renderAdminCategories();
-    return;
-  }
-
-  const oldName=categories[index];
-
-  const duplicate=categories.some(
-    (c,i)=>
-      i!==index &&
-      c.toLowerCase()===newName.toLowerCase()
-  );
-
-  if(duplicate){
-    alert("Another category already has this name.");
-    renderAdminCategories();
-    return;
-  }
-
-  categories[index]=newName;
-
-  products.forEach(p=>{
-    if(p.category===oldName){
-      p.category=newName;
-    }
-  });
-
-  if(selectedCategory===oldName){
-    selectedCategory=newName;
-  }
-
-  saveAll();
-  refresh();
-}
-
-function deleteCategory(index){
-
-  const category=categories[index];
-
-  const usedBy=products.filter(
-    p=>p.category===category
-  );
-
-  if(usedBy.length){
-
-    alert(
-      `Cannot delete "${category}" yet.\n\n` +
-      `${usedBy.length} product(s) are using this category.\n\n` +
-      `Change those products to another category first.`
-    );
-
-    return;
-  }
-
-  const confirmed=confirm(
-    `Delete category "${category}"?`
-  );
-
-  if(!confirmed) return;
-
-  categories.splice(index,1);
-
-  if(selectedCategory===category){
-    selectedCategory="All";
-  }
-
-  saveAll();
-  refresh();
-}
-
-
-/* =========================
-   PRODUCT MANAGEMENT
+   ADMIN PRODUCT MANAGEMENT
 ========================= */
 
 function renderCategorySelect(){
 
-  const select=document.getElementById("newProductCategory");
+  const select=
+    document.getElementById(
+      "newProductCategory"
+    );
 
   select.innerHTML="";
 
   categories.forEach(cat=>{
 
-    const option=document.createElement("option");
+    const option=
+      document.createElement("option");
 
     option.value=cat;
     option.textContent=cat;
 
     select.appendChild(option);
+
   });
 }
 
 function addProduct(){
 
-  const name=document.getElementById("newProductName").value.trim();
-  const price=Number(document.getElementById("newProductPrice").value);
-  const category=document.getElementById("newProductCategory").value;
-  const emoji=document.getElementById("newProductEmoji").value.trim() || "🍽️";
+  if(!categories.length){
 
-  if(!name || !price || !category){
-    alert("Please fill in product name, price and category.");
+    alert(
+      "Please create a category first."
+    );
+
+    return;
+  }
+
+  const name=
+    document.getElementById(
+      "newProductName"
+    ).value.trim();
+
+  const price=
+    Number(
+      document.getElementById(
+        "newProductPrice"
+      ).value
+    );
+
+  const category=
+    document.getElementById(
+      "newProductCategory"
+    ).value;
+
+  const emoji=
+    document.getElementById(
+      "newProductEmoji"
+    ).value.trim()||
+    "🍽️";
+
+  if(!name||!price||!category){
+
+    alert(
+      "Please fill in product name, price and category."
+    );
+
     return;
   }
 
   products.push({
+
     id:Date.now(),
+
     name:name,
+
     price:price,
+
     category:category,
+
     emoji:emoji,
+
     available:true
+
   });
 
-  document.getElementById("newProductName").value="";
-  document.getElementById("newProductPrice").value="";
-  document.getElementById("newProductEmoji").value="";
+  document.getElementById(
+    "newProductName"
+  ).value="";
+
+  document.getElementById(
+    "newProductPrice"
+  ).value="";
+
+  document.getElementById(
+    "newProductEmoji"
+  ).value="";
 
   saveAll();
+
   refresh();
 }
 
 function renderAdminProducts(){
 
-  const box=document.getElementById("adminProducts");
+  const box=
+    document.getElementById(
+      "adminProducts"
+    );
 
   box.innerHTML="";
 
   if(!products.length){
-    box.innerHTML='<div class="empty">No products yet.</div>';
+
+    box.innerHTML=
+      '<div class="empty">No products yet.</div>';
+
     return;
   }
 
   products.forEach(p=>{
 
-    const div=document.createElement("div");
+    const div=
+      document.createElement("div");
+
     div.className="admin-product";
 
     div.innerHTML=`
+
       <label>
         Product Name
-        <input value="${escapeAttr(p.name)}"
-          onchange="updateProduct(${p.id},'name',this.value)">
+
+        <input
+          value="${escapeAttr(p.name)}"
+          onchange="
+            updateProduct(
+              ${p.id},
+              'name',
+              this.value
+            )
+          "
+        >
       </label>
 
       <label>
         Price (MVR)
-        <input type="number" value="${p.price}"
-          onchange="updateProduct(${p.id},'price',this.value)">
+
+        <input
+          type="number"
+          value="${p.price}"
+          onchange="
+            updateProduct(
+              ${p.id},
+              'price',
+              this.value
+            )
+          "
+        >
       </label>
 
       <label>
         Category
-        <select onchange="updateProduct(${p.id},'category',this.value)">
-          ${categories.map(c=>`
-            <option value="${escapeAttr(c)}"
-              ${c===p.category?"selected":""}>
-              ${escapeHtml(c)}
-            </option>
-          `).join("")}
+
+        <select
+          onchange="
+            updateProduct(
+              ${p.id},
+              'category',
+              this.value
+            )
+          "
+        >
+
+          ${
+            categories.map(c=>`
+
+              <option
+                value="${escapeAttr(c)}"
+                ${c===p.category?"selected":""}
+              >
+                ${escapeHtml(c)}
+              </option>
+
+            `).join("")
+          }
+
         </select>
+
       </label>
 
       <label>
         Emoji
-        <input value="${escapeAttr(p.emoji)}"
-          onchange="updateProduct(${p.id},'emoji',this.value)">
+
+        <input
+          value="${escapeAttr(p.emoji)}"
+          onchange="
+            updateProduct(
+              ${p.id},
+              'emoji',
+              this.value
+            )
+          "
+        >
       </label>
 
       <div class="admin-actions">
 
         <button
-          class="${p.available ? "success" : "secondary"}"
-          onclick="toggleProduct(${p.id})">
-          ${p.available ? "✅ Available" : "❌ Sold Out"}
+          class="${
+            p.available
+            ?"success"
+            :"secondary"
+          }"
+          onclick="
+            toggleProduct(${p.id})
+          "
+        >
+          ${
+            p.available
+            ?"✅ Available"
+            :"❌ Sold Out"
+          }
         </button>
 
         <button
           class="danger"
-          onclick="deleteProduct(${p.id})">
+          onclick="
+            deleteProduct(${p.id})
+          "
+        >
           🗑 Delete
         </button>
 
       </div>
+
     `;
 
     box.appendChild(div);
+
   });
 }
 
 function updateProduct(id,field,value){
 
-  const p=products.find(x=>x.id===id);
+  const p=
+    products.find(x=>x.id===id);
 
-  if(!p) return;
+  if(!p)return;
 
   if(field==="price"){
+
     value=Number(value);
 
     if(value<0){
-      alert("Price cannot be negative.");
+
+      alert(
+        "Price cannot be negative."
+      );
+
       renderAdminProducts();
+
       return;
     }
   }
@@ -1104,35 +2130,45 @@ function updateProduct(id,field,value){
   p[field]=value;
 
   saveAll();
+
   renderProducts();
   renderDashboard();
 }
 
 function toggleProduct(id){
 
-  const p=products.find(x=>x.id===id);
+  const p=
+    products.find(x=>x.id===id);
 
-  if(!p) return;
+  if(!p)return;
 
   p.available=!p.available;
 
   saveAll();
+
   refresh();
 }
 
 function deleteProduct(id){
 
-  const p=products.find(x=>x.id===id);
+  const p=
+    products.find(x=>x.id===id);
 
-  if(!p) return;
+  if(!p)return;
 
-  if(!confirm(`Delete "${p.name}"?`)){
+  if(!confirm(
+    `Delete "${p.name}"?`
+  )){
     return;
   }
 
-  products=products.filter(x=>x.id!==id);
+  products=
+    products.filter(
+      x=>x.id!==id
+    );
 
   saveAll();
+
   refresh();
 }
 
@@ -1143,72 +2179,136 @@ function deleteProduct(id){
 
 function addExpense(){
 
-  const name=document.getElementById("expenseName").value.trim();
-  const amount=Number(document.getElementById("expenseAmount").value);
-  const date=document.getElementById("expenseDate").value;
+  const name=
+    document.getElementById(
+      "expenseName"
+    ).value.trim();
 
-  if(!name || !amount || !date){
-    alert("Please fill in all expense fields.");
+  const amount=
+    Number(
+      document.getElementById(
+        "expenseAmount"
+      ).value
+    );
+
+  const date=
+    document.getElementById(
+      "expenseDate"
+    ).value;
+
+  if(!name||!amount||!date){
+
+    alert(
+      "Please fill in all expense fields."
+    );
+
     return;
   }
 
   expenses.unshift({
+
     id:Date.now(),
+
     name:name,
+
     amount:amount,
+
     date:date
+
   });
 
-  document.getElementById("expenseName").value="";
-  document.getElementById("expenseAmount").value="";
+  document.getElementById(
+    "expenseName"
+  ).value="";
+
+  document.getElementById(
+    "expenseAmount"
+  ).value="";
 
   saveAll();
-  renderExpenses();
-  renderReports();
+
+  refresh();
 }
 
 function renderExpenses(){
 
-  const box=document.getElementById("expenseList");
+  const box=
+    document.getElementById(
+      "expenseList"
+    );
 
   box.innerHTML="";
 
   if(!expenses.length){
-    box.innerHTML='<div class="empty">No expenses yet.</div>';
+
+    box.innerHTML=
+      '<div class="empty">No expenses yet.</div>';
+
     return;
   }
 
   expenses.forEach(e=>{
 
-    const div=document.createElement("div");
+    const div=
+      document.createElement("div");
+
     div.className="cart-item";
 
     div.innerHTML=`
+
       <div>
-        <strong>${escapeHtml(e.name)}</strong><br>
+
+        <strong>
+          ${escapeHtml(e.name)}
+        </strong>
+
+        <br>
+
         ${e.date}
+
       </div>
 
       <div>
-        <strong>MVR ${Number(e.amount).toFixed(2)}</strong><br>
-        <button class="danger"
-          onclick="deleteExpense(${e.id})">
+
+        <strong>
+          MVR ${Number(
+            e.amount
+          ).toFixed(2)}
+        </strong>
+
+        <br>
+
+        <button
+          class="danger"
+          onclick="
+            deleteExpense(${e.id})
+          "
+        >
           Delete
         </button>
+
       </div>
+
     `;
 
     box.appendChild(div);
+
   });
 }
 
 function deleteExpense(id){
 
-  if(!confirm("Delete this expense?")) return;
+  if(!confirm(
+    "Delete this expense?"
+  ))return;
 
-  expenses=expenses.filter(e=>e.id!==id);
+  expenses=
+    expenses.filter(
+      e=>e.id!==id
+    );
 
   saveAll();
+
   refresh();
 }
 
@@ -1219,37 +2319,80 @@ function deleteExpense(id){
 
 function todayOrders(){
 
-  const today=new Date().toDateString();
+  const today=
+    new Date().toDateString();
 
-  return orders.filter(o=>
-    new Date(o.date).toDateString()===today
+  return orders.filter(
+    o=>
+      new Date(o.date)
+      .toDateString()===today
   );
 }
 
 function renderDashboard(){
 
-  const list=todayOrders();
+  const list=
+    todayOrders();
 
-  const sales=list.reduce((s,o)=>s+o.total,0);
+  const sales=
+    list.reduce(
+      (s,o)=>s+o.total,
+      0
+    );
 
-  const cash=list
+  const cash=
+    list
     .filter(o=>o.payment==="Cash")
-    .reduce((s,o)=>s+o.total,0);
+    .reduce(
+      (s,o)=>s+o.total,
+      0
+    );
 
-  const card=list
+  const card=
+    list
     .filter(o=>o.payment==="Card")
-    .reduce((s,o)=>s+o.total,0);
+    .reduce(
+      (s,o)=>s+o.total,
+      0
+    );
 
-  const transfer=list
+  const transfer=
+    list
     .filter(o=>o.payment==="Transfer")
-    .reduce((s,o)=>s+o.total,0);
+    .reduce(
+      (s,o)=>s+o.total,
+      0
+    );
 
-  document.getElementById("dashSales").textContent=sales.toFixed(2);
-  document.getElementById("dashOrders").textContent=list.length;
-  document.getElementById("dashCash").textContent=cash.toFixed(2);
-  document.getElementById("dashCard").textContent=card.toFixed(2);
-  document.getElementById("dashTransfer").textContent=transfer.toFixed(2);
-  document.getElementById("dashProducts").textContent=products.length;
+  document.getElementById(
+    "dashSales"
+  ).textContent=
+    sales.toFixed(2);
+
+  document.getElementById(
+    "dashOrders"
+  ).textContent=
+    list.length;
+
+  document.getElementById(
+    "dashCash"
+  ).textContent=
+    cash.toFixed(2);
+
+  document.getElementById(
+    "dashCard"
+  ).textContent=
+    card.toFixed(2);
+
+  document.getElementById(
+    "dashTransfer"
+  ).textContent=
+    transfer.toFixed(2);
+
+  document.getElementById(
+    "dashProducts"
+  ).textContent=
+    products.length;
 }
 
 
@@ -1265,18 +2408,26 @@ function getReportDates(period){
   let end=new Date(now);
 
   if(period==="day"){
+
     start.setHours(0,0,0,0);
     end.setHours(23,59,59,999);
+
   }
 
   if(period==="week"){
 
     const day=now.getDay();
 
-    start.setDate(now.getDate()-day);
+    start.setDate(
+      now.getDate()-day
+    );
+
     start.setHours(0,0,0,0);
 
-    end.setHours(23,59,59,999);
+    end.setHours(
+      23,59,59,999
+    );
+
   }
 
   if(period==="month"){
@@ -1287,14 +2438,13 @@ function getReportDates(period){
       1
     );
 
-    start.setHours(0,0,0,0);
-
     end=new Date(
       now.getFullYear(),
       now.getMonth()+1,
       0,
       23,59,59,999
     );
+
   }
 
   return {start,end};
@@ -1302,96 +2452,288 @@ function getReportDates(period){
 
 function renderReports(){
 
-  const period=document.getElementById("reportPeriod").value;
+  const period=
+    document.getElementById(
+      "reportPeriod"
+    ).value;
 
-  const {start,end}=getReportDates(period);
+  const {start,end}=
+    getReportDates(period);
 
-  const list=orders.filter(o=>{
-    const d=new Date(o.date);
-    return d>=start && d<=end;
-  });
+  const list=
+    orders.filter(o=>{
 
-  const sales=list.reduce((s,o)=>s+o.total,0);
+      const d=
+        new Date(o.date);
 
-  const exp=expenses
+      return d>=start&&d<=end;
+
+    });
+
+  const sales=
+    list.reduce(
+      (s,o)=>s+o.total,
+      0
+    );
+
+  const exp=
+    expenses
     .filter(e=>{
-      const d=new Date(e.date+"T00:00:00");
-      return d>=start && d<=end;
-    })
-    .reduce((s,e)=>s+Number(e.amount),0);
 
-  document.getElementById("reportSales").textContent=sales.toFixed(2);
-  document.getElementById("reportOrders").textContent=list.length;
-  document.getElementById("reportExpenses").textContent=exp.toFixed(2);
-  document.getElementById("reportProfit").textContent=(sales-exp).toFixed(2);
+      const d=
+        new Date(
+          e.date+"T00:00:00"
+        );
+
+      return d>=start&&d<=end;
+
+    })
+    .reduce(
+      (s,e)=>s+Number(e.amount),
+      0
+    );
+
+  document.getElementById(
+    "reportSales"
+  ).textContent=
+    sales.toFixed(2);
+
+  document.getElementById(
+    "reportOrders"
+  ).textContent=
+    list.length;
+
+  document.getElementById(
+    "reportExpenses"
+  ).textContent=
+    exp.toFixed(2);
+
+  document.getElementById(
+    "reportProfit"
+  ).textContent=
+    (sales-exp).toFixed(2);
 }
 
 
 /* =========================
-   ORDER HISTORY
+   HISTORY + EDIT
 ========================= */
 
 function renderHistory(){
 
-  const box=document.getElementById("orderHistory");
+  const box=
+    document.getElementById(
+      "orderHistory"
+    );
 
   box.innerHTML="";
 
   if(!orders.length){
-    box.innerHTML='<div class="empty">No orders yet.</div>';
+
+    box.innerHTML=
+      '<div class="empty">No orders yet.</div>';
+
     return;
   }
 
   orders.forEach(o=>{
 
-    const div=document.createElement("div");
+    const div=
+      document.createElement("div");
+
     div.className="admin-product";
 
-    const items=o.items.map(i=>
-      `${escapeHtml(i.name)} x${i.qty}`
-    ).join(", ");
+    const items=
+      o.items.map(i=>
+        `${escapeHtml(i.name)} x${i.qty}`
+      ).join(", ");
+
+    let cashInfo="";
+
+    if(o.payment==="Cash"){
+
+      cashInfo=`
+
+        <p>
+          Received:
+          MVR ${Number(
+            o.cashReceived||0
+          ).toFixed(2)}
+
+          <br>
+
+          Change:
+          MVR ${Number(
+            o.change||0
+          ).toFixed(2)}
+        </p>
+
+      `;
+    }
 
     div.innerHTML=`
-      <strong>${o.number}</strong><br>
-      <small>${new Date(o.date).toLocaleString()}</small>
 
-      <p>${items}</p>
+      <strong>
+        ${o.number}
+      </strong>
+
+      <br>
+
+      <small>
+        ${new Date(
+          o.date
+        ).toLocaleString()}
+      </small>
+
+      <p>
+        ${items}
+      </p>
 
       <strong>
         MVR ${o.total.toFixed(2)}
       </strong>
 
-      <p>Payment: ${o.payment}</p>
+      <p>
+        Payment: ${o.payment}
+      </p>
 
-      <button class="primary"
-        onclick="showReceiptById(${o.id})">
-        🧾 Receipt
-      </button>
+      ${cashInfo}
 
-      <button class="danger"
-        onclick="deleteOrder(${o.id})">
-        🗑 Delete
-      </button>
+      <div class="history-actions">
+
+        <button
+          class="primary"
+          onclick="
+            editOrder(${o.id})
+          "
+        >
+          ✏️ Edit
+        </button>
+
+        <button
+          class="secondary"
+          onclick="
+            showReceiptById(${o.id})
+          "
+        >
+          🧾 Receipt
+        </button>
+
+        <button
+          class="danger"
+          onclick="
+            deleteOrder(${o.id})
+          "
+        >
+          🗑 Delete
+        </button>
+
+      </div>
+
     `;
 
     box.appendChild(div);
+
+  });
+}
+
+function editOrder(id){
+
+  const order=
+    orders.find(
+      o=>o.id===id
+    );
+
+  if(!order)return;
+
+  /*
+    Create a new temporary sale
+    containing the existing order.
+  */
+
+  const sale=createSale();
+
+  sale.name=
+    "Edit "+order.number;
+
+  sale.cart=
+    JSON.parse(
+      JSON.stringify(order.items)
+    );
+
+  sale.payment=
+    order.payment;
+
+  sale.cashReceived=
+    Number(order.cashReceived)||0;
+
+  saleTabs.push(sale);
+
+  activeSaleId=sale.id;
+
+  editingOrderId=id;
+
+  saveAll();
+
+  /*
+    Switch to POS.
+  */
+
+  document.querySelectorAll(
+    ".page"
+  ).forEach(p=>
+    p.classList.remove("active")
+  );
+
+  document.getElementById(
+    "pos"
+  ).classList.add("active");
+
+  document.querySelectorAll(
+    "nav button"
+  ).forEach(b=>
+    b.classList.remove("active")
+  );
+
+  document.querySelector(
+    "nav button"
+  ).classList.add("active");
+
+  refresh();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
   });
 }
 
 function showReceiptById(id){
 
-  const order=orders.find(o=>o.id===id);
+  const order=
+    orders.find(
+      o=>o.id===id
+    );
 
-  if(order) showReceipt(order);
+  if(order){
+    showReceipt(order);
+  }
 }
 
 function deleteOrder(id){
 
-  if(!confirm("Delete this order?")) return;
+  if(!confirm(
+    "Delete this order?"
+  )){
+    return;
+  }
 
-  orders=orders.filter(o=>o.id!==id);
+  orders=
+    orders.filter(
+      o=>o.id!==id
+    );
 
   saveAll();
+
   refresh();
 }
 
@@ -1411,6 +2753,7 @@ function escapeHtml(value){
 }
 
 function escapeAttr(value){
+
   return escapeHtml(value);
 }
 
@@ -1419,11 +2762,15 @@ function escapeAttr(value){
    START
 ========================= */
 
-document.getElementById("expenseDate").value=
-  new Date().toISOString().split("T")[0];
+ensureSale();
 
-selectPayment("Cash");
-saveAll();
+document.getElementById(
+  "expenseDate"
+).value=
+  new Date()
+  .toISOString()
+  .split("T")[0];
+
 refresh();
 
 </script>
