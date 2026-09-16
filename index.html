@@ -8,22 +8,21 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#f6f3ef;color:#222}
-header{background:#7b3f2f;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
+header{background:#7b3f2f;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
 header h1{font-size:20px}
-header button{background:white;color:#7b3f2f;border:0;padding:9px 13px;border-radius:9px;font-weight:bold}
-nav{display:flex;background:#fff;border-bottom:1px solid #ddd}
-nav button{flex:1;padding:13px;border:0;background:white;font-weight:bold;cursor:pointer}
+nav{display:flex;background:#fff;border-bottom:1px solid #ddd;overflow:auto}
+nav button{flex:1;min-width:100px;padding:13px;border:0;background:#fff;font-weight:bold}
 nav button.active{color:#7b3f2f;border-bottom:3px solid #7b3f2f}
 .page{display:none;padding:15px}
 .page.active{display:block}
+.layout{display:grid;grid-template-columns:1fr 360px;gap:15px}
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.product{background:white;padding:16px;border-radius:14px;box-shadow:0 2px 8px #0001;cursor:pointer}
-.product.sold{opacity:.45;cursor:not-allowed}
+.product,.cart,.admin-form,.stat,.order{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px #0001}
+.product{cursor:pointer}
+.product.sold{opacity:.4;cursor:not-allowed}
 .emoji{font-size:32px;margin-bottom:7px}
 .product h3{font-size:15px;margin-bottom:5px}
 .price{color:#7b3f2f;font-weight:bold}
-.layout{display:grid;grid-template-columns:1fr 360px;gap:15px}
-.cart{background:white;padding:18px;border-radius:15px}
 .cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:11px 0}
 .item-info{flex:1}
 .item-name{font-weight:bold}
@@ -33,24 +32,46 @@ nav button.active{color:#7b3f2f;border-bottom:3px solid #7b3f2f}
 .summary{border-top:1px solid #ddd;margin-top:15px;padding-top:15px}
 .total{display:flex;justify-content:space-between;font-size:21px;font-weight:bold;margin-bottom:12px}
 .payment{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.payment button{padding:11px;border:1px solid #ddd;background:white;border-radius:9px}
-.payment button.active{background:#7b3f2f;color:white}
-.checkout{width:100%;padding:14px;margin-top:10px;border:0;border-radius:10px;background:#222;color:white;font-weight:bold}
+.payment button{padding:11px;border:1px solid #ddd;background:#fff;border-radius:9px}
+.payment button.active{background:#7b3f2f;color:#fff}
+.checkout,.primary{width:100%;padding:14px;margin-top:10px;border:0;border-radius:10px;background:#222;color:#fff;font-weight:bold}
 .checkout:disabled{background:#aaa}
-.admin-form{background:white;padding:18px;border-radius:15px;margin-bottom:18px}
 input,select{width:100%;padding:11px;margin:6px 0 10px;border:1px solid #ddd;border-radius:9px}
-.form-btn{background:#7b3f2f;color:white;border:0;padding:11px 16px;border-radius:9px;font-weight:bold}
-.product-list{display:grid;gap:10px}
-.admin-product{background:white;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.admin-actions button{border:0;padding:8px;border-radius:7px;margin-left:4px}
+.form-btn{background:#7b3f2f;color:#fff;border:0;padding:11px 16px;border-radius:9px;font-weight:bold}
+.product-list,.orders{display:grid;gap:10px;margin-top:12px}
+.admin-product,.order{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.admin-actions button,.order button{border:0;padding:8px;border-radius:7px;margin-left:4px}
 .edit{background:#eee}.delete{background:#fee}.sold-btn{background:#fff0c2}
 .empty{text-align:center;color:#888;padding:30px}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{background:white;padding:20px;border-radius:14px}
-.stat small{color:#777}.stat strong{display:block;font-size:23px;margin-top:7px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat small{color:#777}
+.stat strong{display:block;font-size:22px;margin-top:7px}
+.order{display:block}
+.order-top{display:flex;justify-content:space-between;gap:10px}
+.order-items{font-size:14px;color:#666;margin:8px 0}
+.order-bottom{display:flex;justify-content:space-between;align-items:center}
+.receipt{max-width:380px;margin:auto;background:#fff;padding:25px;text-align:center}
+.receipt-items{text-align:left;margin:20px 0}
+.receipt-row{display:flex;justify-content:space-between;margin:6px 0}
+.receipt-total{border-top:1px dashed #777;padding-top:10px;font-size:20px;font-weight:bold}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:15px;z-index:10}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:15px;padding:15px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+.modal-buttons{display:flex;gap:8px;margin-top:15px}
+.modal-buttons button{flex:1;padding:12px;border:0;border-radius:9px;font-weight:bold}
+.close{background:#eee}
+.print{background:#7b3f2f;color:#fff}
 @media(max-width:800px){
 .layout{grid-template-columns:1fr}
-.stat-grid{grid-template-columns:1fr}
+.stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:450px){
+.stat-grid{grid-template-columns:1fr 1fr}
+}
+@media print{
+body *{visibility:hidden}
+#printArea,#printArea *{visibility:visible}
+#printArea{position:absolute;left:0;top:0;width:100%}
 }
 </style>
 </head>
@@ -66,6 +87,7 @@ input,select{width:100%;padding:11px;margin:6px 0 10px;border:1px solid #ddd;bor
 <button class="active" onclick="showPage('pos',this)">🧾 POS</button>
 <button onclick="showPage('admin',this)">⚙️ Admin</button>
 <button onclick="showPage('dashboard',this)">📊 Dashboard</button>
+<button onclick="showPage('history',this)">📜 History</button>
 </nav>
 
 <!-- POS -->
@@ -96,11 +118,9 @@ input,select{width:100%;padding:11px;margin:6px 0 10px;border:1px solid #ddd;bor
 <strong>Payment Method</strong>
 
 <div class="payment" style="margin-top:8px">
-
 <button onclick="selectPayment('Cash')" id="cash">💵 Cash</button>
 <button onclick="selectPayment('Card')" id="card">💳 Card</button>
 <button onclick="selectPayment('Transfer')" id="transfer">🏦 Transfer</button>
-
 </div>
 
 <button class="checkout" id="checkout" onclick="checkout()" disabled>
@@ -123,7 +143,6 @@ Complete Order
 <h3>Add New Product</h3>
 
 <input id="newName" placeholder="Product name">
-
 <input id="newPrice" type="number" placeholder="Price">
 
 <select id="newCategory">
@@ -136,14 +155,11 @@ Complete Order
 
 <input id="newEmoji" placeholder="Emoji e.g. 🍰">
 
-<button class="form-btn" onclick="addProduct()">
-+ Add Product
-</button>
+<button class="form-btn" onclick="addProduct()">+ Add Product</button>
 
 </div>
 
-<h3 style="margin-bottom:10px">Your Products</h3>
-
+<h3>Your Products</h3>
 <div class="product-list" id="adminProducts"></div>
 
 </section>
@@ -166,6 +182,21 @@ Complete Order
 </div>
 
 <div class="stat">
+<small>Cash</small>
+<strong id="dashCash">MVR 0.00</strong>
+</div>
+
+<div class="stat">
+<small>Card</small>
+<strong id="dashCard">MVR 0.00</strong>
+</div>
+
+<div class="stat">
+<small>Transfer</small>
+<strong id="dashTransfer">MVR 0.00</strong>
+</div>
+
+<div class="stat">
 <small>Products</small>
 <strong id="dashProducts">0</strong>
 </div>
@@ -173,6 +204,31 @@ Complete Order
 </div>
 
 </section>
+
+<!-- HISTORY -->
+<section id="history" class="page">
+
+<h2>📜 Order History</h2>
+
+<div class="orders" id="orders"></div>
+
+</section>
+
+<!-- RECEIPT MODAL -->
+<div class="modal" id="receiptModal">
+
+<div class="modal-box">
+
+<div id="printArea"></div>
+
+<div class="modal-buttons">
+<button class="close" onclick="closeReceipt()">Close</button>
+<button class="print" onclick="printReceipt()">🖨️ Print</button>
+</div>
+
+</div>
+
+</div>
 
 <script>
 
@@ -188,35 +244,51 @@ const defaultProducts=[
 ];
 
 let products=JSON.parse(localStorage.getItem("products"))||defaultProducts;
+let orders=JSON.parse(localStorage.getItem("orders"))||[];
 let cart=[];
 let paymentMethod=null;
 
-let todaySales=Number(localStorage.getItem("todaySales"))||0;
-let todayOrders=Number(localStorage.getItem("todayOrders"))||0;
-
 function save(){
 localStorage.setItem("products",JSON.stringify(products));
-localStorage.setItem("todaySales",todaySales);
-localStorage.setItem("todayOrders",todayOrders);
+localStorage.setItem("orders",JSON.stringify(orders));
+}
+
+function todayOrders(){
+const today=new Date().toDateString();
+return orders.filter(o=>new Date(o.time).toDateString()===today);
+}
+
+function todayTotal(){
+return todayOrders().reduce((s,o)=>s+o.total,0);
+}
+
+function paymentTotal(method){
+return todayOrders()
+.filter(o=>o.payment===method)
+.reduce((s,o)=>s+o.total,0);
 }
 
 function showPage(page,button){
 
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
 document.getElementById(page).classList.add("active");
 
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll("nav button")
+.forEach(b=>b.classList.remove("active"));
+
 button.classList.add("active");
 
-if(page==="admin") renderAdmin();
-if(page==="dashboard") renderDashboard();
+if(page==="admin")renderAdmin();
+if(page==="dashboard")renderDashboard();
+if(page==="history")renderHistory();
 
 }
 
 function renderProducts(){
 
 const grid=document.getElementById("productGrid");
-
 grid.innerHTML="";
 
 products.forEach(p=>{
@@ -226,18 +298,14 @@ const div=document.createElement("div");
 div.className="product"+(!p.available?" sold":"");
 
 div.onclick=()=>{
-
 if(p.available)addToCart(p.id);
-
 };
 
 div.innerHTML=`
-
 <div class="emoji">${p.emoji||"🍽️"}</div>
 <h3>${p.name}</h3>
 <div class="price">MVR ${Number(p.price).toFixed(2)}</div>
 <small>${p.available?"":"SOLD OUT"}</small>
-
 `;
 
 grid.appendChild(div);
@@ -245,14 +313,13 @@ grid.appendChild(div);
 });
 
 document.getElementById("headerSales").innerText=
-"MVR "+todaySales.toFixed(2);
+"MVR "+todayTotal().toFixed(2);
 
 }
 
 function addToCart(id){
 
 const p=products.find(x=>x.id===id);
-
 if(!p||!p.available)return;
 
 const item=cart.find(x=>x.id===id);
@@ -267,7 +334,6 @@ renderCart();
 function changeQty(id,n){
 
 const item=cart.find(x=>x.id===id);
-
 if(!item)return;
 
 item.qty+=n;
@@ -283,7 +349,7 @@ function renderCart(){
 
 const box=document.getElementById("cartItems");
 
-if(cart.length===0){
+if(!cart.length){
 
 box.innerHTML='<div class="empty">No products added</div>';
 
@@ -295,7 +361,9 @@ box.innerHTML=cart.map(item=>`
 
 <div class="item-info">
 <div class="item-name">${item.name}</div>
-<div class="item-price">MVR ${(item.price*item.qty).toFixed(2)}</div>
+<div class="item-price">
+MVR ${(item.price*item.qty).toFixed(2)}
+</div>
 </div>
 
 <div class="qty">
@@ -315,9 +383,7 @@ updateTotal();
 }
 
 function getTotal(){
-
 return cart.reduce((sum,x)=>sum+x.price*x.qty,0);
-
 }
 
 function updateTotal(){
@@ -326,7 +392,7 @@ document.getElementById("total").innerText=
 "MVR "+getTotal().toFixed(2);
 
 document.getElementById("checkout").disabled=
-cart.length===0||!paymentMethod;
+!cart.length||!paymentMethod;
 
 }
 
@@ -337,7 +403,8 @@ paymentMethod=method;
 document.querySelectorAll(".payment button")
 .forEach(b=>b.classList.remove("active"));
 
-document.getElementById(method.toLowerCase()).classList.add("active");
+document.getElementById(method.toLowerCase())
+.classList.add("active");
 
 updateTotal();
 
@@ -347,18 +414,24 @@ function checkout(){
 
 if(!cart.length||!paymentMethod)return;
 
-const total=getTotal();
+const now=new Date();
 
-todaySales+=total;
-todayOrders++;
+const order={
+id:Date.now(),
+number:"ORD-"+String(orders.length+1).padStart(4,"0"),
+time:now.toISOString(),
+payment:paymentMethod,
+items:cart.map(x=>({
+name:x.name,
+price:x.price,
+qty:x.qty
+})),
+total:getTotal()
+};
+
+orders.unshift(order);
 
 save();
-
-alert(
-"ORDER COMPLETED\n\n"+
-"Total: MVR "+total.toFixed(2)+
-"\nPayment: "+paymentMethod
-);
 
 cart=[];
 paymentMethod=null;
@@ -368,6 +441,184 @@ document.querySelectorAll(".payment button")
 
 renderCart();
 renderProducts();
+
+showReceipt(order);
+
+}
+
+function showReceipt(order){
+
+const date=new Date(order.time);
+
+document.getElementById("printArea").innerHTML=`
+
+<div class="receipt">
+
+<h2>🍰 Bakery</h2>
+
+<p>Thank you for your order!</p>
+
+<hr style="margin:15px 0">
+
+<strong>${order.number}</strong>
+
+<p style="font-size:13px;margin-top:5px">
+${date.toLocaleDateString()} ${date.toLocaleTimeString()}
+</p>
+
+<div class="receipt-items">
+
+${order.items.map(item=>`
+
+<div class="receipt-row">
+<span>${item.name} × ${item.qty}</span>
+<span>MVR ${(item.price*item.qty).toFixed(2)}</span>
+</div>
+
+`).join("")}
+
+</div>
+
+<div class="receipt-total">
+
+<div class="receipt-row">
+<span>TOTAL</span>
+<span>MVR ${order.total.toFixed(2)}</span>
+</div>
+
+</div>
+
+<p style="margin-top:15px">
+Payment: <strong>${order.payment}</strong>
+</p>
+
+<p style="margin-top:20px">
+Thank you ❤️
+</p>
+
+</div>
+
+`;
+
+document.getElementById("receiptModal")
+.classList.add("show");
+
+}
+
+function closeReceipt(){
+document.getElementById("receiptModal")
+.classList.remove("show");
+}
+
+function printReceipt(){
+window.print();
+}
+
+function renderHistory(){
+
+const box=document.getElementById("orders");
+
+if(!orders.length){
+
+box.innerHTML='<div class="empty">No orders yet</div>';
+return;
+
+}
+
+box.innerHTML=orders.map(o=>{
+
+const date=new Date(o.time);
+
+return`
+
+<div class="order">
+
+<div class="order-top">
+
+<div>
+<strong>${o.number}</strong>
+<br>
+<small>
+${date.toLocaleDateString()}
+${date.toLocaleTimeString()}
+</small>
+</div>
+
+<strong>MVR ${o.total.toFixed(2)}</strong>
+
+</div>
+
+<div class="order-items">
+
+${o.items.map(i=>`${i.name} × ${i.qty}`).join(", ")}
+
+</div>
+
+<div class="order-bottom">
+
+<span>💳 ${o.payment}</span>
+
+<div>
+<button onclick='showReceiptById(${o.id})'>
+🧾 Receipt
+</button>
+
+<button onclick="deleteOrder(${o.id})">
+🗑️
+</button>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+function showReceiptById(id){
+
+const order=orders.find(o=>o.id===id);
+
+if(order)showReceipt(order);
+
+}
+
+function deleteOrder(id){
+
+if(!confirm("Delete this order from history?"))return;
+
+orders=orders.filter(o=>o.id!==id);
+
+save();
+
+renderHistory();
+renderDashboard();
+renderProducts();
+
+}
+
+function renderDashboard(){
+
+document.getElementById("dashSales").innerText=
+"MVR "+todayTotal().toFixed(2);
+
+document.getElementById("dashOrders").innerText=
+todayOrders().length;
+
+document.getElementById("dashCash").innerText=
+"MVR "+paymentTotal("Cash").toFixed(2);
+
+document.getElementById("dashCard").innerText=
+"MVR "+paymentTotal("Card").toFixed(2);
+
+document.getElementById("dashTransfer").innerText=
+"MVR "+paymentTotal("Transfer").toFixed(2);
+
+document.getElementById("dashProducts").innerText=
+products.length;
 
 }
 
@@ -430,13 +681,16 @@ box.innerHTML=products.map(p=>`
 
 <div class="admin-actions">
 
-<button class="edit" onclick="editProduct(${p.id})">✏️</button>
+<button class="edit"
+onclick="editProduct(${p.id})">✏️</button>
 
-<button class="sold-btn" onclick="toggleProduct(${p.id})">
+<button class="sold-btn"
+onclick="toggleProduct(${p.id})">
 ${p.available?"🔴":"🟢"}
 </button>
 
-<button class="delete" onclick="deleteProduct(${p.id})">🗑️</button>
+<button class="delete"
+onclick="deleteProduct(${p.id})">🗑️</button>
 
 </div>
 
@@ -451,11 +705,9 @@ function editProduct(id){
 const p=products.find(x=>x.id===id);
 
 const name=prompt("Product name:",p.name);
-
 if(name===null)return;
 
 const price=prompt("Price:",p.price);
-
 if(price===null)return;
 
 const emoji=prompt("Emoji:",p.emoji);
@@ -494,19 +746,6 @@ save();
 
 renderAdmin();
 renderProducts();
-
-}
-
-function renderDashboard(){
-
-document.getElementById("dashSales").innerText=
-"MVR "+todaySales.toFixed(2);
-
-document.getElementById("dashOrders").innerText=
-todayOrders;
-
-document.getElementById("dashProducts").innerText=
-products.length;
 
 }
 
