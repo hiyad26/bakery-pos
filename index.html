@@ -122,10 +122,37 @@ label{
   white-space:nowrap;
   background:#f1d8dc;
   color:#700d1d;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 9px 10px 13px;
 }
 
 .sale-tab.active{
   background:#700d1d;
+  color:white;
+}
+
+.close-sale{
+  width:22px;
+  height:22px;
+  padding:0;
+  border-radius:50%;
+  background:rgba(0,0,0,.12);
+  color:inherit;
+  font-size:14px;
+  line-height:22px;
+  text-align:center;
+  flex:none;
+}
+
+.sale-tab.active .close-sale{
+  background:rgba(255,255,255,.2);
+  color:white;
+}
+
+.close-sale:hover{
+  background:#b51d35;
   color:white;
 }
 
@@ -373,15 +400,10 @@ td,th{
   <button onclick="showPage('history',this)">History</button>
 </nav>
 
-
-<!-- ================= POS ================= -->
-
 <section id="pos" class="page active">
 
   <div class="card">
-
     <div class="sales-tabs" id="salesTabs"></div>
-
   </div>
 
   <div class="card">
@@ -460,9 +482,6 @@ td,th{
 
 </section>
 
-
-<!-- ================= ADMIN ================= -->
-
 <section id="admin" class="page">
 
   <div class="card">
@@ -489,7 +508,6 @@ td,th{
     <div id="categoryManager"></div>
 
   </div>
-
 
   <div class="card">
 
@@ -535,7 +553,6 @@ td,th{
 
   </div>
 
-
   <div class="card">
 
     <h2>✏️ Edit Products</h2>
@@ -543,7 +560,6 @@ td,th{
     <div id="adminProducts"></div>
 
   </div>
-
 
   <div class="card">
 
@@ -588,9 +604,6 @@ td,th{
   </div>
 
 </section>
-
-
-<!-- ================= DASHBOARD ================= -->
 
 <section id="dashboard" class="page">
 
@@ -644,9 +657,6 @@ td,th{
 
 </section>
 
-
-<!-- ================= REPORTS ================= -->
-
 <section id="reports" class="page">
 
   <div class="card">
@@ -695,9 +705,6 @@ td,th{
 
 </section>
 
-
-<!-- ================= HISTORY ================= -->
-
 <section id="history" class="page">
 
   <div class="card">
@@ -709,9 +716,6 @@ td,th{
   </div>
 
 </section>
-
-
-<!-- ================= RECEIPT ================= -->
 
 <div class="modal" id="receiptModal">
 
@@ -732,7 +736,6 @@ td,th{
   </div>
 
 </div>
-
 
 <script>
 
@@ -773,11 +776,6 @@ JSON.parse(localStorage.getItem(orderKey))||[];
 let expenses=
 JSON.parse(localStorage.getItem(expenseKey))||[];
 
-
-/* =========================
-   MULTIPLE SALES
-========================= */
-
 let saleTabs=
 JSON.parse(localStorage.getItem(tabsKey))||[];
 
@@ -786,12 +784,6 @@ let activeSaleId=null;
 let selectedCategory="All";
 
 let editingOrderId=null;
-
-
-/*
-  Convert old cart/payment variables
-  into the new multi-sale system.
-*/
 
 function createSale(){
 
@@ -861,11 +853,6 @@ function saveAll(){
   );
 }
 
-
-/* =========================
-   NAVIGATION
-========================= */
-
 function showPage(page,button){
 
   document.querySelectorAll(".page")
@@ -883,11 +870,6 @@ function showPage(page,button){
 
   refresh();
 }
-
-
-/* =========================
-   REFRESH
-========================= */
 
 function refresh(){
 
@@ -933,6 +915,13 @@ function renderSalesTabs(){
 
   saleTabs.forEach((sale,index)=>{
 
+    const wrapper=
+      document.createElement("div");
+
+    wrapper.style.display="flex";
+    wrapper.style.alignItems="center";
+    wrapper.style.gap="0";
+
     const button=
       document.createElement("button");
 
@@ -940,15 +929,38 @@ function renderSalesTabs(){
       "sale-tab"+
       (sale.id===activeSaleId ? " active":"");
 
-    button.textContent=
-      sale.name+
-      (sale.cart.length ? " • "+sale.cart.length : "");
+    button.innerHTML=
+      escapeHtml(sale.name)+
+      (sale.cart.length
+        ? " • "+sale.cart.length
+        : "");
 
     button.onclick=()=>{
       switchSale(sale.id);
     };
 
-    box.appendChild(button);
+    const close=
+      document.createElement("button");
+
+    close.className="close-sale";
+    close.type="button";
+    close.textContent="✕";
+    close.title="Close "+sale.name;
+
+    close.onclick=(event)=>{
+      event.stopPropagation();
+      deleteSale(sale.id);
+    };
+
+    /*
+      Put the sale button and close button
+      together visually.
+    */
+
+    wrapper.appendChild(button);
+    wrapper.appendChild(close);
+
+    box.appendChild(wrapper);
 
   });
 
@@ -1001,23 +1013,43 @@ function deleteSale(id){
     return;
   }
 
-  const sale=saleTabs.find(s=>s.id===id);
+  const sale=
+    saleTabs.find(
+      s=>s.id===id
+    );
+
+  if(!sale)return;
 
   if(
-    sale &&
     sale.cart.length &&
-    !confirm("This sale has items. Close it?")
+    !confirm(
+      "This sale has items.\n\nClose this sale and discard the current items?"
+    )
   ){
     return;
   }
 
+  /*
+    If this is the sale currently being
+    used to edit an old order, cancel
+    that editing session too.
+  */
+
+  if(activeSaleId===id){
+    editingOrderId=null;
+  }
+
   saleTabs=
-    saleTabs.filter(s=>s.id!==id);
+    saleTabs.filter(
+      s=>s.id!==id
+    );
 
   if(activeSaleId===id){
 
     activeSaleId=
-      saleTabs[0].id;
+      saleTabs[
+        Math.max(0,saleTabs.length-1)
+      ].id;
   }
 
   saveAll();
@@ -1630,9 +1662,6 @@ function completeOrder(){
     }
   }
 
-
-  /* EDIT EXISTING ORDER */
-
   if(editingOrderId){
 
     const order=
@@ -1685,9 +1714,6 @@ function completeOrder(){
       return;
     }
   }
-
-
-  /* NEW ORDER */
 
   const order={
 
@@ -2646,11 +2672,6 @@ function editOrder(id){
 
   if(!order)return;
 
-  /*
-    Create a new temporary sale
-    containing the existing order.
-  */
-
   const sale=createSale();
 
   sale.name=
@@ -2674,10 +2695,6 @@ function editOrder(id){
   editingOrderId=id;
 
   saveAll();
-
-  /*
-    Switch to POS.
-  */
 
   document.querySelectorAll(
     ".page"
