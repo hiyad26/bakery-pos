@@ -76,6 +76,8 @@ td,th{padding:8px 5px;border-bottom:1px solid #eee;text-align:left}
 .badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold;background:#f1d8dc;color:#700d1d}
 .badge.green{background:#d9f0e4;color:#19734a}
 .badge.red{background:#f8d5db;color:#b51d35}
+.inventory-actions{display:flex;gap:7px;margin-top:10px}
+.inventory-actions button{flex:1}
 hr{border:0;border-top:1px solid #eee;margin:18px 0}
 @media(min-width:700px){
 .products{grid-template-columns:repeat(4,1fr)}
@@ -99,8 +101,6 @@ hr{border:0;border-top:1px solid #eee;margin:18px 0}
 <button onclick="showPage('reports',this)">Reports</button>
 <button onclick="showPage('history',this)">History</button>
 </nav>
-
-<!-- ================= POS ================= -->
 
 <section id="pos" class="page active">
 
@@ -155,8 +155,6 @@ Change: MVR <span id="changeAmount">0.00</span>
 
 </div>
 </section>
-
-<!-- ================= INVENTORY ================= -->
 
 <section id="inventory" class="page">
 
@@ -257,8 +255,6 @@ Remaining
 
 </section>
 
-<!-- ================= ADMIN ================= -->
-
 <section id="admin" class="page">
 
 <div class="card">
@@ -343,8 +339,6 @@ Date
 
 </section>
 
-<!-- ================= DASHBOARD ================= -->
-
 <section id="dashboard" class="page">
 
 <div class="card">
@@ -396,8 +390,6 @@ Products
 
 </section>
 
-<!-- ================= REPORTS ================= -->
-
 <section id="reports" class="page">
 
 <div class="card">
@@ -438,8 +430,6 @@ Net Profit
 
 </section>
 
-<!-- ================= HISTORY ================= -->
-
 <section id="history" class="page">
 
 <div class="card">
@@ -451,8 +441,6 @@ Net Profit
 </div>
 
 </section>
-
-<!-- ================= RECEIPT ================= -->
 
 <div class="modal" id="receiptModal">
 
@@ -470,10 +458,6 @@ Net Profit
 </div>
 
 <script>
-
-/* =========================
-   STORAGE
-========================= */
 
 const categoryKey="kanbuloCategories";
 const productKey="bakeryProducts";
@@ -507,11 +491,6 @@ let activeSaleId=null;
 let selectedCategory="All";
 let editingOrderId=null;
 
-
-/* =========================
-   SAVE
-========================= */
-
 function saveAll(){
 
 localStorage.setItem(categoryKey,JSON.stringify(categories));
@@ -522,11 +501,6 @@ localStorage.setItem(tabsKey,JSON.stringify(saleTabs));
 localStorage.setItem(inventoryKey,JSON.stringify(inventory));
 
 }
-
-
-/* =========================
-   DATE HELPERS
-========================= */
 
 function localDate(){
 
@@ -591,11 +565,6 @@ Number(r.waste||0)
 
 }
 
-
-/* =========================
-   SALES
-========================= */
-
 function createSale(){
 
 return{
@@ -634,11 +603,6 @@ return saleTabs.find(s=>s.id===activeSaleId);
 
 }
 
-
-/* =========================
-   NAVIGATION
-========================= */
-
 function showPage(page,button){
 
 document.querySelectorAll(".page")
@@ -675,11 +639,6 @@ renderInventory();
 calculateChange();
 
 }
-
-
-/* =========================
-   SALE TABS
-========================= */
 
 function renderSalesTabs(){
 
@@ -769,7 +728,8 @@ if(!sale)return;
 if(
 sale.cart.length &&
 !confirm("This sale has items.\n\nClose this sale and discard the current items?")
-)return;
+)
+return;
 
 if(activeSaleId===id)editingOrderId=null;
 
@@ -786,11 +746,6 @@ saveAll();
 refresh();
 
 }
-
-
-/* =========================
-   CATEGORIES
-========================= */
 
 function renderCategoryButtons(){
 
@@ -950,11 +905,6 @@ saveAll();
 refresh();
 
 }
-
-
-/* =========================
-   PRODUCTS
-========================= */
 
 function renderProducts(){
 
@@ -1145,11 +1095,6 @@ calculateChange();
 
 }
 
-
-/* =========================
-   CART
-========================= */
-
 function renderCart(){
 
 const sale=activeSale();
@@ -1222,11 +1167,6 @@ sale.payment==="Cash"?"block":"none";
 
 }
 
-
-/* =========================
-   PAYMENT
-========================= */
-
 function calculateChange(){
 
 const sale=activeSale();
@@ -1273,11 +1213,6 @@ renderCart();
 calculateChange();
 
 }
-
-
-/* =========================
-   INVENTORY VALIDATION
-========================= */
 
 function validateSaleStock(cart,excludeOrder){
 
@@ -1369,11 +1304,6 @@ saveAll();
 
 }
 
-
-/* =========================
-   COMPLETE SALE
-========================= */
-
 function completeOrder(){
 
 const sale=activeSale();
@@ -1407,9 +1337,6 @@ return;
 }
 
 }
-
-
-/* EDIT EXISTING ORDER */
 
 if(editingOrderId){
 
@@ -1450,9 +1377,6 @@ refresh();
 return;
 
 }
-
-
-/* NEW ORDER */
 
 if(!validateSaleStock(sale.cart,null))return;
 
@@ -1495,11 +1419,6 @@ saveAll();
 refresh();
 
 }
-
-
-/* =========================
-   INVENTORY MANAGEMENT
-========================= */
 
 function renderInventorySelects(){
 
@@ -1635,6 +1554,62 @@ renderDashboard();
 
 }
 
+/* =========================
+   DELETE INDIVIDUAL INVENTORY ITEM
+========================= */
+
+function deleteInventoryItem(date,id){
+
+const product=products.find(p=>p.id===id);
+
+if(!product)return;
+
+if(
+!inventory[date] ||
+!inventory[date][id]
+){
+
+alert("No inventory record found for this item.");
+return;
+
+}
+
+const record=inventory[date][id];
+
+let message=
+`Delete inventory for "${product.name}" on ${date}?\n\n`+
+`Prepared: ${Number(record.prepared||0)}\n`+
+`Sold: ${Number(record.sold||0)}\n`+
+`Waste: ${Number(record.waste||0)}\n\n`+
+`This will remove only this item's inventory record.`;
+
+if(Number(record.sold||0)>0){
+
+message+=
+`\n\n⚠️ This item already has ${record.sold} recorded sale(s) in inventory.`;
+}
+
+if(!confirm(message))return;
+
+delete inventory[date][id];
+
+if(
+inventory[date] &&
+Object.keys(inventory[date]).length===0
+){
+
+delete inventory[date];
+
+}
+
+saveAll();
+
+renderInventory();
+renderProducts();
+renderDashboard();
+
+}
+
 function renderInventory(){
 
 const dateInput=document.getElementById("inventoryDate");
@@ -1676,11 +1651,17 @@ div.className="inventory-row";
 
 div.innerHTML=`
 
-<strong>${escapeHtml(p.emoji)} ${escapeHtml(p.name)}</strong>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+
+<strong>
+${escapeHtml(p.emoji)} ${escapeHtml(p.name)}
+</strong>
 
 <span class="badge ${rem>0?"green":"red"}">
 ${rem>0?rem+" remaining":"SOLD OUT"}
 </span>
+
+</div>
 
 <div class="inventory-grid">
 
@@ -1720,6 +1701,15 @@ escapeHtml(w.reason)+" ("+w.qty+")"
 </small>`
 :""
 }
+
+<div class="inventory-actions">
+
+<button class="danger"
+onclick="deleteInventoryItem('${date}',${p.id})">
+🗑 Delete Inventory
+</button>
+
+</div>
 
 `;
 
@@ -1790,11 +1780,6 @@ html||
 '<div class="empty">No inventory added today.</div>';
 
 }
-
-
-/* =========================
-   RECEIPT
-========================= */
 
 function showReceipt(order){
 
@@ -1874,11 +1859,6 @@ function closeReceipt(){
 document.getElementById("receiptModal").classList.remove("show");
 
 }
-
-
-/* =========================
-   ADMIN PRODUCTS
-========================= */
 
 function renderCategorySelect(){
 
@@ -2068,11 +2048,6 @@ refresh();
 
 }
 
-
-/* =========================
-   EXPENSES
-========================= */
-
 function addExpense(){
 
 const name=document.getElementById("expenseName").value.trim();
@@ -2156,11 +2131,6 @@ refresh();
 
 }
 
-
-/* =========================
-   DASHBOARD
-========================= */
-
 function todayOrders(){
 
 const today=new Date().toDateString();
@@ -2196,11 +2166,6 @@ document.getElementById("dashProducts").textContent=products.length;
 renderDashboardInventory();
 
 }
-
-
-/* =========================
-   REPORTS
-========================= */
 
 function getReportDates(period){
 
@@ -2273,11 +2238,6 @@ document.getElementById("reportExpenses").textContent=exp.toFixed(2);
 document.getElementById("reportProfit").textContent=(sales-exp).toFixed(2);
 
 }
-
-
-/* =========================
-   HISTORY
-========================= */
 
 function renderHistory(){
 
@@ -2358,11 +2318,6 @@ box.appendChild(div);
 
 }
 
-
-/* =========================
-   EDIT ORDER
-========================= */
-
 function editOrder(id){
 
 const order=orders.find(o=>o.id===id);
@@ -2433,11 +2388,6 @@ refresh();
 
 }
 
-
-/* =========================
-   HELPERS
-========================= */
-
 function escapeHtml(value){
 
 return String(value)
@@ -2454,11 +2404,6 @@ function escapeAttr(value){
 return escapeHtml(value);
 
 }
-
-
-/* =========================
-   START
-========================= */
 
 ensureSale();
 
