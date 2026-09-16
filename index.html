@@ -4,335 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bakery POS</title>
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f6f7fb;
-  color:#222;
-}
-header{
-  background:#111827;
-  color:white;
-  padding:16px;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-.header-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f7fb;color:#222}
+header{background:#111827;color:white;padding:16px;position:sticky;top:0;z-index:10}
+.header-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 header h1{margin:0;font-size:22px}
-.sales-box{
-  background:#1f2937;
-  padding:8px 12px;
-  border-radius:10px;
-  font-size:13px;
-}
-nav{
-  display:flex;
-  gap:7px;
-  padding:10px;
-  background:white;
-  overflow-x:auto;
-  border-bottom:1px solid #ddd;
-}
-nav button{
-  border:0;
-  background:#eee;
-  padding:11px 14px;
-  border-radius:10px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-weight:bold;
-}
-nav button.active{
-  background:#111827;
-  color:white;
-}
+.sales-box{background:#1f2937;padding:8px 12px;border-radius:10px;font-size:13px}
+nav{display:flex;gap:7px;padding:10px;background:white;overflow-x:auto;border-bottom:1px solid #ddd}
+nav button{border:0;background:#eee;padding:11px 14px;border-radius:10px;white-space:nowrap;cursor:pointer;font-weight:bold}
+nav button.active{background:#111827;color:white}
 .page{display:none;padding:15px;max-width:1100px;margin:auto}
 .page.active{display:block}
-
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:14px;
-}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
 .section-title h2{margin:0}
-
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-  gap:12px;
-}
-.product{
-  background:white;
-  border:1px solid #e5e7eb;
-  border-radius:15px;
-  padding:15px;
-  cursor:pointer;
-  box-shadow:0 2px 7px #0000000d;
-}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}
+.product{background:white;border:1px solid #e5e7eb;border-radius:15px;padding:15px;cursor:pointer;box-shadow:0 2px 7px #0000000d}
 .product:hover{transform:translateY(-2px)}
 .product.soldout{opacity:.45;cursor:not-allowed}
 .emoji{font-size:35px}
 .product-name{font-weight:bold;margin-top:8px}
 .price{color:#16a34a;font-weight:bold;margin-top:5px}
-.category{
-  font-size:12px;
-  color:#777;
-  margin-top:5px;
-}
-
-.pos-grid{
-  display:grid;
-  grid-template-columns:1.5fr 1fr;
-  gap:15px;
-}
-.cart{
-  background:white;
-  border-radius:15px;
-  padding:15px;
-  box-shadow:0 2px 8px #0000000d;
-}
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid #eee;
-}
-.qty{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.qty button{
-  border:0;
-  background:#eee;
-  width:30px;
-  height:30px;
-  border-radius:8px;
-  font-weight:bold;
-}
-.total{
-  font-size:23px;
-  font-weight:bold;
-  margin:18px 0;
-}
-.payments{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-}
-.payments button{
-  padding:12px 5px;
-  border:2px solid #ddd;
-  background:white;
-  border-radius:10px;
-  cursor:pointer;
-}
-.payments button.selected{
-  border-color:#111827;
-  background:#111827;
-  color:white;
-}
-.primary{
-  width:100%;
-  padding:14px;
-  border:0;
-  background:#16a34a;
-  color:white;
-  border-radius:11px;
-  font-size:16px;
-  font-weight:bold;
-  margin-top:12px;
-  cursor:pointer;
-}
-.danger{background:#dc2626!important}
-.secondary{
-  padding:10px 13px;
-  border:0;
-  background:#e5e7eb;
-  border-radius:9px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:12px;
-}
-.card{
-  background:white;
-  padding:17px;
-  border-radius:15px;
-  box-shadow:0 2px 8px #0000000d;
-}
+.category{font-size:12px;color:#777;margin-top:5px}
+.pos-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px}
+.cart{background:white;border-radius:15px;padding:15px;box-shadow:0 2px 8px #0000000d}
+.cart-item{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{border:0;background:#eee;width:30px;height:30px;border-radius:8px;font-weight:bold}
+.total{font-size:23px;font-weight:bold;margin:18px 0}
+.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.payments button{padding:12px 5px;border:2px solid #ddd;background:white;border-radius:10px;cursor:pointer}
+.payments button.selected{border-color:#111827;background:#111827;color:white}
+.primary{width:100%;padding:14px;border:0;background:#16a34a;color:white;border-radius:11px;font-size:16px;font-weight:bold;margin-top:12px;cursor:pointer}
+.secondary{padding:10px 13px;border:0;background:#e5e7eb;border-radius:9px;cursor:pointer;font-weight:bold}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.card{background:white;padding:17px;border-radius:15px;box-shadow:0 2px 8px #0000000d}
 .card .label{color:#777;font-size:13px}
-.card .value{
-  font-size:23px;
-  font-weight:bold;
-  margin-top:7px;
-}
-
-.form{
-  background:white;
-  padding:15px;
-  border-radius:15px;
-  margin-bottom:15px;
-}
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:10px;
-}
-input,select{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:9px;
-  font-size:15px;
-}
-.form button{
-  padding:12px 15px;
-  border:0;
-  border-radius:9px;
-  background:#111827;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.admin-item,.history-item,.expense-item{
-  background:white;
-  padding:14px;
-  border-radius:13px;
-  margin-bottom:10px;
-  box-shadow:0 2px 7px #0000000d;
-}
-.admin-top,.history-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
-.actions{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.actions button{
-  border:0;
-  padding:8px 10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-}
+.card .value{font-size:23px;font-weight:bold;margin-top:7px}
+.form{background:white;padding:15px;border-radius:15px;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;font-size:15px}
+.form button{padding:12px 15px;border:0;border-radius:9px;background:#111827;color:white;font-weight:bold;cursor:pointer}
+.admin-item,.history-item,.expense-item{background:white;padding:14px;border-radius:13px;margin-bottom:10px;box-shadow:0 2px 7px #0000000d}
+.admin-top,.history-top{display:flex;justify-content:space-between;gap:10px}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.actions button{border:0;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:bold}
 .edit{background:#e0f2fe}
 .delete{background:#fee2e2;color:#991b1b}
 .toggle{background:#dcfce7;color:#166534}
-
-.report-controls{
-  display:flex;
-  gap:8px;
-  margin-bottom:15px;
-}
-.report-controls button{
-  flex:1;
-  padding:11px;
-  border:0;
-  background:#e5e7eb;
-  border-radius:9px;
-  font-weight:bold;
-}
-.report-controls button.active{
-  background:#111827;
-  color:white;
-}
-
-.expense-form{
-  display:grid;
-  grid-template-columns:1fr 130px auto;
-  gap:8px;
-  margin-bottom:15px;
-}
-.expense-total{
-  margin-top:12px;
-  font-size:18px;
-  font-weight:bold;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#0008;
-  z-index:50;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-}
+.report-controls{display:flex;gap:8px;margin-bottom:15px}
+.report-controls button{flex:1;padding:11px;border:0;background:#e5e7eb;border-radius:9px;font-weight:bold}
+.report-controls button.active{background:#111827;color:white}
+.expense-form{display:grid;grid-template-columns:1fr 150px 150px auto;gap:8px;margin-bottom:15px}
+.expense-total{margin-top:12px;font-size:18px;font-weight:bold}
+.expense-date{font-size:13px;color:#666;margin-top:5px}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;align-items:center;justify-content:center;padding:15px}
 .modal.show{display:flex}
-.receipt{
-  background:white;
-  width:100%;
-  max-width:420px;
-  max-height:90vh;
-  overflow:auto;
-  padding:22px;
-  border-radius:15px;
-}
+.receipt{background:white;width:100%;max-width:420px;max-height:90vh;overflow:auto;padding:22px;border-radius:15px}
 .receipt h2{text-align:center;margin-top:0}
-.receipt-line{
-  display:flex;
-  justify-content:space-between;
-  margin:8px 0;
-}
-.receipt-total{
-  border-top:1px dashed #999;
-  margin-top:15px;
-  padding-top:12px;
-  font-size:20px;
-  font-weight:bold;
-}
-.close{
-  width:100%;
-  padding:12px;
-  border:0;
-  border-radius:9px;
-  margin-top:8px;
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-  padding:30px;
-  color:#777;
-  background:white;
-  border-radius:13px;
-}
-
+.receipt-line{display:flex;justify-content:space-between;margin:8px 0}
+.receipt-total{border-top:1px dashed #999;margin-top:15px;padding-top:12px;font-size:20px;font-weight:bold}
+.close{width:100%;padding:12px;border:0;border-radius:9px;margin-top:8px;cursor:pointer}
+.empty{text-align:center;padding:30px;color:#777;background:white;border-radius:13px}
 @media(max-width:750px){
-  .pos-grid{grid-template-columns:1fr}
-  .expense-form{grid-template-columns:1fr}
-  .header-row{align-items:flex-start}
+.pos-grid{grid-template-columns:1fr}
+.expense-form{grid-template-columns:1fr}
+.header-row{align-items:flex-start}
 }
-
 @media print{
-  body>*:not(.modal){display:none!important}
-  .modal{position:static;background:white;display:flex!important}
-  .receipt{box-shadow:none;max-width:100%}
-  .close,.print-btn{display:none!important}
+body>*:not(.modal){display:none!important}
+.modal{position:static;background:white;display:flex!important}
+.receipt{box-shadow:none;max-width:100%}
+.close,.print-btn{display:none!important}
 }
 </style>
 </head>
@@ -340,854 +83,836 @@ input,select{
 <body>
 
 <header>
-  <div class="header-row">
-    <h1>🥐 Bakery POS</h1>
-    <div class="sales-box">
-      Today's Sales: <strong id="headerSales">MVR 0.00</strong>
-    </div>
-  </div>
+<div class="header-row">
+<h1>🥐 Bakery POS</h1>
+<div class="sales-box">Today's Sales: <strong id="headerSales">MVR 0.00</strong></div>
+</div>
 </header>
 
 <nav>
-  <button class="active" onclick="showPage('pos',this)">🧾 POS</button>
-  <button onclick="showPage('admin',this)">⚙️ Admin</button>
-  <button onclick="showPage('dashboard',this)">📊 Dashboard</button>
-  <button onclick="showPage('reports',this)">📈 Reports</button>
-  <button onclick="showPage('history',this)">📜 History</button>
+<button class="active" onclick="showPage('pos',this)">🧾 POS</button>
+<button onclick="showPage('admin',this)">⚙️ Admin</button>
+<button onclick="showPage('dashboard',this)">📊 Dashboard</button>
+<button onclick="showPage('reports',this)">📈 Reports</button>
+<button onclick="showPage('history',this)">📜 History</button>
 </nav>
 
-<!-- POS -->
 <section id="pos" class="page active">
-  <div class="section-title">
-    <h2>Products</h2>
-  </div>
+<div class="section-title"><h2>Products</h2></div>
 
-  <div class="pos-grid">
-    <div>
-      <div id="products" class="products"></div>
-    </div>
+<div class="pos-grid">
+<div>
+<div id="products" class="products"></div>
+</div>
 
-    <div class="cart">
-      <h2>🛒 Current Order</h2>
-      <div id="cart"></div>
+<div class="cart">
+<h2>🛒 Current Order</h2>
+<div id="cart"></div>
 
-      <div class="total">
-        Total: <span id="cartTotal">MVR 0.00</span>
-      </div>
+<div class="total">Total: <span id="cartTotal">MVR 0.00</span></div>
 
-      <div class="payments">
-        <button onclick="setPayment('Cash')" id="payCash">💵 Cash</button>
-        <button onclick="setPayment('Card')" id="payCard">💳 Card</button>
-        <button onclick="setPayment('Transfer')" id="payTransfer">🏦 Transfer</button>
-      </div>
+<div class="payments">
+<button onclick="setPayment('Cash')" id="payCash">💵 Cash</button>
+<button onclick="setPayment('Card')" id="payCard">💳 Card</button>
+<button onclick="setPayment('Transfer')" id="payTransfer">🏦 Transfer</button>
+</div>
 
-      <button class="primary" onclick="completeOrder()">
-        ✅ Complete Order
-      </button>
-    </div>
-  </div>
+<button class="primary" onclick="completeOrder()">✅ Complete Order</button>
+</div>
+</div>
 </section>
 
-<!-- ADMIN -->
 <section id="admin" class="page">
-  <div class="section-title">
-    <h2>⚙️ Product Admin</h2>
-  </div>
+<div class="section-title"><h2>⚙️ Product Admin</h2></div>
 
-  <div class="form">
-    <h3 id="formTitle">Add Product</h3>
+<div class="form">
+<h3 id="formTitle">Add Product</h3>
 
-    <div class="form-grid">
-      <input id="productName" placeholder="Product name">
-      <input id="productPrice" type="number" step="0.01" placeholder="Price">
-      <input id="productCategory" placeholder="Category">
-      <input id="productEmoji" placeholder="Emoji 🥐">
-    </div>
+<div class="form-grid">
+<input id="productName" placeholder="Product name">
+<input id="productPrice" type="number" step="0.01" placeholder="Price">
+<input id="productCategory" placeholder="Category">
+<input id="productEmoji" placeholder="Emoji 🥐">
+</div>
 
-    <button style="margin-top:10px" onclick="saveProduct()">
-      💾 Save Product
-    </button>
+<button style="margin-top:10px" onclick="saveProduct()">💾 Save Product</button>
+<button id="cancelEdit" style="display:none;margin-top:10px;background:#6b7280" onclick="cancelEdit()">Cancel Edit</button>
+</div>
 
-    <button id="cancelEdit" style="display:none;margin-top:10px;background:#6b7280" onclick="cancelEdit()">
-      Cancel Edit
-    </button>
-  </div>
-
-  <div id="adminProducts"></div>
+<div id="adminProducts"></div>
 </section>
 
-<!-- DASHBOARD -->
 <section id="dashboard" class="page">
-  <div class="section-title">
-    <h2>📊 Dashboard</h2>
-  </div>
+<div class="section-title"><h2>📊 Dashboard</h2></div>
 
-  <div class="cards">
-    <div class="card">
-      <div class="label">Today's Sales</div>
-      <div class="value" id="dashSales">MVR 0.00</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Orders Today</div>
-      <div class="value" id="dashOrders">0</div>
-    </div>
-
-    <div class="card">
-      <div class="label">💵 Cash</div>
-      <div class="value" id="dashCash">MVR 0.00</div>
-    </div>
-
-    <div class="card">
-      <div class="label">💳 Card</div>
-      <div class="value" id="dashCard">MVR 0.00</div>
-    </div>
-
-    <div class="card">
-      <div class="label">🏦 Transfer</div>
-      <div class="value" id="dashTransfer">MVR 0.00</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Products</div>
-      <div class="value" id="dashProducts">0</div>
-    </div>
-  </div>
+<div class="cards">
+<div class="card"><div class="label">Today's Sales</div><div class="value" id="dashSales">MVR 0.00</div></div>
+<div class="card"><div class="label">Orders Today</div><div class="value" id="dashOrders">0</div></div>
+<div class="card"><div class="label">💵 Cash</div><div class="value" id="dashCash">MVR 0.00</div></div>
+<div class="card"><div class="label">💳 Card</div><div class="value" id="dashCard">MVR 0.00</div></div>
+<div class="card"><div class="label">🏦 Transfer</div><div class="value" id="dashTransfer">MVR 0.00</div></div>
+<div class="card"><div class="label">Products</div><div class="value" id="dashProducts">0</div></div>
+</div>
 </section>
 
-<!-- REPORTS -->
 <section id="reports" class="page">
-  <div class="section-title">
-    <h2>📈 Reports & Profit</h2>
-  </div>
 
-  <div class="report-controls">
-    <button class="active" onclick="setReport('day',this)">Today</button>
-    <button onclick="setReport('week',this)">This Week</button>
-    <button onclick="setReport('month',this)">This Month</button>
-  </div>
+<div class="section-title">
+<h2>📈 Reports & Profit</h2>
+</div>
 
-  <div class="cards">
-    <div class="card">
-      <div class="label">Gross Sales</div>
-      <div class="value" id="reportSales">MVR 0.00</div>
-    </div>
+<div class="report-controls">
+<button class="active" onclick="setReport('day',this)">Today</button>
+<button onclick="setReport('week',this)">This Week</button>
+<button onclick="setReport('month',this)">This Month</button>
+</div>
 
-    <div class="card">
-      <div class="label">Orders</div>
-      <div class="value" id="reportOrders">0</div>
-    </div>
+<div class="cards">
+<div class="card"><div class="label">Gross Sales</div><div class="value" id="reportSales">MVR 0.00</div></div>
+<div class="card"><div class="label">Orders</div><div class="value" id="reportOrders">0</div></div>
+<div class="card"><div class="label">💵 Cash</div><div class="value" id="reportCash">MVR 0.00</div></div>
+<div class="card"><div class="label">💳 Card</div><div class="value" id="reportCard">MVR 0.00</div></div>
+<div class="card"><div class="label">🏦 Transfer</div><div class="value" id="reportTransfer">MVR 0.00</div></div>
+<div class="card"><div class="label">💸 Expenses</div><div class="value" id="reportExpenses">MVR 0.00</div></div>
+<div class="card"><div class="label">📈 Net Profit</div><div class="value" id="reportProfit">MVR 0.00</div></div>
+</div>
 
-    <div class="card">
-      <div class="label">💵 Cash</div>
-      <div class="value" id="reportCash">MVR 0.00</div>
-    </div>
+<br>
 
-    <div class="card">
-      <div class="label">💳 Card</div>
-      <div class="value" id="reportCard">MVR 0.00</div>
-    </div>
+<div class="form">
+<h3>💸 Add Expense</h3>
 
-    <div class="card">
-      <div class="label">🏦 Transfer</div>
-      <div class="value" id="reportTransfer">MVR 0.00</div>
-    </div>
+<div class="expense-form">
+<input id="expenseName" placeholder="Expense name">
 
-    <div class="card">
-      <div class="label">💸 Expenses</div>
-      <div class="value" id="reportExpenses">MVR 0.00</div>
-    </div>
+<input id="expenseAmount" type="number" step="0.01" placeholder="Amount">
 
-    <div class="card">
-      <div class="label">📈 Net Profit</div>
-      <div class="value" id="reportProfit">MVR 0.00</div>
-    </div>
-  </div>
+<input id="expenseDate" type="date">
 
-  <br>
+<button class="secondary" onclick="addExpense()">➕ Add</button>
+</div>
 
-  <div class="form">
-    <h3>💸 Add Expense</h3>
+<div class="expense-total">
+Selected Period Expenses: <span id="expenseTotal">MVR 0.00</span>
+</div>
+</div>
 
-    <div class="expense-form">
-      <input id="expenseName" placeholder="Expense name">
-      <input id="expenseAmount" type="number" step="0.01" placeholder="Amount">
-      <button class="secondary" onclick="addExpense()">Add</button>
-    </div>
+<h3>Expense History</h3>
+<div id="expenses"></div>
 
-    <div class="expense-total">
-      Total Expenses: <span id="expenseTotal">MVR 0.00</span>
-    </div>
-  </div>
-
-  <h3>Expense History</h3>
-  <div id="expenses"></div>
 </section>
 
-<!-- HISTORY -->
 <section id="history" class="page">
-  <div class="section-title">
-    <h2>📜 Order History</h2>
-  </div>
-
-  <div id="historyList"></div>
+<div class="section-title"><h2>📜 Order History</h2></div>
+<div id="historyList"></div>
 </section>
 
-<!-- RECEIPT MODAL -->
 <div id="receiptModal" class="modal">
-  <div class="receipt">
-    <h2>🥐 Bakery POS</h2>
-    <div style="text-align:center">
-      Thank you for your order ❤️
-    </div>
+<div class="receipt">
+<h2>🥐 Bakery POS</h2>
+<div style="text-align:center">Thank you for your order ❤️</div>
+<hr>
+<div id="receiptContent"></div>
 
-    <hr>
-
-    <div id="receiptContent"></div>
-
-    <button class="primary print-btn" onclick="window.print()">
-      🖨️ Print Receipt
-    </button>
-
-    <button class="close" onclick="closeReceipt()">
-      Close
-    </button>
-  </div>
+<button class="primary print-btn" onclick="window.print()">🖨️ Print Receipt</button>
+<button class="close" onclick="closeReceipt()">Close</button>
+</div>
 </div>
 
 <script>
 
-const defaultProducts = [
-  {id:1,name:"Chocolate Cake",price:120,category:"Cakes",emoji:"🍰",available:true},
-  {id:2,name:"Croissant",price:45,category:"Bakery",emoji:"🥐",available:true},
-  {id:3,name:"Chicken Burger",price:95,category:"Food",emoji:"🍔",available:true},
-  {id:4,name:"Pizza",price:150,category:"Food",emoji:"🍕",available:true},
-  {id:5,name:"French Fries",price:55,category:"Snacks",emoji:"🍟",available:true},
-  {id:6,name:"Coffee",price:35,category:"Drinks",emoji:"☕",available:true},
-  {id:7,name:"Fresh Juice",price:50,category:"Drinks",emoji:"🧃",available:true},
-  {id:8,name:"Sandwich",price:70,category:"Food",emoji:"🥪",available:true}
+const defaultProducts=[
+{id:1,name:"Chocolate Cake",price:120,category:"Cakes",emoji:"🍰",available:true},
+{id:2,name:"Croissant",price:45,category:"Bakery",emoji:"🥐",available:true},
+{id:3,name:"Chicken Burger",price:95,category:"Food",emoji:"🍔",available:true},
+{id:4,name:"Pizza",price:150,category:"Food",emoji:"🍕",available:true},
+{id:5,name:"French Fries",price:55,category:"Snacks",emoji:"🍟",available:true},
+{id:6,name:"Coffee",price:35,category:"Drinks",emoji:"☕",available:true},
+{id:7,name:"Fresh Juice",price:50,category:"Drinks",emoji:"🧃",available:true},
+{id:8,name:"Sandwich",price:70,category:"Food",emoji:"🥪",available:true}
 ];
 
-let products = JSON.parse(localStorage.getItem("bakeryProducts")) || defaultProducts;
-let orders = JSON.parse(localStorage.getItem("bakeryOrders")) || [];
-let expenses = JSON.parse(localStorage.getItem("bakeryExpenses")) || [];
+let products=JSON.parse(localStorage.getItem("bakeryProducts"))||defaultProducts;
+let orders=JSON.parse(localStorage.getItem("bakeryOrders"))||[];
+let expenses=JSON.parse(localStorage.getItem("bakeryExpenses"))||[];
 
-let cart = [];
-let paymentMethod = "Cash";
-let editingId = null;
-let reportPeriod = "day";
+let cart=[];
+let paymentMethod="Cash";
+let editingId=null;
+let reportPeriod="day";
 
 function save(){
-  localStorage.setItem("bakeryProducts",JSON.stringify(products));
-  localStorage.setItem("bakeryOrders",JSON.stringify(orders));
-  localStorage.setItem("bakeryExpenses",JSON.stringify(expenses));
+localStorage.setItem("bakeryProducts",JSON.stringify(products));
+localStorage.setItem("bakeryOrders",JSON.stringify(orders));
+localStorage.setItem("bakeryExpenses",JSON.stringify(expenses));
 }
 
 function money(n){
-  return "MVR " + Number(n || 0).toFixed(2);
+return "MVR "+Number(n||0).toFixed(2);
+}
+
+function todayString(){
+const d=new Date();
+const y=d.getFullYear();
+const m=String(d.getMonth()+1).padStart(2,"0");
+const day=String(d.getDate()).padStart(2,"0");
+return `${y}-${m}-${day}`;
 }
 
 function showPage(id,button){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  button.classList.add("active");
+document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+button.classList.add("active");
 
-  renderAll();
+renderAll();
 }
 
 function renderProducts(){
-  const box=document.getElementById("products");
 
-  if(!products.length){
-    box.innerHTML='<div class="empty">No products yet.</div>';
-    return;
-  }
+const box=document.getElementById("products");
 
-  box.innerHTML=products.map(p=>`
-    <div class="product ${p.available ? "" : "soldout"}"
-         onclick="${p.available ? `addToCart(${p.id})` : ""}">
-      <div class="emoji">${p.emoji || "🍴"}</div>
-      <div class="product-name">${escapeHtml(p.name)}</div>
-      <div class="price">${money(p.price)}</div>
-      <div class="category">${escapeHtml(p.category || "")}</div>
-      ${!p.available ? "<small>Sold Out</small>" : ""}
-    </div>
-  `).join("");
+if(!products.length){
+box.innerHTML='<div class="empty">No products yet.</div>';
+return;
+}
+
+box.innerHTML=products.map(p=>`
+<div class="product ${p.available?"":"soldout"}"
+onclick="${p.available?`addToCart(${p.id})`:""}">
+
+<div class="emoji">${p.emoji||"🍴"}</div>
+<div class="product-name">${escapeHtml(p.name)}</div>
+<div class="price">${money(p.price)}</div>
+<div class="category">${escapeHtml(p.category||"")}</div>
+${!p.available?"<small>Sold Out</small>":""}
+
+</div>
+`).join("");
 }
 
 function addToCart(id){
-  const product=products.find(p=>p.id===id);
-  if(!product || !product.available) return;
 
-  const existing=cart.find(i=>i.id===id);
+const product=products.find(p=>p.id===id);
 
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({
-      id:product.id,
-      name:product.name,
-      price:Number(product.price),
-      qty:1
-    });
-  }
+if(!product||!product.available)return;
 
-  renderCart();
+const existing=cart.find(i=>i.id===id);
+
+if(existing){
+existing.qty++;
+}else{
+cart.push({
+id:product.id,
+name:product.name,
+price:Number(product.price),
+qty:1
+});
+}
+
+renderCart();
 }
 
 function changeQty(id,change){
-  const item=cart.find(i=>i.id===id);
-  if(!item) return;
 
-  item.qty+=change;
+const item=cart.find(i=>i.id===id);
+if(!item)return;
 
-  if(item.qty<=0){
-    cart=cart.filter(i=>i.id!==id);
-  }
+item.qty+=change;
 
-  renderCart();
+if(item.qty<=0){
+cart=cart.filter(i=>i.id!==id);
+}
+
+renderCart();
 }
 
 function cartTotal(){
-  return cart.reduce((sum,item)=>sum + item.price*item.qty,0);
+return cart.reduce((sum,item)=>sum+item.price*item.qty,0);
 }
 
 function renderCart(){
-  const box=document.getElementById("cart");
 
-  if(!cart.length){
-    box.innerHTML='<div class="empty">Cart is empty 🛒</div>';
-  }else{
-    box.innerHTML=cart.map(item=>`
-      <div class="cart-item">
-        <div>
-          <strong>${escapeHtml(item.name)}</strong><br>
-          <small>${money(item.price)} × ${item.qty}</small>
-        </div>
+const box=document.getElementById("cart");
 
-        <div class="qty">
-          <button onclick="changeQty(${item.id},-1)">−</button>
-          <strong>${item.qty}</strong>
-          <button onclick="changeQty(${item.id},1)">+</button>
-        </div>
-      </div>
-    `).join("");
-  }
+if(!cart.length){
+box.innerHTML='<div class="empty">Cart is empty 🛒</div>';
+}else{
 
-  document.getElementById("cartTotal").textContent=money(cartTotal());
+box.innerHTML=cart.map(item=>`
+<div class="cart-item">
+
+<div>
+<strong>${escapeHtml(item.name)}</strong><br>
+<small>${money(item.price)} × ${item.qty}</small>
+</div>
+
+<div class="qty">
+<button onclick="changeQty(${item.id},-1)">−</button>
+<strong>${item.qty}</strong>
+<button onclick="changeQty(${item.id},1)">+</button>
+</div>
+
+</div>
+`).join("");
+}
+
+document.getElementById("cartTotal").textContent=money(cartTotal());
 }
 
 function setPayment(method){
-  paymentMethod=method;
 
-  ["Cash","Card","Transfer"].forEach(m=>{
-    document.getElementById("pay"+m).classList.toggle(
-      "selected",
-      m===method
-    );
-  });
+paymentMethod=method;
+
+["Cash","Card","Transfer"].forEach(m=>{
+document.getElementById("pay"+m).classList.toggle("selected",m===method);
+});
 }
 
 function completeOrder(){
 
-  if(!cart.length){
-    alert("Please add products first.");
-    return;
-  }
+if(!cart.length){
+alert("Please add products first.");
+return;
+}
 
-  const now=new Date();
+const now=new Date();
 
-  const order={
-    id:Date.now(),
-    number:"ORD-"+String(orders.length+1).padStart(4,"0"),
-    date:now.toISOString(),
-    payment:paymentMethod,
-    items:cart.map(item=>({...item})),
-    total:cartTotal()
-  };
+const order={
+id:Date.now(),
+number:"ORD-"+String(orders.length+1).padStart(4,"0"),
+date:now.toISOString(),
+payment:paymentMethod,
+items:cart.map(item=>({...item})),
+total:cartTotal()
+};
 
-  orders.unshift(order);
+orders.unshift(order);
 
-  save();
+save();
 
-  cart=[];
+cart=[];
 
-  renderAll();
+renderAll();
 
-  showReceipt(order);
+showReceipt(order);
 }
 
 function todayOrders(){
-  const today=new Date();
 
-  return orders.filter(order=>{
-    const d=new Date(order.date);
+const today=new Date();
 
-    return d.getFullYear()===today.getFullYear() &&
-           d.getMonth()===today.getMonth() &&
-           d.getDate()===today.getDate();
-  });
+return orders.filter(order=>{
+const d=new Date(order.date);
+
+return d.getFullYear()===today.getFullYear() &&
+d.getMonth()===today.getMonth() &&
+d.getDate()===today.getDate();
+});
 }
 
 function paymentTotal(method,list=todayOrders()){
-  return list
-    .filter(o=>o.payment===method)
-    .reduce((sum,o)=>sum+Number(o.total),0);
+
+return list
+.filter(o=>o.payment===method)
+.reduce((sum,o)=>sum+Number(o.total),0);
 }
 
 function todayTotal(){
-  return todayOrders().reduce((sum,o)=>sum+Number(o.total),0);
+return todayOrders().reduce((sum,o)=>sum+Number(o.total),0);
 }
 
 function renderDashboard(){
 
-  const today=todayOrders();
+const today=todayOrders();
 
-  document.getElementById("headerSales").textContent=money(todayTotal());
-
-  document.getElementById("dashSales").textContent=money(todayTotal());
-  document.getElementById("dashOrders").textContent=today.length;
-  document.getElementById("dashCash").textContent=money(paymentTotal("Cash"));
-  document.getElementById("dashCard").textContent=money(paymentTotal("Card"));
-  document.getElementById("dashTransfer").textContent=money(paymentTotal("Transfer"));
-  document.getElementById("dashProducts").textContent=products.length;
+document.getElementById("headerSales").textContent=money(todayTotal());
+document.getElementById("dashSales").textContent=money(todayTotal());
+document.getElementById("dashOrders").textContent=today.length;
+document.getElementById("dashCash").textContent=money(paymentTotal("Cash"));
+document.getElementById("dashCard").textContent=money(paymentTotal("Card"));
+document.getElementById("dashTransfer").textContent=money(paymentTotal("Transfer"));
+document.getElementById("dashProducts").textContent=products.length;
 }
 
 function saveProduct(){
 
-  const name=document.getElementById("productName").value.trim();
-  const price=Number(document.getElementById("productPrice").value);
-  const category=document.getElementById("productCategory").value.trim();
-  const emoji=document.getElementById("productEmoji").value.trim() || "🍴";
+const name=document.getElementById("productName").value.trim();
+const price=Number(document.getElementById("productPrice").value);
+const category=document.getElementById("productCategory").value.trim();
+const emoji=document.getElementById("productEmoji").value.trim()||"🍴";
 
-  if(!name || !price){
-    alert("Please enter product name and price.");
-    return;
-  }
+if(!name||!price){
+alert("Please enter product name and price.");
+return;
+}
 
-  if(editingId){
+if(editingId){
 
-    const product=products.find(p=>p.id===editingId);
+const product=products.find(p=>p.id===editingId);
 
-    if(product){
-      product.name=name;
-      product.price=price;
-      product.category=category;
-      product.emoji=emoji;
-    }
+if(product){
+product.name=name;
+product.price=price;
+product.category=category;
+product.emoji=emoji;
+}
 
-  }else{
+}else{
 
-    products.push({
-      id:Date.now(),
-      name,
-      price,
-      category,
-      emoji,
-      available:true
-    });
+products.push({
+id:Date.now(),
+name,
+price,
+category,
+emoji,
+available:true
+});
 
-  }
+}
 
-  save();
-  cancelEdit();
-  renderAll();
+save();
+cancelEdit();
+renderAll();
 }
 
 function editProduct(id){
 
-  const p=products.find(x=>x.id===id);
-  if(!p)return;
+const p=products.find(x=>x.id===id);
+if(!p)return;
 
-  editingId=id;
+editingId=id;
 
-  document.getElementById("productName").value=p.name;
-  document.getElementById("productPrice").value=p.price;
-  document.getElementById("productCategory").value=p.category;
-  document.getElementById("productEmoji").value=p.emoji;
+document.getElementById("productName").value=p.name;
+document.getElementById("productPrice").value=p.price;
+document.getElementById("productCategory").value=p.category;
+document.getElementById("productEmoji").value=p.emoji;
 
-  document.getElementById("formTitle").textContent="Edit Product";
-  document.getElementById("cancelEdit").style.display="inline-block";
+document.getElementById("formTitle").textContent="Edit Product";
+document.getElementById("cancelEdit").style.display="inline-block";
 
-  window.scrollTo({top:0,behavior:"smooth"});
+window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function cancelEdit(){
 
-  editingId=null;
+editingId=null;
 
-  document.getElementById("productName").value="";
-  document.getElementById("productPrice").value="";
-  document.getElementById("productCategory").value="";
-  document.getElementById("productEmoji").value="";
+document.getElementById("productName").value="";
+document.getElementById("productPrice").value="";
+document.getElementById("productCategory").value="";
+document.getElementById("productEmoji").value="";
 
-  document.getElementById("formTitle").textContent="Add Product";
-  document.getElementById("cancelEdit").style.display="none";
+document.getElementById("formTitle").textContent="Add Product";
+document.getElementById("cancelEdit").style.display="none";
 }
 
 function deleteProduct(id){
 
-  if(!confirm("Delete this product?")) return;
+if(!confirm("Delete this product?"))return;
 
-  products=products.filter(p=>p.id!==id);
+products=products.filter(p=>p.id!==id);
 
-  save();
-  renderAll();
+save();
+renderAll();
 }
 
 function toggleProduct(id){
 
-  const p=products.find(x=>x.id===id);
+const p=products.find(x=>x.id===id);
 
-  if(p){
-    p.available=!p.available;
-    save();
-    renderAll();
-  }
+if(p){
+p.available=!p.available;
+save();
+renderAll();
+}
 }
 
 function renderAdmin(){
 
-  const box=document.getElementById("adminProducts");
+const box=document.getElementById("adminProducts");
 
-  if(!products.length){
-    box.innerHTML='<div class="empty">No products.</div>';
-    return;
-  }
+if(!products.length){
+box.innerHTML='<div class="empty">No products.</div>';
+return;
+}
 
-  box.innerHTML=products.map(p=>`
-    <div class="admin-item">
-      <div class="admin-top">
-        <div>
-          <strong>${p.emoji} ${escapeHtml(p.name)}</strong>
-          <div>${money(p.price)} · ${escapeHtml(p.category || "No category")}</div>
-        </div>
+box.innerHTML=products.map(p=>`
 
-        <strong>${p.available ? "🟢 Available" : "🔴 Sold Out"}</strong>
-      </div>
+<div class="admin-item">
 
-      <div class="actions">
-        <button class="edit" onclick="editProduct(${p.id})">✏️ Edit</button>
-        <button class="toggle" onclick="toggleProduct(${p.id})">
-          ${p.available ? "🔴 Mark Sold Out" : "🟢 Make Available"}
-        </button>
-        <button class="delete" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
-      </div>
-    </div>
-  `).join("");
+<div class="admin-top">
+
+<div>
+<strong>${p.emoji} ${escapeHtml(p.name)}</strong>
+<div>${money(p.price)} · ${escapeHtml(p.category||"No category")}</div>
+</div>
+
+<strong>${p.available?"🟢 Available":"🔴 Sold Out"}</strong>
+
+</div>
+
+<div class="actions">
+
+<button class="edit" onclick="editProduct(${p.id})">✏️ Edit</button>
+
+<button class="toggle" onclick="toggleProduct(${p.id})">
+${p.available?"🔴 Mark Sold Out":"🟢 Make Available"}
+</button>
+
+<button class="delete" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+
+</div>
+
+</div>
+
+`).join("");
 }
 
 function setReport(period,button){
 
-  reportPeriod=period;
+reportPeriod=period;
 
-  document.querySelectorAll(".report-controls button")
-    .forEach(b=>b.classList.remove("active"));
+document.querySelectorAll(".report-controls button")
+.forEach(b=>b.classList.remove("active"));
 
-  button.classList.add("active");
+button.classList.add("active");
 
-  renderReports();
+renderReports();
+}
+
+function startOfWeek(){
+
+const now=new Date();
+now.setHours(0,0,0,0);
+
+const day=now.getDay();
+const diff=day===0?6:day-1;
+
+now.setDate(now.getDate()-diff);
+
+return now;
+}
+
+function isDateInPeriod(date){
+
+const d=new Date(date);
+const now=new Date();
+
+if(reportPeriod==="day"){
+
+return d.getFullYear()===now.getFullYear() &&
+d.getMonth()===now.getMonth() &&
+d.getDate()===now.getDate();
+
+}
+
+if(reportPeriod==="week"){
+return d>=startOfWeek();
+}
+
+if(reportPeriod==="month"){
+
+return d.getFullYear()===now.getFullYear() &&
+d.getMonth()===now.getMonth();
+
+}
+
+return false;
 }
 
 function getReportOrders(){
-
-  const now=new Date();
-
-  return orders.filter(order=>{
-
-    const d=new Date(order.date);
-
-    if(reportPeriod==="day"){
-      return d.getFullYear()===now.getFullYear() &&
-             d.getMonth()===now.getMonth() &&
-             d.getDate()===now.getDate();
-    }
-
-    if(reportPeriod==="week"){
-
-      const start=new Date(now);
-      start.setHours(0,0,0,0);
-
-      const day=start.getDay();
-      const diff=day===0 ? 6 : day-1;
-
-      start.setDate(start.getDate()-diff);
-
-      return d>=start;
-    }
-
-    if(reportPeriod==="month"){
-      return d.getFullYear()===now.getFullYear() &&
-             d.getMonth()===now.getMonth();
-    }
-
-    return false;
-  });
+return orders.filter(o=>isDateInPeriod(o.date));
 }
 
 function getReportExpenses(){
-
-  const now=new Date();
-
-  return expenses.filter(exp=>{
-
-    const d=new Date(exp.date);
-
-    if(reportPeriod==="day"){
-      return d.getFullYear()===now.getFullYear() &&
-             d.getMonth()===now.getMonth() &&
-             d.getDate()===now.getDate();
-    }
-
-    if(reportPeriod==="week"){
-
-      const start=new Date(now);
-      start.setHours(0,0,0,0);
-
-      const day=start.getDay();
-      const diff=day===0 ? 6 : day-1;
-
-      start.setDate(start.getDate()-diff);
-
-      return d>=start;
-    }
-
-    if(reportPeriod==="month"){
-      return d.getFullYear()===now.getFullYear() &&
-             d.getMonth()===now.getMonth();
-    }
-
-    return false;
-  });
+return expenses.filter(e=>isDateInPeriod(e.date));
 }
 
 function renderReports(){
 
-  const list=getReportOrders();
-  const expenseList=getReportExpenses();
+const list=getReportOrders();
+const expenseList=getReportExpenses();
 
-  const sales=list.reduce((sum,o)=>sum+Number(o.total),0);
-  const expenseTotal=expenseList.reduce((sum,e)=>sum+Number(e.amount),0);
-  const profit=sales-expenseTotal;
+const sales=list.reduce((sum,o)=>sum+Number(o.total),0);
+const expenseTotal=expenseList.reduce((sum,e)=>sum+Number(e.amount),0);
+const profit=sales-expenseTotal;
 
-  document.getElementById("reportSales").textContent=money(sales);
-  document.getElementById("reportOrders").textContent=list.length;
+document.getElementById("reportSales").textContent=money(sales);
+document.getElementById("reportOrders").textContent=list.length;
 
-  document.getElementById("reportCash").textContent=money(
-    paymentTotal("Cash",list)
-  );
+document.getElementById("reportCash").textContent=
+money(paymentTotal("Cash",list));
 
-  document.getElementById("reportCard").textContent=money(
-    paymentTotal("Card",list)
-  );
+document.getElementById("reportCard").textContent=
+money(paymentTotal("Card",list));
 
-  document.getElementById("reportTransfer").textContent=money(
-    paymentTotal("Transfer",list)
-  );
+document.getElementById("reportTransfer").textContent=
+money(paymentTotal("Transfer",list));
 
-  document.getElementById("reportExpenses").textContent=money(expenseTotal);
-  document.getElementById("reportProfit").textContent=money(profit);
+document.getElementById("reportExpenses").textContent=
+money(expenseTotal);
 
-  renderExpenses();
+document.getElementById("reportProfit").textContent=
+money(profit);
+
+renderExpenses();
 }
 
 function addExpense(){
 
-  const name=document.getElementById("expenseName").value.trim();
-  const amount=Number(document.getElementById("expenseAmount").value);
+const name=document.getElementById("expenseName").value.trim();
+const amount=Number(document.getElementById("expenseAmount").value);
+const date=document.getElementById("expenseDate").value;
 
-  if(!name || !amount){
-    alert("Please enter expense name and amount.");
-    return;
-  }
+if(!name||!amount||!date){
 
-  expenses.unshift({
-    id:Date.now(),
-    name,
-    amount,
-    date:new Date().toISOString()
-  });
+alert("Please enter expense name, amount and date.");
+return;
+}
 
-  document.getElementById("expenseName").value="";
-  document.getElementById("expenseAmount").value="";
+expenses.unshift({
 
-  save();
-  renderReports();
+id:Date.now(),
+name:name,
+amount:amount,
+
+/*
+Store the selected date at noon
+to avoid timezone shifting problems.
+*/
+date:date+"T12:00:00"
+
+});
+
+document.getElementById("expenseName").value="";
+document.getElementById("expenseAmount").value="";
+
+save();
+
+renderReports();
 }
 
 function deleteExpense(id){
 
-  if(!confirm("Delete this expense?")) return;
+if(!confirm("Delete this expense?"))return;
 
-  expenses=expenses.filter(e=>e.id!==id);
+expenses=expenses.filter(e=>e.id!==id);
 
-  save();
-  renderReports();
+save();
+
+renderReports();
 }
 
 function renderExpenses(){
 
-  const box=document.getElementById("expenses");
-  const list=getReportExpenses();
+const box=document.getElementById("expenses");
+const list=getReportExpenses();
 
-  const total=list.reduce((sum,e)=>sum+Number(e.amount),0);
+const total=list.reduce((sum,e)=>sum+Number(e.amount),0);
 
-  document.getElementById("expenseTotal").textContent=money(total);
+document.getElementById("expenseTotal").textContent=money(total);
 
-  if(!list.length){
-    box.innerHTML='<div class="empty">No expenses for this period.</div>';
-    return;
-  }
+if(!list.length){
 
-  box.innerHTML=list.map(e=>`
-    <div class="expense-item">
-      <div class="admin-top">
-        <div>
-          <strong>💸 ${escapeHtml(e.name)}</strong><br>
-          <small>${formatDate(e.date)}</small>
-        </div>
+box.innerHTML=
+'<div class="empty">No expenses for this period.</div>';
 
-        <strong>${money(e.amount)}</strong>
-      </div>
+return;
+}
 
-      <div class="actions">
-        <button class="delete" onclick="deleteExpense(${e.id})">
-          🗑️ Delete
-        </button>
-      </div>
-    </div>
-  `).join("");
+box.innerHTML=list.map(e=>`
+
+<div class="expense-item">
+
+<div class="admin-top">
+
+<div>
+
+<strong>💸 ${escapeHtml(e.name)}</strong>
+
+<div class="expense-date">
+📅 ${formatExpenseDate(e.date)}
+</div>
+
+</div>
+
+<strong>${money(e.amount)}</strong>
+
+</div>
+
+<div class="actions">
+
+<button class="delete" onclick="deleteExpense(${e.id})">
+🗑️ Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+}
+
+function formatExpenseDate(date){
+
+const d=new Date(date);
+
+return d.toLocaleDateString(undefined,{
+year:"numeric",
+month:"short",
+day:"numeric"
+});
 }
 
 function renderHistory(){
 
-  const box=document.getElementById("historyList");
+const box=document.getElementById("historyList");
 
-  if(!orders.length){
-    box.innerHTML='<div class="empty">No orders yet.</div>';
-    return;
-  }
+if(!orders.length){
 
-  box.innerHTML=orders.map(order=>`
-    <div class="history-item">
+box.innerHTML='<div class="empty">No orders yet.</div>';
 
-      <div class="history-top">
-        <div>
-          <strong>${order.number}</strong><br>
-          <small>${formatDate(order.date)}</small>
-        </div>
+return;
+}
 
-        <strong>${money(order.total)}</strong>
-      </div>
+box.innerHTML=orders.map(order=>`
 
-      <div style="margin-top:10px">
-        ${order.items.map(i=>
-          `${escapeHtml(i.name)} × ${i.qty}`
-        ).join("<br>")}
-      </div>
+<div class="history-item">
 
-      <div style="margin-top:8px">
-        Payment: <strong>${order.payment}</strong>
-      </div>
+<div class="history-top">
 
-      <div class="actions">
-        <button class="edit" onclick="showReceiptById(${order.id})">
-          🧾 Receipt
-        </button>
+<div>
+<strong>${order.number}</strong><br>
+<small>${formatDate(order.date)}</small>
+</div>
 
-        <button class="delete" onclick="deleteOrder(${order.id})">
-          🗑️ Delete
-        </button>
-      </div>
+<strong>${money(order.total)}</strong>
 
-    </div>
-  `).join("");
+</div>
+
+<div style="margin-top:10px">
+
+${order.items.map(i=>
+`${escapeHtml(i.name)} × ${i.qty}`
+).join("<br>")}
+
+</div>
+
+<div style="margin-top:8px">
+Payment: <strong>${order.payment}</strong>
+</div>
+
+<div class="actions">
+
+<button class="edit" onclick="showReceiptById(${order.id})">
+🧾 Receipt
+</button>
+
+<button class="delete" onclick="deleteOrder(${order.id})">
+🗑️ Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
 }
 
 function deleteOrder(id){
 
-  if(!confirm("Delete this order from history?")) return;
+if(!confirm("Delete this order from history?"))return;
 
-  orders=orders.filter(o=>o.id!==id);
+orders=orders.filter(o=>o.id!==id);
 
-  save();
-  renderAll();
+save();
+renderAll();
 }
 
 function showReceiptById(id){
 
-  const order=orders.find(o=>o.id===id);
+const order=orders.find(o=>o.id===id);
 
-  if(order) showReceipt(order);
+if(order)showReceipt(order);
 }
 
 function showReceipt(order){
 
-  document.getElementById("receiptContent").innerHTML=`
+document.getElementById("receiptContent").innerHTML=`
 
-    <div class="receipt-line">
-      <span>Order</span>
-      <strong>${order.number}</strong>
-    </div>
+<div class="receipt-line">
+<span>Order</span>
+<strong>${order.number}</strong>
+</div>
 
-    <div class="receipt-line">
-      <span>Date</span>
-      <span>${formatDate(order.date)}</span>
-    </div>
+<div class="receipt-line">
+<span>Date</span>
+<span>${formatDate(order.date)}</span>
+</div>
 
-    <hr>
+<hr>
 
-    ${order.items.map(item=>`
-      <div class="receipt-line">
-        <span>${escapeHtml(item.name)} × ${item.qty}</span>
-        <span>${money(item.price*item.qty)}</span>
-      </div>
-    `).join("")}
+${order.items.map(item=>`
 
-    <div class="receipt-total">
-      <div class="receipt-line">
-        <span>Total</span>
-        <span>${money(order.total)}</span>
-      </div>
+<div class="receipt-line">
+<span>${escapeHtml(item.name)} × ${item.qty}</span>
+<span>${money(item.price*item.qty)}</span>
+</div>
 
-      <div class="receipt-line">
-        <span>Payment</span>
-        <span>${order.payment}</span>
-      </div>
-    </div>
-  `;
+`).join("")}
 
-  document.getElementById("receiptModal").classList.add("show");
+<div class="receipt-total">
+
+<div class="receipt-line">
+<span>Total</span>
+<span>${money(order.total)}</span>
+</div>
+
+<div class="receipt-line">
+<span>Payment</span>
+<span>${order.payment}</span>
+</div>
+
+</div>
+`;
+
+document.getElementById("receiptModal").classList.add("show");
 }
 
 function closeReceipt(){
-  document.getElementById("receiptModal").classList.remove("show");
+document.getElementById("receiptModal").classList.remove("show");
 }
 
 function formatDate(date){
-  return new Date(date).toLocaleString();
+return new Date(date).toLocaleString();
 }
 
 function escapeHtml(text){
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 }
 
 function renderAll(){
-  renderProducts();
-  renderCart();
-  renderAdmin();
-  renderDashboard();
-  renderReports();
-  renderHistory();
-  setPayment(paymentMethod);
+
+renderProducts();
+renderCart();
+renderAdmin();
+renderDashboard();
+renderReports();
+renderHistory();
+
+setPayment(paymentMethod);
 }
+
+/* Default expense date = today */
+document.getElementById("expenseDate").value=todayString();
 
 renderAll();
 
