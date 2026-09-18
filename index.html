@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KANBULO BAKERY POS</title>
+
+<style>
+*{box-sizing:border-box}
+.header-logo{width:82px;height:82px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 7px;border:3px solid #e6b33d;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+body{margin:0;font-family:Arial,sans-serif;background:#fff8f5;color:#351015}
+header{background:#700d1d;color:white;padding:13px 12px 15px;text-align:center}
+header h1{margin:0;font-size:24px;letter-spacing:.5px}
+header p{margin:4px 0 0;font-size:13px;opacity:.92}
+nav{display:flex;overflow-x:auto;background:#4d0713;position:sticky;top:0;z-index:20}
+nav button{flex:1;min-width:85px;padding:13px 8px;border:0;background:transparent;color:white;font-weight:bold}
+nav button.active{background:#9b1c31}
+.page{display:none;padding:14px}
+.page.active{display:block}
+.card{background:white;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 3px 12px rgba(80,0,0,.08)}
+h2,h3{margin-top:0;color:#700d1d}
+button{border:0;border-radius:10px;padding:10px 13px;font-weight:bold;cursor:pointer;min-height:42px}
+.primary{background:#700d1d;color:white}
+.secondary{background:#f1d8dc;color:#700d1d}
+.danger{background:#b51d35;color:white}
+.success{background:#19734a;color:white}
+input,select{width:100%;padding:11px;border:1px solid #d9b8be;border-radius:10px;background:white;margin-top:5px;font-size:16px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:10px}
+.sales-tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px}
+.sale-tab{white-space:nowrap;background:#f1d8dc;color:#700d1d;display:flex;align-items:center;gap:8px;padding:10px 9px 10px 13px}
+.sale-tab.active{background:#700d1d;color:white}
+.close-sale{width:28px;height:28px;padding:0;border-radius:50%;background:rgba(0,0,0,.12);color:inherit;font-size:14px;line-height:28px;text-align:center;flex:none}
+.sale-tab.active .close-sale{background:rgba(255,255,255,.2);color:white}
+.close-sale:hover{background:#b51d35;color:white}
+.new-sale{background:#19734a;color:white;white-space:nowrap}
+.categories{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px}
+.categories button{white-space:nowrap;background:#f1d8dc;color:#700d1d;padding:11px 14px;border-radius:22px}
+.categories button.active{background:#700d1d;color:white}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.product{background:white;border:1px solid #ead2d6;border-radius:15px;padding:12px;min-height:190px;display:flex;flex-direction:column;transition:transform .12s,box-shadow .12s}
+.product:active{transform:scale(.98)}
+.product .emoji{font-size:34px;text-align:center;line-height:1.1;margin-bottom:5px}
+.product h3{font-size:15px;margin:5px 0 4px;text-align:center;line-height:1.2}
+.product .price{font-weight:bold;color:#700d1d;text-align:center;font-size:16px;margin-top:5px}
+.product small{color:#777;text-align:center;min-height:16px}
+.stock-label{font-size:11px;font-weight:bold;margin-top:5px;color:#19734a;text-align:center}
+ .stock-out{color:#b51d35}
+.product .add-btn{margin-top:auto;width:100%;font-size:14px}
+.pos-intro{background:linear-gradient(135deg,#fff4ef,#fff);border:1px solid #efd9d2;border-radius:14px;padding:12px;margin-bottom:12px}
+.pos-intro strong{color:#700d1d}
+.search-wrap{position:relative;margin-bottom:10px}
+.search-wrap input{padding-left:40px}
+.search-icon{position:absolute;left:13px;top:17px;font-size:18px;pointer-events:none}
+.cart-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:12px 0}
+.cart-main{min-width:0}
+.cart-name{font-weight:bold;display:block;line-height:1.25}
+.price-editor{display:flex;align-items:center;gap:5px;margin-top:7px}
+.price-editor span{font-size:12px;color:#777;white-space:nowrap}
+.price-editor input{width:105px;margin:0;padding:8px 9px;font-size:14px}
+.price-reset{padding:7px 9px;min-height:36px;background:#f7ecee;color:#700d1d;font-size:12px}
+.line-total{text-align:right;font-size:12px;color:#777;margin-top:5px}
+.qty{display:flex;align-items:center;gap:5px}
+.qty button{width:38px;height:38px;padding:0;background:#f1d8dc;color:#700d1d;font-size:20px}
+.qty strong{min-width:24px;text-align:center}
+.total{font-size:22px;font-weight:bold;color:#700d1d;text-align:right;margin:15px 0}
+.cash-box{background:#fff4ef;border:1px solid #e7c7cd;border-radius:12px;padding:12px;margin-top:12px}
+.change-display{font-size:22px;font-weight:bold;color:#19734a;text-align:right;margin-top:8px}
+.insufficient{color:#b51d35}
+.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.payments button{background:#f1d8dc;color:#700d1d;min-height:48px;font-size:14px}
+.payments button.active{background:#700d1d;color:white}
+.admin-product{border:1px solid #ead2d6;border-radius:12px;padding:12px;margin-bottom:10px;background:#fffafa}
+.admin-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.category-row{display:grid;grid-template-columns:1fr auto auto;gap:7px;align-items:center;margin-bottom:8px}
+.category-row input{margin:0}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#fff;padding:14px;border-radius:12px;box-shadow:0 2px 8px rgba(80,0,0,.07)}
+.stat strong{display:block;font-size:21px;color:#700d1d;margin-top:5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:8px 5px;border-bottom:1px solid #eee;text-align:left}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:15px;z-index:100}
+.modal.show{display:flex}
+.modal-box{background:white;width:100%;max-width:450px;border-radius:15px;padding:18px;max-height:90vh;overflow:auto}
+.empty{text-align:center;padding:25px;color:#777}
+.history-actions{display:flex;gap:7px;flex-wrap:wrap}
+.inventory-row{border:1px solid #ead2d6;border-radius:12px;padding:12px;margin-bottom:10px;background:#fffafa}
+.inventory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.inv-stat{background:#fff4ef;padding:9px;border-radius:9px;text-align:center}
+.inv-stat strong{display:block;color:#700d1d;font-size:18px;margin-top:3px}
+.remaining-good{color:#19734a}
+.remaining-zero{color:#b51d35}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold;background:#f1d8dc;color:#700d1d}
+.badge.green{background:#d9f0e4;color:#19734a}
+.badge.red{background:#f8d5db;color:#b51d35}
+.inventory-actions{display:flex;gap:7px;margin-top:10px}
+.inventory-actions button{flex:1}
+hr{border:0;border-top:1px solid #eee;margin:18px 0}
+@media(min-width:700px){
+.products{grid-template-columns:repeat(4,1fr)}
+.page{max-width:1000px;margin:auto}
+}
+@media(max-width:380px){
+.products{grid-template-columns:repeat(2,1fr);gap:7px}
+.product{padding:9px;min-height:180px}
+.product h3{font-size:14px}
+.payments button{font-size:12px;padding:8px 5px}
+.price-editor input{width:92px}
+.price-reset{font-size:11px;padding:7px 6px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<img class="header-logo" src="kanbulo-logo.png" alt="Kanbulo Bakery logo">
+<h1>KANBULO BAKERY</h1>
+<p>Friendly POS • Fast & Easy Sales</p>
+</header>
+
+<nav>
+<button class="active" onclick="showPage('pos',this)">POS</button>
+<button onclick="showPage('inventory',this)">📦 Inventory</button>
+<button onclick="showPage('admin',this)">Admin</button>
+<button onclick="showPage('dashboard',this)">Dashboard</button>
+<button onclick="showPage('reports',this)">Reports</button>
+<button onclick="showPage('history',this)">History</button>
+</nav>
+
+<section id="pos" class="page active">
+
+<div class="card">
+<div class="sales-tabs" id="salesTabs"></div>
+</div>
+
+<div class="card">
+
+<div class="pos-intro">
+<strong>👋 Ready to take an order?</strong><br>
+<span style="font-size:13px;color:#666">Choose a category, then tap a product. You can change the price in the cart anytime.</span>
+</div>
+
+<div class="search-wrap">
+<span class="search-icon">🔎</span>
+<input id="search" placeholder="Search products..." oninput="renderProducts()">
+</div>
+
+<div id="categoryButtons" class="categories"></div>
+
+<div id="products" class="products"></div>
+
+</div>
+
+<div class="card">
+
+<h2 id="currentSaleTitle">🛒 Sale 1</h2>
+
+<div id="cart"></div>
+
+<div class="total">
+Total: MVR <span id="cartTotal">0.00</span>
+</div>
+
+<div class="payments">
+<button id="payCash" onclick="selectPayment('Cash')">💵 Cash</button>
+<button id="payCard" onclick="selectPayment('Card')">💳 Card</button>
+<button id="payTransfer" onclick="selectPayment('Transfer')">🏦 Transfer</button>
+</div>
+
+<div id="cashBox" class="cash-box">
+
+<label>
+Customer Gives (MVR)
+<input id="cashReceived" type="number" min="0" step="0.01" placeholder="Example: 500" oninput="calculateChange()">
+</label>
+
+<div class="change-display">
+Change: MVR <span id="changeAmount">0.00</span>
+</div>
+
+</div>
+
+<br>
+
+<button class="primary" style="width:100%" onclick="completeOrder()">
+✅ Complete Sale
+</button>
+
+</div>
+</section>
+
+<section id="inventory" class="page">
+
+<div class="card">
+
+<h2>📦 Inventory Management</h2>
+
+<label>
+Inventory Date
+<input type="date" id="inventoryDate" onchange="renderInventory()">
+</label>
+
+<p style="font-size:13px;color:#777">
+Add the quantity you prepared at the beginning of the day.
+Sales are automatically deducted from inventory.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>➕ Add Prepared Stock</h3>
+
+<label>
+Product
+<select id="stockProduct"></select>
+</label>
+
+<label>
+Quantity Prepared
+<input id="stockQuantity" type="number" min="1" step="1" placeholder="Example: 12">
+</label>
+
+<button class="primary" onclick="addStock()">
+＋ Add Stock
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>🗑 Record Waste / Damaged Items</h3>
+
+<label>
+Product
+<select id="wasteProduct"></select>
+</label>
+
+<label>
+Quantity Wasted
+<input id="wasteQuantity" type="number" min="1" step="1" placeholder="Example: 2">
+</label>
+
+<label>
+Reason
+<input id="wasteReason" placeholder="Example: Damaged / Expired">
+</label>
+
+<button class="danger" onclick="addWaste()">
+🗑 Record Waste
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>📊 Daily Inventory</h2>
+
+<div class="stat-grid">
+
+<div class="stat">
+Prepared
+<strong id="invPrepared">0</strong>
+</div>
+
+<div class="stat">
+Sold
+<strong id="invSold">0</strong>
+</div>
+
+<div class="stat">
+Waste
+<strong id="invWaste">0</strong>
+</div>
+
+<div class="stat">
+Remaining
+<strong id="invRemaining">0</strong>
+</div>
+
+</div>
+
+<hr>
+
+<div id="inventoryList"></div>
+
+</div>
+
+</section>
+
+<section id="admin" class="page">
+
+<div class="card">
+
+<h2>🏷️ Category Management</h2>
+
+<label>
+New Category
+<input id="newCategory" placeholder="Example: Pizza">
+</label>
+
+<button class="primary" onclick="addCategory()">＋ Add Category</button>
+
+<hr>
+
+<h3>Existing Categories</h3>
+<div id="categoryManager"></div>
+
+</div>
+
+<div class="card">
+
+<h2>📦 Product Management</h2>
+
+<label>
+Product Name
+<input id="newProductName" placeholder="Example: Chicken Pizza">
+</label>
+
+<label>
+Price (MVR)
+<input id="newProductPrice" type="number" placeholder="150">
+</label>
+
+<label>
+Category
+<select id="newProductCategory"></select>
+</label>
+
+<label>
+Emoji
+<input id="newProductEmoji" placeholder="🍕">
+</label>
+
+<button class="primary" onclick="addProduct()">＋ Add Product</button>
+
+</div>
+
+<div class="card">
+
+<h2>✏️ Edit Products</h2>
+<div id="adminProducts"></div>
+
+</div>
+
+<div class="card">
+
+<h2>💸 Expenses</h2>
+
+<label>
+Expense Name
+<input id="expenseName" placeholder="Example: Ingredients">
+</label>
+
+<label>
+Amount (MVR)
+<input id="expenseAmount" type="number" placeholder="500">
+</label>
+
+<label>
+Date
+<input id="expenseDate" type="date">
+</label>
+
+<button class="primary" onclick="addExpense()">＋ Add Expense</button>
+
+<hr>
+
+<div id="expenseList"></div>
+
+</div>
+
+</section>
+
+<section id="dashboard" class="page">
+
+<div class="card">
+
+<h2>📊 Today's Dashboard</h2>
+
+<div class="stat-grid">
+
+<div class="stat">
+Sales
+<strong>MVR <span id="dashSales">0.00</span></strong>
+</div>
+
+<div class="stat">
+Orders
+<strong id="dashOrders">0</strong>
+</div>
+
+<div class="stat">
+Cash
+<strong>MVR <span id="dashCash">0.00</span></strong>
+</div>
+
+<div class="stat">
+Card
+<strong>MVR <span id="dashCard">0.00</span></strong>
+</div>
+
+<div class="stat">
+Transfer
+<strong>MVR <span id="dashTransfer">0.00</span></strong>
+</div>
+
+<div class="stat">
+Products
+<strong id="dashProducts">0</strong>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📦 Today's Stock</h2>
+<div id="dashboardInventory"></div>
+
+</div>
+
+</section>
+
+<section id="reports" class="page">
+
+<div class="card">
+
+<h2>📈 Reports</h2>
+
+<select id="reportPeriod" onchange="renderReports()">
+<option value="day">Today</option>
+<option value="week">This Week</option>
+<option value="month">This Month</option>
+</select>
+
+<div class="stat-grid" style="margin-top:12px">
+
+<div class="stat">
+Gross Sales
+<strong>MVR <span id="reportSales">0.00</span></strong>
+</div>
+
+<div class="stat">
+Orders
+<strong id="reportOrders">0</strong>
+</div>
+
+<div class="stat">
+Expenses
+<strong>MVR <span id="reportExpenses">0.00</span></strong>
+</div>
+
+<div class="stat">
+Net Profit
+<strong>MVR <span id="reportProfit">0.00</span></strong>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="history" class="page">
+
+<div class="card">
+
+<h2>🧾 Order History</h2>
+
+<div id="orderHistory"></div>
+
+</div>
+
+</section>
+
+<div class="modal" id="receiptModal">
+
+<div class="modal-box">
+
+<div id="receiptContent"></div>
+
+<br>
+
+<button class="primary" onclick="window.print()">🖨️ Print Receipt</button>
+
+<button class="secondary" onclick="closeReceipt()">Close</button>
+
+</div>
+</div>
+
+<script>
+
+const categoryKey="kanbuloCategories";
+const productKey="bakeryProducts";
+const orderKey="bakeryOrders";
+const expenseKey="bakeryExpenses";
+const tabsKey="kanbuloSaleTabs";
+const inventoryKey="kanbuloInventory";
+
+let categories=JSON.parse(localStorage.getItem(categoryKey))||[
+"Pizza","Cakes","Bakery","Burgers","Snacks","Drinks"
+];
+
+let products=JSON.parse(localStorage.getItem(productKey))||[
+{id:1,name:"Chicken Pizza",price:150,category:"Pizza",emoji:"🍕",available:true},
+{id:2,name:"Beef Pizza",price:160,category:"Pizza",emoji:"🍕",available:true},
+{id:3,name:"Tuna Pizza",price:150,category:"Pizza",emoji:"🍕",available:true},
+{id:4,name:"Chocolate Cake",price:120,category:"Cakes",emoji:"🍰",available:true},
+{id:5,name:"Croissant",price:45,category:"Bakery",emoji:"🥐",available:true},
+{id:6,name:"Chicken Burger",price:95,category:"Burgers",emoji:"🍔",available:true},
+{id:7,name:"French Fries",price:55,category:"Snacks",emoji:"🍟",available:true},
+{id:8,name:"Coffee",price:35,category:"Drinks",emoji:"☕",available:true},
+{id:9,name:"Fresh Juice",price:50,category:"Drinks",emoji:"🥤",available:true}
+];
+
+let orders=JSON.parse(localStorage.getItem(orderKey))||[];
+let expenses=JSON.parse(localStorage.getItem(expenseKey))||[];
+let saleTabs=JSON.parse(localStorage.getItem(tabsKey))||[];
+let inventory=JSON.parse(localStorage.getItem(inventoryKey))||{};
+
+let activeSaleId=null;
+let selectedCategory="All";
+let editingOrderId=null;
+
+function saveAll(){
+
+localStorage.setItem(categoryKey,JSON.stringify(categories));
+localStorage.setItem(productKey,JSON.stringify(products));
+localStorage.setItem(orderKey,JSON.stringify(orders));
+localStorage.setItem(expenseKey,JSON.stringify(expenses));
+localStorage.setItem(tabsKey,JSON.stringify(saleTabs));
+localStorage.setItem(inventoryKey,JSON.stringify(inventory));
+
+}
+
+function localDate(){
+
+const d=new Date();
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
+
+}
+
+function inventoryDay(date){
+
+if(!inventory[date]){
+inventory[date]={};
+}
+
+return inventory[date];
+
+}
+
+function getInvRecord(date,id){
+
+const day=inventoryDay(date);
+
+if(!day[id]){
+day[id]={
+prepared:0,
+sold:0,
+waste:0,
+wasteItems:[]
+};
+}
+
+return day[id];
+
+}
+
+function isInventoryTracked(date,id){
+
+return !!(
+inventory[date] &&
+inventory[date][id]
+);
+
+}
+
+function inventoryRemaining(date,id){
+
+if(!isInventoryTracked(date,id)){
+return Infinity;
+}
+
+const r=getInvRecord(date,id);
+
+return Math.max(
+0,
+Number(r.prepared||0)-
+Number(r.sold||0)-
+Number(r.waste||0)
+);
+
+}
+
+function createSale(){
+
+return{
+id:Date.now()+Math.floor(Math.random()*1000),
+name:"Sale "+(saleTabs.length+1),
+cart:[],
+payment:"Cash",
+cashReceived:0
+};
+
+}
+
+function ensureSale(){
+
+if(!saleTabs.length){
+
+const sale=createSale();
+
+saleTabs.push(sale);
+activeSaleId=sale.id;
+saveAll();
+
+}else if(!activeSaleId){
+
+activeSaleId=saleTabs[0].id;
+
+}
+
+}
+
+function activeSale(){
+
+ensureSale();
+
+return saleTabs.find(s=>s.id===activeSaleId);
+
+}
+
+function showPage(page,button){
+
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+document.getElementById(page).classList.add("active");
+
+document.querySelectorAll("nav button")
+.forEach(b=>b.classList.remove("active"));
+
+if(button)button.classList.add("active");
+
+refresh();
+
+}
+
+function refresh(){
+
+ensureSale();
+
+renderSalesTabs();
+renderCategoryButtons();
+renderProducts();
+renderCart();
+renderAdminCategories();
+renderAdminProducts();
+renderCategorySelect();
+renderExpenses();
+renderDashboard();
+renderReports();
+renderHistory();
+renderInventorySelects();
+renderInventory();
+calculateChange();
+
+}
+
+function renderSalesTabs(){
+
+const box=document.getElementById("salesTabs");
+box.innerHTML="";
+
+saleTabs.forEach(sale=>{
+
+const wrapper=document.createElement("div");
+
+wrapper.style.display="flex";
+wrapper.style.alignItems="center";
+
+const button=document.createElement("button");
+
+button.className="sale-tab"+
+(sale.id===activeSaleId?" active":"");
+
+button.innerHTML=
+escapeHtml(sale.name)+
+(sale.cart.length?" • "+sale.cart.length:"");
+
+button.onclick=()=>switchSale(sale.id);
+
+const close=document.createElement("button");
+
+close.className="close-sale";
+close.textContent="✕";
+
+close.onclick=e=>{
+e.stopPropagation();
+deleteSale(sale.id);
+};
+
+wrapper.appendChild(button);
+wrapper.appendChild(close);
+box.appendChild(wrapper);
+
+});
+
+const newButton=document.createElement("button");
+
+newButton.className="new-sale";
+newButton.textContent="＋ New Sale";
+newButton.onclick=newSale;
+
+box.appendChild(newButton);
+
+}
+
+function newSale(){
+
+const sale=createSale();
+
+saleTabs.push(sale);
+activeSaleId=sale.id;
+editingOrderId=null;
+
+saveAll();
+refresh();
+
+}
+
+function switchSale(id){
+
+activeSaleId=id;
+editingOrderId=null;
+
+saveAll();
+refresh();
+
+}
+
+function deleteSale(id){
+
+if(saleTabs.length<=1){
+
+alert("You must keep at least one sale open.");
+return;
+
+}
+
+const sale=saleTabs.find(s=>s.id===id);
+
+if(!sale)return;
+
+if(
+sale.cart.length &&
+!confirm("This sale has items.\n\nClose this sale and discard the current items?")
+)
+return;
+
+if(activeSaleId===id)editingOrderId=null;
+
+saleTabs=saleTabs.filter(s=>s.id!==id);
+
+if(activeSaleId===id){
+
+activeSaleId=
+saleTabs[Math.max(0,saleTabs.length-1)].id;
+
+}
+
+saveAll();
+refresh();
+
+}
+
+function renderCategoryButtons(){
+
+const box=document.getElementById("categoryButtons");
+box.innerHTML="";
+
+const all=document.createElement("button");
+
+all.textContent="✨ All";
+all.className=selectedCategory==="All"?"active":"";
+
+all.onclick=()=>{
+selectedCategory="All";
+renderCategoryButtons();
+renderProducts();
+};
+
+box.appendChild(all);
+
+const categoryIcons={
+Pizza:"🍕",
+Cakes:"🍰",
+Bakery:"🥐",
+Burgers:"🍔",
+Snacks:"🍟",
+Drinks:"🥤"
+};
+
+categories.forEach(cat=>{
+
+const b=document.createElement("button");
+
+b.textContent=(categoryIcons[cat]||"🍽️")+" "+cat;
+b.className=selectedCategory===cat?"active":"";
+
+b.onclick=()=>{
+selectedCategory=cat;
+renderCategoryButtons();
+renderProducts();
+};
+
+box.appendChild(b);
+
+});
+
+}
+
+function renderAdminCategories(){
+
+const box=document.getElementById("categoryManager");
+box.innerHTML="";
+
+if(!categories.length){
+
+box.innerHTML='<div class="empty">No categories yet.</div>';
+return;
+
+}
+
+categories.forEach((cat,index)=>{
+
+const row=document.createElement("div");
+row.className="category-row";
+
+const input=document.createElement("input");
+input.value=cat;
+
+const save=document.createElement("button");
+save.className="secondary";
+save.textContent="💾";
+save.onclick=()=>renameCategory(index,input.value);
+
+const del=document.createElement("button");
+del.className="danger";
+del.textContent="🗑";
+del.onclick=()=>deleteCategory(index);
+
+row.appendChild(input);
+row.appendChild(save);
+row.appendChild(del);
+
+box.appendChild(row);
+
+});
+
+}
+
+function addCategory(){
+
+const input=document.getElementById("newCategory");
+const name=input.value.trim();
+
+if(!name){
+alert("Please enter a category name.");
+return;
+}
+
+if(categories.some(c=>c.toLowerCase()===name.toLowerCase())){
+alert("This category already exists.");
+return;
+}
+
+categories.push(name);
+input.value="";
+
+saveAll();
+refresh();
+
+}
+
+function renameCategory(index,newName){
+
+newName=newName.trim();
+
+if(!newName){
+alert("Category name cannot be empty.");
+renderAdminCategories();
+return;
+}
+
+const oldName=categories[index];
+
+if(categories.some((c,i)=>i!==index&&c.toLowerCase()===newName.toLowerCase())){
+alert("Another category already has this name.");
+renderAdminCategories();
+return;
+}
+
+categories[index]=newName;
+
+products.forEach(p=>{
+if(p.category===oldName)p.category=newName;
+});
+
+if(selectedCategory===oldName)selectedCategory=newName;
+
+saveAll();
+refresh();
+
+}
+
+function deleteCategory(index){
+
+const category=categories[index];
+
+const used=products.filter(p=>p.category===category);
+
+if(used.length){
+
+alert(
+`Cannot delete "${category}".\n\n`+
+`${used.length} product(s) are using it.\n\n`+
+`Change those products first.`
+);
+
+return;
+}
+
+if(!confirm(`Delete category "${category}"?`))return;
+
+categories.splice(index,1);
+
+if(selectedCategory===category)selectedCategory="All";
+
+saveAll();
+refresh();
+
+}
+
+function renderProducts(){
+
+const box=document.getElementById("products");
+
+const search=(
+document.getElementById("search").value||""
+).toLowerCase();
+
+const list=products.filter(p=>{
+
+const cat=
+selectedCategory==="All"||
+p.category===selectedCategory;
+
+const text=p.name.toLowerCase().includes(search);
+
+return cat&&text;
+
+});
+
+box.innerHTML="";
+
+if(!list.length){
+
+box.innerHTML='<div class="empty">No products found.</div>';
+return;
+
+}
+
+const today=localDate();
+
+list.forEach(p=>{
+
+const tracked=isInventoryTracked(today,p.id);
+const remaining=inventoryRemaining(today,p.id);
+
+let stockHTML="";
+
+if(tracked){
+
+if(remaining<=0){
+
+stockHTML=
+`<div class="stock-label stock-out">● Sold Out — 0 left</div>`;
+
+}else{
+
+stockHTML=
+`<div class="stock-label">● ${remaining} left</div>`;
+
+}
+
+}else{
+
+stockHTML=
+`<div class="stock-label" style="color:#777">Inventory not set</div>`;
+
+}
+
+const canSell=
+p.available &&
+(!tracked||remaining>0);
+
+const div=document.createElement("div");
+
+div.className="product";
+
+div.innerHTML=`
+
+<div class="emoji">${p.emoji}</div>
+
+<h3>${escapeHtml(p.name)}</h3>
+
+<small>${escapeHtml(p.category)}</small>
+
+<div class="price">
+MVR ${Number(p.price).toFixed(2)}
+</div>
+
+${stockHTML}
+
+<br>
+
+${
+canSell
+?
+`<button class="primary add-btn" onclick="addToCart(${p.id})">＋ Add to Sale</button>`
+:
+`<button class="add-btn" disabled>${p.available?"Sold Out":"Unavailable"}</button>`
+}
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function addToCart(id){
+
+const p=products.find(x=>x.id===id);
+
+if(!p||!p.available)return;
+
+const sale=activeSale();
+
+const existing=sale.cart.find(x=>x.id===id);
+
+const currentQty=existing?existing.qty:0;
+
+const remaining=inventoryRemaining(localDate(),id);
+
+if(remaining!==Infinity && currentQty>=remaining){
+
+alert(
+`No more ${p.name} available.\n\n`+
+`Remaining stock: ${remaining}`
+);
+
+return;
+
+}
+
+if(existing){
+
+existing.qty++;
+
+}else{
+
+sale.cart.push({
+id:p.id,
+name:p.name,
+price:Number(p.price),
+qty:1
+});
+
+}
+
+saveAll();
+
+renderSalesTabs();
+renderProducts();
+renderCart();
+calculateChange();
+
+}
+
+function changeQty(id,amount){
+
+const sale=activeSale();
+
+const item=sale.cart.find(x=>x.id===id);
+
+if(!item)return;
+
+if(amount>0){
+
+const remaining=inventoryRemaining(localDate(),id);
+
+if(
+remaining!==Infinity &&
+item.qty>=remaining
+){
+
+alert("You cannot add more than the available stock.");
+return;
+
+}
+
+}
+
+item.qty+=amount;
+
+if(item.qty<=0){
+
+sale.cart=sale.cart.filter(x=>x.id!==id);
+
+}
+
+saveAll();
+
+renderSalesTabs();
+renderProducts();
+renderCart();
+calculateChange();
+
+}
+
+function updateItemPrice(id,value){
+
+const sale=activeSale();
+const item=sale.cart.find(x=>x.id===id);
+
+if(!item)return;
+
+const price=Number(value);
+
+if(!Number.isFinite(price)||price<0){
+alert("Price cannot be negative.");
+renderCart();
+return;
+}
+
+item.price=price;
+saveAll();
+renderSalesTabs();
+renderCart();
+calculateChange();
+
+}
+
+function resetItemPrice(id){
+
+const sale=activeSale();
+const item=sale.cart.find(x=>x.id===id);
+const product=products.find(x=>x.id===id);
+
+if(!item||!product)return;
+
+item.price=Number(product.price);
+saveAll();
+renderSalesTabs();
+renderCart();
+calculateChange();
+
+}
+
+function renderCart(){
+
+const sale=activeSale();
+const box=document.getElementById("cart");
+
+box.innerHTML="";
+
+document.getElementById("currentSaleTitle").textContent=
+"🛒 "+sale.name+
+(editingOrderId?" ✏️ EDITING":"");
+
+if(!sale.cart.length){
+
+box.innerHTML='<div class="empty">🛍️ Your sale is empty.<br><small>Tap a product above to add it.</small></div>';
+
+}
+
+sale.cart.forEach(item=>{
+
+const div=document.createElement("div");
+
+div.className="cart-item";
+
+div.innerHTML=`
+
+<div class="cart-main">
+<span class="cart-name">${escapeHtml(item.name)}</span>
+
+<div class="price-editor">
+<span>Price:</span>
+<input type="number" min="0" step="0.01" value="${Number(item.price).toFixed(2)}" onchange="updateItemPrice(${item.id},this.value)" aria-label="Price for ${escapeAttr(item.name)}">
+<button class="price-reset" type="button" onclick="resetItemPrice(${item.id})">↺ Reset</button>
+</div>
+
+<div class="line-total">${item.qty} × MVR ${Number(item.price).toFixed(2)} = <strong>MVR ${(item.price*item.qty).toFixed(2)}</strong></div>
+</div>
+
+<div class="qty">
+<button type="button" onclick="changeQty(${item.id},-1)">−</button>
+<strong>${item.qty}</strong>
+<button type="button" onclick="changeQty(${item.id},1)">+</button>
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+const total=sale.cart.reduce(
+(sum,item)=>sum+(item.price*item.qty),0
+);
+
+document.getElementById("cartTotal").textContent=total.toFixed(2);
+
+document.getElementById("cashReceived").value=
+sale.cashReceived||"";
+
+document.querySelectorAll(".payments button")
+.forEach(b=>b.classList.remove("active"));
+
+if(sale.payment==="Cash")
+document.getElementById("payCash").classList.add("active");
+
+if(sale.payment==="Card")
+document.getElementById("payCard").classList.add("active");
+
+if(sale.payment==="Transfer")
+document.getElementById("payTransfer").classList.add("active");
+
+document.getElementById("cashBox").style.display=
+sale.payment==="Cash"?"block":"none";
+
+}
+
+function calculateChange(){
+
+const sale=activeSale();
+
+const total=sale.cart.reduce(
+(sum,item)=>sum+(item.price*item.qty),0
+);
+
+const input=document.getElementById("cashReceived");
+
+let received=Number(input.value)||0;
+
+sale.cashReceived=received;
+
+const change=received-total;
+
+const display=document.getElementById("changeAmount");
+
+display.textContent=Math.max(change,0).toFixed(2);
+display.classList.remove("insufficient");
+
+if(received>0&&received<total){
+
+display.classList.add("insufficient");
+
+display.textContent=
+"Need "+(total-received).toFixed(2)+" more";
+
+}
+
+saveAll();
+
+}
+
+function selectPayment(type){
+
+const sale=activeSale();
+
+sale.payment=type;
+
+saveAll();
+
+renderCart();
+calculateChange();
+
+}
+
+function validateSaleStock(cart,excludeOrder){
+
+const date=localDate();
+
+for(const item of cart){
+
+const tracked=isInventoryTracked(date,item.id);
+
+if(!tracked)continue;
+
+let soldAlready=getInvRecord(date,item.id).sold;
+
+if(excludeOrder){
+
+const oldItem=
+excludeOrder.items.find(x=>x.id===item.id);
+
+if(oldItem){
+soldAlready-=oldItem.qty;
+}
+
+}
+
+const record=getInvRecord(date,item.id);
+
+const remaining=
+Number(record.prepared||0)-
+Number(record.waste||0)-
+soldAlready;
+
+if(item.qty>remaining){
+
+const p=products.find(x=>x.id===item.id);
+
+alert(
+`Not enough stock for ${p?p.name:item.name}.\n\n`+
+`Available: ${remaining}\n`+
+`Requested: ${item.qty}`
+);
+
+return false;
+
+}
+
+}
+
+return true;
+
+}
+
+function addInventorySale(cart){
+
+const date=localDate();
+
+cart.forEach(item=>{
+
+if(!isInventoryTracked(date,item.id))return;
+
+const record=getInvRecord(date,item.id);
+
+record.sold=
+Number(record.sold||0)+Number(item.qty);
+
+});
+
+saveAll();
+
+}
+
+function removeInventorySale(cart){
+
+const date=localDate();
+
+cart.forEach(item=>{
+
+if(!isInventoryTracked(date,item.id))return;
+
+const record=getInvRecord(date,item.id);
+
+record.sold=Math.max(
+0,
+Number(record.sold||0)-Number(item.qty)
+);
+
+});
+
+saveAll();
+
+}
+
+function completeOrder(){
+
+const sale=activeSale();
+
+if(!sale.cart.length){
+
+alert("Cart is empty.");
+return;
+
+}
+
+const total=sale.cart.reduce(
+(sum,item)=>sum+(item.price*item.qty),0
+);
+
+if(sale.payment==="Cash"){
+
+const received=Number(sale.cashReceived)||0;
+
+if(received<total){
+
+alert(
+"Customer has not given enough cash.\n\n"+
+"Total: MVR "+total.toFixed(2)+"\n"+
+"Received: MVR "+received.toFixed(2)+"\n"+
+"Still needed: MVR "+(total-received).toFixed(2)
+);
+
+return;
+
+}
+
+}
+
+if(editingOrderId){
+
+const order=orders.find(o=>o.id===editingOrderId);
+
+if(!order)return;
+
+if(!validateSaleStock(sale.cart,order))return;
+
+removeInventorySale(order.items);
+
+order.items=JSON.parse(JSON.stringify(sale.cart));
+order.total=total;
+order.payment=sale.payment;
+order.cashReceived=Number(sale.cashReceived)||0;
+
+order.change=
+sale.payment==="Cash"
+?Math.max(0,sale.cashReceived-total)
+:0;
+
+order.editedAt=new Date().toISOString();
+
+addInventorySale(order.items);
+
+showReceipt(order);
+
+editingOrderId=null;
+
+sale.cart=[];
+sale.payment="Cash";
+sale.cashReceived=0;
+
+saveAll();
+
+refresh();
+
+return;
+
+}
+
+if(!validateSaleStock(sale.cart,null))return;
+
+const order={
+
+id:Date.now(),
+
+number:
+"KB-"+String(orders.length+1).padStart(4,"0"),
+
+date:new Date().toISOString(),
+
+items:JSON.parse(JSON.stringify(sale.cart)),
+
+total:total,
+
+payment:sale.payment,
+
+cashReceived:Number(sale.cashReceived)||0,
+
+change:
+sale.payment==="Cash"
+?Math.max(0,sale.cashReceived-total)
+:0
+
+};
+
+orders.unshift(order);
+
+addInventorySale(order.items);
+
+showReceipt(order);
+
+sale.cart=[];
+sale.payment="Cash";
+sale.cashReceived=0;
+
+saveAll();
+
+refresh();
+
+}
+
+function renderInventorySelects(){
+
+const stock=document.getElementById("stockProduct");
+const waste=document.getElementById("wasteProduct");
+
+if(!stock||!waste)return;
+
+stock.innerHTML="";
+waste.innerHTML="";
+
+products.forEach(p=>{
+
+const a=document.createElement("option");
+a.value=p.id;
+a.textContent=p.name;
+
+const b=document.createElement("option");
+b.value=p.id;
+b.textContent=p.name;
+
+stock.appendChild(a);
+waste.appendChild(b);
+
+});
+
+}
+
+function addStock(){
+
+const date=
+document.getElementById("inventoryDate").value||
+localDate();
+
+const id=Number(
+document.getElementById("stockProduct").value
+);
+
+const qty=Number(
+document.getElementById("stockQuantity").value
+);
+
+if(!qty||qty<1){
+
+alert("Enter a valid stock quantity.");
+return;
+
+}
+
+const record=getInvRecord(date,id);
+
+record.prepared=
+Number(record.prepared||0)+qty;
+
+document.getElementById("stockQuantity").value="";
+
+saveAll();
+
+renderInventory();
+renderProducts();
+renderDashboard();
+
+alert(
+"Stock added successfully.\n\n"+
+"Prepared quantity added: "+qty
+);
+
+}
+
+function addWaste(){
+
+const date=
+document.getElementById("inventoryDate").value||
+localDate();
+
+const id=Number(
+document.getElementById("wasteProduct").value
+);
+
+const qty=Number(
+document.getElementById("wasteQuantity").value
+);
+
+const reason=
+document.getElementById("wasteReason").value.trim()||
+"Waste";
+
+if(!qty||qty<1){
+
+alert("Enter a valid waste quantity.");
+return;
+
+}
+
+const record=getInvRecord(date,id);
+
+const remaining=
+Number(record.prepared||0)-
+Number(record.sold||0)-
+Number(record.waste||0);
+
+if(qty>remaining){
+
+alert(
+"Cannot record that much waste.\n\n"+
+"Available remaining: "+remaining
+);
+
+return;
+
+}
+
+record.waste=
+Number(record.waste||0)+qty;
+
+record.wasteItems=
+record.wasteItems||[];
+
+record.wasteItems.push({
+qty:qty,
+reason:reason,
+time:new Date().toISOString()
+});
+
+document.getElementById("wasteQuantity").value="";
+document.getElementById("wasteReason").value="";
+
+saveAll();
+
+renderInventory();
+renderProducts();
+renderDashboard();
+
+}
+
+/* =========================
+   DELETE INDIVIDUAL INVENTORY ITEM
+========================= */
+
+function deleteInventoryItem(date,id){
+
+const product=products.find(p=>p.id===id);
+
+if(!product)return;
+
+if(
+!inventory[date] ||
+!inventory[date][id]
+){
+
+alert("No inventory record found for this item.");
+return;
+
+}
+
+const record=inventory[date][id];
+
+let message=
+`Delete inventory for "${product.name}" on ${date}?\n\n`+
+`Prepared: ${Number(record.prepared||0)}\n`+
+`Sold: ${Number(record.sold||0)}\n`+
+`Waste: ${Number(record.waste||0)}\n\n`+
+`This will remove only this item's inventory record.`;
+
+if(Number(record.sold||0)>0){
+
+message+=
+`\n\n⚠️ This item already has ${record.sold} recorded sale(s) in inventory.`;
+}
+
+if(!confirm(message))return;
+
+delete inventory[date][id];
+
+if(
+inventory[date] &&
+Object.keys(inventory[date]).length===0
+){
+
+delete inventory[date];
+
+}
+
+saveAll();
+
+renderInventory();
+renderProducts();
+renderDashboard();
+
+}
+
+function renderInventory(){
+
+const dateInput=document.getElementById("inventoryDate");
+
+if(!dateInput)return;
+
+const date=dateInput.value||localDate();
+
+if(!dateInput.value)dateInput.value=localDate();
+
+const box=document.getElementById("inventoryList");
+
+box.innerHTML="";
+
+let prepared=0;
+let sold=0;
+let waste=0;
+let remaining=0;
+
+products.forEach(p=>{
+
+if(!isInventoryTracked(date,p.id))return;
+
+const r=getInvRecord(date,p.id);
+
+const rem=
+Number(r.prepared||0)-
+Number(r.sold||0)-
+Number(r.waste||0);
+
+prepared+=Number(r.prepared||0);
+sold+=Number(r.sold||0);
+waste+=Number(r.waste||0);
+remaining+=Math.max(0,rem);
+
+const div=document.createElement("div");
+
+div.className="inventory-row";
+
+div.innerHTML=`
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+
+<strong>
+${escapeHtml(p.emoji)} ${escapeHtml(p.name)}
+</strong>
+
+<span class="badge ${rem>0?"green":"red"}">
+${rem>0?rem+" remaining":"SOLD OUT"}
+</span>
+
+</div>
+
+<div class="inventory-grid">
+
+<div class="inv-stat">
+Prepared
+<strong>${r.prepared||0}</strong>
+</div>
+
+<div class="inv-stat">
+Sold
+<strong>${r.sold||0}</strong>
+</div>
+
+<div class="inv-stat">
+Waste
+<strong>${r.waste||0}</strong>
+</div>
+
+<div class="inv-stat">
+Remaining
+<strong class="${rem>0?"remaining-good":"remaining-zero"}">
+${Math.max(0,rem)}
+</strong>
+</div>
+
+</div>
+
+${
+r.wasteItems&&r.wasteItems.length
+?
+`<small style="display:block;margin-top:8px;color:#777">
+Waste: ${
+r.wasteItems.map(w=>
+escapeHtml(w.reason)+" ("+w.qty+")"
+).join(", ")
+}
+</small>`
+:""
+}
+
+<div class="inventory-actions">
+
+<button class="danger"
+onclick="deleteInventoryItem('${date}',${p.id})">
+🗑 Delete Inventory
+</button>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+if(!box.innerHTML){
+
+box.innerHTML=
+'<div class="empty">No inventory has been added for this date yet.</div>';
+
+}
+
+document.getElementById("invPrepared").textContent=prepared;
+document.getElementById("invSold").textContent=sold;
+document.getElementById("invWaste").textContent=waste;
+document.getElementById("invRemaining").textContent=remaining;
+
+}
+
+function renderDashboardInventory(){
+
+const box=document.getElementById("dashboardInventory");
+
+if(!box)return;
+
+const date=localDate();
+
+let html="";
+
+products.forEach(p=>{
+
+if(!isInventoryTracked(date,p.id))return;
+
+const r=getInvRecord(date,p.id);
+
+const rem=
+Number(r.prepared||0)-
+Number(r.sold||0)-
+Number(r.waste||0);
+
+html+=`
+
+<div class="cart-item">
+
+<div>
+<strong>${escapeHtml(p.emoji)} ${escapeHtml(p.name)}</strong><br>
+<small>
+Prepared ${r.prepared||0} ·
+Sold ${r.sold||0} ·
+Waste ${r.waste||0}
+</small>
+</div>
+
+<strong class="${rem>0?"remaining-good":"remaining-zero"}">
+${Math.max(0,rem)} left
+</strong>
+
+</div>
+
+`;
+
+});
+
+box.innerHTML=
+html||
+'<div class="empty">No inventory added today.</div>';
+
+}
+
+function showReceipt(order){
+
+const box=document.getElementById("receiptContent");
+
+let rows="";
+
+order.items.forEach(item=>{
+
+rows+=`
+<tr>
+<td>${escapeHtml(item.name)} x${item.qty}</td>
+<td>MVR ${(item.price*item.qty).toFixed(2)}</td>
+</tr>
+`;
+
+});
+
+let cashInfo="";
+
+if(order.payment==="Cash"){
+
+cashInfo=`
+
+<p>
+Cash Received:
+<strong>MVR ${Number(order.cashReceived||0).toFixed(2)}</strong>
+</p>
+
+<p>
+Change:
+<strong>MVR ${Number(order.change||0).toFixed(2)}</strong>
+</p>
+
+`;
+
+}
+
+box.innerHTML=`
+
+<div style="text-align:center">
+
+<h2>KANBULO BAKERY</h2>
+
+<small>${new Date(order.date).toLocaleString()}</small>
+
+<br>
+
+<strong>${order.number}</strong>
+
+</div>
+
+<hr>
+
+<table>${rows}</table>
+
+<hr>
+
+<h3 style="text-align:right">
+Total: MVR ${order.total.toFixed(2)}
+</h3>
+
+<p>Payment: <strong>${order.payment}</strong></p>
+
+${cashInfo}
+
+<p style="text-align:center">Thank you!</p>
+
+`;
+
+document.getElementById("receiptModal").classList.add("show");
+
+}
+
+function closeReceipt(){
+
+document.getElementById("receiptModal").classList.remove("show");
+
+}
+
+function renderCategorySelect(){
+
+const select=document.getElementById("newProductCategory");
+
+select.innerHTML="";
+
+categories.forEach(cat=>{
+
+const option=document.createElement("option");
+
+option.value=cat;
+option.textContent=cat;
+
+select.appendChild(option);
+
+});
+
+}
+
+function addProduct(){
+
+if(!categories.length){
+
+alert("Please create a category first.");
+return;
+
+}
+
+const name=document.getElementById("newProductName").value.trim();
+const price=Number(document.getElementById("newProductPrice").value);
+const category=document.getElementById("newProductCategory").value;
+const emoji=document.getElementById("newProductEmoji").value.trim()||"🍽️";
+
+if(!name||!price||!category){
+
+alert("Please fill in product name, price and category.");
+return;
+
+}
+
+products.push({
+id:Date.now(),
+name:name,
+price:price,
+category:category,
+emoji:emoji,
+available:true
+});
+
+document.getElementById("newProductName").value="";
+document.getElementById("newProductPrice").value="";
+document.getElementById("newProductEmoji").value="";
+
+saveAll();
+refresh();
+
+}
+
+function renderAdminProducts(){
+
+const box=document.getElementById("adminProducts");
+
+box.innerHTML="";
+
+if(!products.length){
+
+box.innerHTML='<div class="empty">No products yet.</div>';
+return;
+
+}
+
+products.forEach(p=>{
+
+const div=document.createElement("div");
+
+div.className="admin-product";
+
+div.innerHTML=`
+
+<label>
+Product Name
+<input value="${escapeAttr(p.name)}"
+onchange="updateProduct(${p.id},'name',this.value)">
+</label>
+
+<label>
+Price (MVR)
+<input type="number" value="${p.price}"
+onchange="updateProduct(${p.id},'price',this.value)">
+</label>
+
+<label>
+Category
+<select onchange="updateProduct(${p.id},'category',this.value)">
+${categories.map(c=>`
+<option value="${escapeAttr(c)}"
+${c===p.category?"selected":""}>
+${escapeHtml(c)}
+</option>
+`).join("")}
+</select>
+</label>
+
+<label>
+Emoji
+<input value="${escapeAttr(p.emoji)}"
+onchange="updateProduct(${p.id},'emoji',this.value)">
+</label>
+
+<div class="admin-actions">
+
+<button class="${p.available?"success":"secondary"}"
+onclick="toggleProduct(${p.id})">
+${p.available?"✅ Available":"❌ Sold Out"}
+</button>
+
+<button class="danger"
+onclick="deleteProduct(${p.id})">
+🗑 Delete
+</button>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function updateProduct(id,field,value){
+
+const p=products.find(x=>x.id===id);
+
+if(!p)return;
+
+if(field==="price"){
+
+value=Number(value);
+
+if(value<0){
+
+alert("Price cannot be negative.");
+renderAdminProducts();
+return;
+
+}
+
+}
+
+p[field]=value;
+
+saveAll();
+
+renderProducts();
+renderDashboard();
+
+}
+
+function toggleProduct(id){
+
+const p=products.find(x=>x.id===id);
+
+if(!p)return;
+
+p.available=!p.available;
+
+saveAll();
+refresh();
+
+}
+
+function deleteProduct(id){
+
+const p=products.find(x=>x.id===id);
+
+if(!p)return;
+
+if(!confirm(`Delete "${p.name}"?`))return;
+
+products=products.filter(x=>x.id!==id);
+
+saveAll();
+refresh();
+
+}
+
+function addExpense(){
+
+const name=document.getElementById("expenseName").value.trim();
+const amount=Number(document.getElementById("expenseAmount").value);
+const date=document.getElementById("expenseDate").value;
+
+if(!name||!amount||!date){
+
+alert("Please fill in all expense fields.");
+return;
+
+}
+
+expenses.unshift({
+id:Date.now(),
+name:name,
+amount:amount,
+date:date
+});
+
+document.getElementById("expenseName").value="";
+document.getElementById("expenseAmount").value="";
+
+saveAll();
+refresh();
+
+}
+
+function renderExpenses(){
+
+const box=document.getElementById("expenseList");
+
+box.innerHTML="";
+
+if(!expenses.length){
+
+box.innerHTML='<div class="empty">No expenses yet.</div>';
+return;
+
+}
+
+expenses.forEach(e=>{
+
+const div=document.createElement("div");
+
+div.className="cart-item";
+
+div.innerHTML=`
+
+<div>
+<strong>${escapeHtml(e.name)}</strong><br>
+${e.date}
+</div>
+
+<div>
+<strong>MVR ${Number(e.amount).toFixed(2)}</strong><br>
+
+<button class="danger"
+onclick="deleteExpense(${e.id})">
+Delete
+</button>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function deleteExpense(id){
+
+if(!confirm("Delete this expense?"))return;
+
+expenses=expenses.filter(e=>e.id!==id);
+
+saveAll();
+refresh();
+
+}
+
+function todayOrders(){
+
+const today=new Date().toDateString();
+
+return orders.filter(
+o=>new Date(o.date).toDateString()===today
+);
+
+}
+
+function renderDashboard(){
+
+const list=todayOrders();
+
+const sales=list.reduce((s,o)=>s+o.total,0);
+
+const cash=list.filter(o=>o.payment==="Cash")
+.reduce((s,o)=>s+o.total,0);
+
+const card=list.filter(o=>o.payment==="Card")
+.reduce((s,o)=>s+o.total,0);
+
+const transfer=list.filter(o=>o.payment==="Transfer")
+.reduce((s,o)=>s+o.total,0);
+
+document.getElementById("dashSales").textContent=sales.toFixed(2);
+document.getElementById("dashOrders").textContent=list.length;
+document.getElementById("dashCash").textContent=cash.toFixed(2);
+document.getElementById("dashCard").textContent=card.toFixed(2);
+document.getElementById("dashTransfer").textContent=transfer.toFixed(2);
+document.getElementById("dashProducts").textContent=products.length;
+
+renderDashboardInventory();
+
+}
+
+function getReportDates(period){
+
+const now=new Date();
+
+let start=new Date(now);
+let end=new Date(now);
+
+if(period==="day"){
+
+start.setHours(0,0,0,0);
+end.setHours(23,59,59,999);
+
+}
+
+if(period==="week"){
+
+const day=now.getDay();
+
+start.setDate(now.getDate()-day);
+start.setHours(0,0,0,0);
+end.setHours(23,59,59,999);
+
+}
+
+if(period==="month"){
+
+start=new Date(now.getFullYear(),now.getMonth(),1);
+
+end=new Date(
+now.getFullYear(),
+now.getMonth()+1,
+0,
+23,59,59,999
+);
+
+}
+
+return{start,end};
+
+}
+
+function renderReports(){
+
+const period=document.getElementById("reportPeriod").value;
+
+const {start,end}=getReportDates(period);
+
+const list=orders.filter(o=>{
+
+const d=new Date(o.date);
+
+return d>=start&&d<=end;
+
+});
+
+const sales=list.reduce((s,o)=>s+o.total,0);
+
+const exp=expenses.filter(e=>{
+
+const d=new Date(e.date+"T00:00:00");
+
+return d>=start&&d<=end;
+
+}).reduce((s,e)=>s+Number(e.amount),0);
+
+document.getElementById("reportSales").textContent=sales.toFixed(2);
+document.getElementById("reportOrders").textContent=list.length;
+document.getElementById("reportExpenses").textContent=exp.toFixed(2);
+document.getElementById("reportProfit").textContent=(sales-exp).toFixed(2);
+
+}
+
+function renderHistory(){
+
+const box=document.getElementById("orderHistory");
+
+box.innerHTML="";
+
+if(!orders.length){
+
+box.innerHTML='<div class="empty">No orders yet.</div>';
+return;
+
+}
+
+orders.forEach(o=>{
+
+const div=document.createElement("div");
+
+div.className="admin-product";
+
+const items=o.items.map(i=>
+`${escapeHtml(i.name)} x${i.qty}`
+).join(", ");
+
+let cashInfo="";
+
+if(o.payment==="Cash"){
+
+cashInfo=`
+
+<p>
+Received: MVR ${Number(o.cashReceived||0).toFixed(2)}
+<br>
+Change: MVR ${Number(o.change||0).toFixed(2)}
+</p>
+
+`;
+
+}
+
+div.innerHTML=`
+
+<strong>${o.number}</strong>
+
+<br>
+
+<small>${new Date(o.date).toLocaleString()}</small>
+
+<p>${items}</p>
+
+<strong>MVR ${o.total.toFixed(2)}</strong>
+
+<p>Payment: ${o.payment}</p>
+
+${cashInfo}
+
+<div class="history-actions">
+
+<button class="primary" onclick="editOrder(${o.id})">
+✏️ Edit
+</button>
+
+<button class="secondary" onclick="showReceiptById(${o.id})">
+🧾 Receipt
+</button>
+
+<button class="danger" onclick="deleteOrder(${o.id})">
+🗑 Delete
+</button>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function editOrder(id){
+
+const order=orders.find(o=>o.id===id);
+
+if(!order)return;
+
+const sale=createSale();
+
+sale.name="Edit "+order.number;
+
+sale.cart=JSON.parse(JSON.stringify(order.items));
+
+sale.payment=order.payment;
+
+sale.cashReceived=Number(order.cashReceived)||0;
+
+saleTabs.push(sale);
+
+activeSaleId=sale.id;
+editingOrderId=id;
+
+saveAll();
+
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+document.getElementById("pos").classList.add("active");
+
+document.querySelectorAll("nav button")
+.forEach(b=>b.classList.remove("active"));
+
+document.querySelector("nav button").classList.add("active");
+
+refresh();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+function showReceiptById(id){
+
+const order=orders.find(o=>o.id===id);
+
+if(order)showReceipt(order);
+
+}
+
+function deleteOrder(id){
+
+if(!confirm(
+"Delete this order?\n\n"+
+"If inventory tracking was active, the sold quantity will be returned to inventory."
+))return;
+
+const order=orders.find(o=>o.id===id);
+
+if(!order)return;
+
+removeInventorySale(order.items);
+
+orders=orders.filter(o=>o.id!==id);
+
+saveAll();
+refresh();
+
+}
+
+function escapeHtml(value){
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+function escapeAttr(value){
+
+return escapeHtml(value);
+
+}
+
+ensureSale();
+
+document.getElementById("expenseDate").value=localDate();
+document.getElementById("inventoryDate").value=localDate();
+
+refresh();
+
+</script>
+
+</body>
+</html>
