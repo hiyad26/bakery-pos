@@ -12,26 +12,20 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-box-sizing:border-box
-}
+*{box-sizing:border-box}
 
-html{
-scroll-behavior:smooth
-}
+html{scroll-behavior:smooth}
 
 body{
 margin:0;
 font-family:Arial,sans-serif;
 background:#fff8f5;
 color:#351015;
-font-size:15px
+font-size:15px;
+padding-bottom:20px
 }
 
-/* =========================
-   HEADER
-========================= */
-
+/* HEADER */
 header{
 background:#700d1d;
 color:white;
@@ -63,10 +57,7 @@ font-size:13px;
 opacity:.92
 }
 
-/* =========================
-   NAVIGATION
-========================= */
-
+/* NAV */
 nav{
 display:flex;
 overflow-x:auto;
@@ -78,14 +69,12 @@ box-shadow:0 2px 8px rgba(0,0,0,.18);
 scrollbar-width:none
 }
 
-nav::-webkit-scrollbar{
-display:none
-}
+nav::-webkit-scrollbar{display:none}
 
 nav button{
 flex:1;
 min-width:105px;
-padding:13px 9px;
+padding:14px 9px;
 border:0;
 border-radius:0;
 background:transparent;
@@ -95,14 +84,9 @@ font-size:14px;
 white-space:nowrap
 }
 
-nav button.active{
-background:#9b1c31
-}
+nav button.active{background:#9b1c31}
 
-/* =========================
-   PAGES
-========================= */
-
+/* PAGES */
 .page{
 display:none;
 padding:16px;
@@ -111,14 +95,9 @@ max-width:1500px;
 margin:auto
 }
 
-.page.active{
-display:block
-}
+.page.active{display:block}
 
-/* =========================
-   CARDS
-========================= */
-
+/* CARDS */
 .card{
 background:white;
 border-radius:16px;
@@ -133,18 +112,10 @@ margin-top:0;
 color:#700d1d
 }
 
-h2{
-font-size:21px
-}
+h2{font-size:21px}
+h3{font-size:17px}
 
-h3{
-font-size:17px
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
+/* BUTTONS */
 button{
 border:0;
 border-radius:10px;
@@ -180,10 +151,7 @@ background:#19734a;
 color:white
 }
 
-/* =========================
-   INPUTS
-========================= */
-
+/* INPUTS */
 input,select{
 width:100%;
 padding:12px;
@@ -208,10 +176,7 @@ font-weight:bold;
 margin-bottom:11px
 }
 
-/* =========================
-   POS INTRO
-========================= */
-
+/* POS INTRO */
 .pos-intro{
 background:linear-gradient(135deg,#fff4ef,#fff);
 border:1px solid #efd9d2;
@@ -220,18 +185,13 @@ padding:13px;
 margin-bottom:13px
 }
 
-.pos-intro strong{
-color:#700d1d
-}
+.pos-intro strong{color:#700d1d}
 
-/* =========================
-   POS LAYOUT
-========================= */
-
+/* POS LAYOUT */
 .pos-layout{
 display:grid;
-grid-template-columns:430px minmax(0,1fr);
-gap:18px;
+grid-template-columns:440px minmax(0,1fr);
+gap:20px;
 align-items:start
 }
 
@@ -241,19 +201,12 @@ top:62px;
 min-width:0
 }
 
-.pos-right{
-min-width:0
-}
+.pos-right{min-width:0}
 
 .pos-left .card,
-.pos-right .card{
-margin-bottom:13px
-}
+.pos-right .card{margin-bottom:13px}
 
-/* =========================
-   SALES TABS
-========================= */
-
+/* POS HEADING */
 .pos-heading{
 display:flex;
 align-items:center;
@@ -262,9 +215,7 @@ gap:10px;
 margin-bottom:12px
 }
 
-.pos-heading h2{
-margin:0
-}
+.pos-heading h2{margin:0}
 
 .pos-hint{
 font-size:12px;
@@ -274,6 +225,7 @@ padding:6px 9px;
 border-radius:20px
 }
 
+/* SALES TABS */
 .sales-tabs{
 display:flex;
 flex-direction:column;
@@ -345,10 +297,7 @@ color:white;
 margin-top:2px
 }
 
-/* =========================
-   SEARCH
-========================= */
-
+/* SEARCH */
 .search-wrap{
 position:relative;
 margin-bottom:12px
@@ -356,7 +305,7 @@ margin-bottom:12px
 
 .search-wrap input{
 padding-left:42px;
-height:48px
+height:50px
 }
 
 .search-icon{
@@ -368,10 +317,7 @@ pointer-events:none;
 z-index:2
 }
 
-/* =========================
-   CATEGORIES
-========================= */
-
+/* CATEGORIES */
 .categories{
 display:flex;
 gap:8px;
@@ -380,9 +326,7 @@ padding:2px 0 12px;
 scrollbar-width:none
 }
 
-.categories::-webkit-scrollbar{
-display:none
-}
+.categories::-webkit-scrollbar{display:none}
 
 .categories button{
 white-space:nowrap;
@@ -390,7 +334,7 @@ background:#f1d8dc;
 color:#700d1d;
 padding:11px 15px;
 border-radius:22px;
-min-height:42px
+min-height:44px
 }
 
 .categories button.active{
@@ -398,31 +342,26 @@ background:#700d1d;
 color:white
 }
 
-/* =========================
-   PRODUCTS
-========================= */
-
+/* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(5,minmax(135px,1fr));
-gap:13px
+grid-template-columns:repeat(5,minmax(145px,1fr));
+gap:14px
 }
 
 .product{
 background:white;
 border:1px solid #ead2d6;
 border-radius:16px;
-padding:13px;
-min-height:205px;
+padding:14px;
+min-height:215px;
 display:flex;
 flex-direction:column;
 transition:transform .12s,box-shadow .12s;
 box-shadow:0 2px 7px rgba(80,0,0,.04)
 }
 
-.product:active{
-transform:scale(.98)
-}
+.product:active{transform:scale(.98)}
 
 .product:hover{
 transform:translateY(-2px);
@@ -430,14 +369,14 @@ box-shadow:0 6px 16px rgba(80,0,0,.10)
 }
 
 .product .emoji{
-font-size:40px;
+font-size:42px;
 text-align:center;
 line-height:1.1;
 margin-bottom:6px
 }
 
 .product h3{
-font-size:15px;
+font-size:16px;
 margin:5px 0 4px;
 text-align:center;
 line-height:1.25
@@ -447,7 +386,7 @@ line-height:1.25
 font-weight:bold;
 color:#700d1d;
 text-align:center;
-font-size:17px;
+font-size:18px;
 margin-top:6px
 }
 
@@ -465,20 +404,16 @@ color:#19734a;
 text-align:center
 }
 
-.stock-out{
-color:#b51d35
-}
+.stock-out{color:#b51d35}
 
 .product .add-btn{
 margin-top:auto;
 width:100%;
-font-size:14px
+font-size:15px;
+padding:12px 8px
 }
 
-/* =========================
-   CART
-========================= */
-
+/* CART */
 .cart-item{
 display:grid;
 grid-template-columns:minmax(0,1fr) auto;
@@ -488,13 +423,9 @@ border-bottom:1px solid #eee;
 padding:13px 0
 }
 
-.cart-item:last-child{
-border-bottom:0
-}
+.cart-item:last-child{border-bottom:0}
 
-.cart-main{
-min-width:0
-}
+.cart-main{min-width:0}
 
 .cart-name{
 font-weight:bold;
@@ -544,9 +475,9 @@ gap:5px
 }
 
 .qty button{
-width:39px;
-height:39px;
-min-height:39px;
+width:40px;
+height:40px;
+min-height:40px;
 padding:0;
 background:#f1d8dc;
 color:#700d1d;
@@ -559,17 +490,14 @@ text-align:center
 }
 
 .total{
-font-size:23px;
+font-size:24px;
 font-weight:bold;
 color:#700d1d;
 text-align:right;
 margin:16px 0
 }
 
-/* =========================
-   PAYMENTS
-========================= */
-
+/* PAYMENTS */
 .payments{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -604,14 +532,9 @@ text-align:right;
 margin-top:8px
 }
 
-.insufficient{
-color:#b51d35
-}
+.insufficient{color:#b51d35}
 
-/* =========================
-   STATS
-========================= */
-
+/* STATS */
 .stat-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -633,10 +556,7 @@ color:#700d1d;
 margin-top:6px
 }
 
-/* =========================
-   TABLES
-========================= */
-
+/* TABLES */
 table{
 width:100%;
 border-collapse:collapse;
@@ -649,10 +569,7 @@ border-bottom:1px solid #eee;
 text-align:left
 }
 
-/* =========================
-   ADMIN
-========================= */
-
+/* ADMIN */
 .admin-product{
 border:1px solid #ead2d6;
 border-radius:13px;
@@ -676,14 +593,9 @@ align-items:center;
 margin-bottom:8px
 }
 
-.category-row input{
-margin:0
-}
+.category-row input{margin:0}
 
-/* =========================
-   INVENTORY
-========================= */
-
+/* INVENTORY */
 .inventory-row{
 border:1px solid #ead2d6;
 border-radius:13px;
@@ -713,13 +625,8 @@ font-size:18px;
 margin-top:3px
 }
 
-.remaining-good{
-color:#19734a
-}
-
-.remaining-zero{
-color:#b51d35
-}
+.remaining-good{color:#19734a}
+.remaining-zero{color:#b51d35}
 
 .badge{
 display:inline-block;
@@ -747,24 +654,16 @@ gap:7px;
 margin-top:10px
 }
 
-.inventory-actions button{
-flex:1
-}
+.inventory-actions button{flex:1}
 
-/* =========================
-   HISTORY
-========================= */
-
+/* HISTORY */
 .history-actions{
 display:flex;
 gap:7px;
 flex-wrap:wrap
 }
 
-/* =========================
-   MODAL
-========================= */
-
+/* MODAL */
 .modal{
 position:fixed;
 inset:0;
@@ -776,9 +675,7 @@ padding:15px;
 z-index:100
 }
 
-.modal.show{
-display:flex
-}
+.modal.show{display:flex}
 
 .modal-box{
 background:white;
@@ -790,20 +687,14 @@ max-height:90vh;
 overflow:auto
 }
 
-/* =========================
-   EMPTY
-========================= */
-
+/* EMPTY */
 .empty{
 text-align:center;
 padding:28px 15px;
 color:#777
 }
 
-/* =========================
-   BACKUP
-========================= */
-
+/* BACKUP */
 hr{
 border:0;
 border-top:1px solid #eee;
@@ -823,42 +714,50 @@ width:100%;
 margin-bottom:8px
 }
 
-/* =========================
-   DESKTOP LARGE SCREEN
-========================= */
-
+/* LARGE LAPTOP */
 @media(min-width:1200px){
+
+.page{
+padding:20px 24px;
+max-width:1550px
+}
 
 .pos-layout{
 grid-template-columns:450px minmax(0,1fr);
-gap:20px
+gap:22px
 }
 
 .products{
-grid-template-columns:repeat(5,minmax(145px,1fr));
-gap:14px
-}
-
-.page{
-padding:18px 22px
+grid-template-columns:repeat(5,minmax(150px,1fr));
+gap:15px
 }
 
 }
 
-/* =========================
-   TABLET
-========================= */
-
-@media(max-width:1100px){
+/* MEDIUM LAPTOP */
+@media(max-width:1199px) and (min-width:701px){
 
 .pos-layout{
-grid-template-columns:360px minmax(0,1fr);
-gap:13px
+grid-template-columns:390px minmax(0,1fr);
+gap:15px
 }
 
 .products{
-grid-template-columns:repeat(3,minmax(115px,1fr));
-gap:10px
+grid-template-columns:repeat(4,minmax(125px,1fr));
+gap:11px
+}
+
+}
+
+/* TABLET */
+@media(max-width:900px) and (min-width:701px){
+
+.pos-layout{
+grid-template-columns:350px minmax(0,1fr)
+}
+
+.products{
+grid-template-columns:repeat(3,minmax(115px,1fr))
 }
 
 .stat-grid{
@@ -867,15 +766,10 @@ grid-template-columns:repeat(2,1fr)
 
 }
 
-/* =========================
-   PHONE
-========================= */
-
+/* PHONE */
 @media(max-width:700px){
 
-body{
-font-size:14px
-}
+body{font-size:14px}
 
 header{
 padding:10px 12px 13px
@@ -886,13 +780,9 @@ width:65px;
 height:65px
 }
 
-header h1{
-font-size:21px
-}
+header h1{font-size:21px}
 
-header p{
-font-size:12px
-}
+header p{font-size:12px}
 
 nav button{
 min-width:91px;
@@ -900,9 +790,7 @@ font-size:12px;
 padding:12px 7px
 }
 
-.page{
-padding:10px
-}
+.page{padding:10px}
 
 .card{
 padding:13px;
@@ -910,9 +798,7 @@ border-radius:14px;
 margin-bottom:11px
 }
 
-h2{
-font-size:19px
-}
+h2{font-size:19px}
 
 .pos-layout{
 display:flex;
@@ -922,21 +808,13 @@ gap:0
 
 .pos-left{
 position:static;
-width:100%
+width:100%;
+order:0
 }
 
 .pos-right{
-width:100%
-}
-
-/* Products first feeling on phone */
-.pos-right{
-display:flex;
-flex-direction:column
-}
-
-.pos-right .card{
-width:100%
+width:100%;
+order:1
 }
 
 .sales-tabs{
@@ -946,9 +824,7 @@ padding-bottom:4px;
 scrollbar-width:none
 }
 
-.sales-tabs::-webkit-scrollbar{
-display:none
-}
+.sales-tabs::-webkit-scrollbar{display:none}
 
 .sale-tab-wrap{
 width:auto;
@@ -965,18 +841,6 @@ min-width:120px;
 margin-top:0
 }
 
-.pos-left .card:first-child{
-order:0
-}
-
-.pos-right{
-order:1
-}
-
-.pos-left{
-order:0
-}
-
 .pos-right .products{
 grid-template-columns:repeat(2,minmax(0,1fr));
 gap:9px
@@ -988,42 +852,28 @@ overflow-x:auto
 }
 
 .product{
-min-height:190px;
+min-height:195px;
 padding:11px
 }
 
-.product .emoji{
-font-size:34px
-}
+.product .emoji{font-size:35px}
 
-.product h3{
-font-size:14px
-}
+.product h3{font-size:14px}
 
-.product .price{
-font-size:16px
-}
+.product .price{font-size:16px}
 
 .product .add-btn{
 font-size:13px;
-padding:10px 6px
+padding:11px 6px
 }
 
-.pos-intro{
-font-size:13px
-}
+.pos-intro{font-size:13px}
 
-.cart-item{
-padding:11px 0
-}
+.cart-item{padding:11px 0}
 
-.price-editor input{
-width:95px
-}
+.price-editor input{width:95px}
 
-.total{
-font-size:21px
-}
+.total{font-size:21px}
 
 .payments button{
 font-size:12px;
@@ -1035,13 +885,9 @@ grid-template-columns:repeat(2,1fr);
 gap:9px
 }
 
-.stat{
-padding:12px
-}
+.stat{padding:12px}
 
-.stat strong{
-font-size:18px
-}
+.stat strong{font-size:18px}
 
 .inventory-grid{
 grid-template-columns:repeat(2,1fr)
@@ -1052,72 +898,50 @@ grid-template-columns:minmax(0,1fr) auto auto
 }
 
 .history-actions button{
-flex:1
+flex:1;
 min-width:90px
 }
 
 }
 
-/* =========================
-   SMALL PHONE
-========================= */
-
+/* SMALL PHONE */
 @media(max-width:380px){
 
-.page{
-padding:8px
-}
+.page{padding:8px}
 
-.card{
-padding:11px
-}
+.card{padding:11px}
 
-.pos-right .products{
-gap:7px
-}
+.pos-right .products{gap:7px}
 
 .product{
 padding:9px;
 min-height:180px
 }
 
-.product h3{
-font-size:13px
-}
+.product h3{font-size:13px}
 
-.product .emoji{
-font-size:31px
-}
+.product .emoji{font-size:31px}
 
 .payments button{
 font-size:11px;
 padding:8px 4px
 }
 
-.price-editor input{
-width:88px
-}
+.price-editor input{width:88px}
 
 .price-reset{
 font-size:11px;
 padding:7px 6px
 }
 
-.stat strong{
-font-size:17px
-}
+.stat strong{font-size:17px}
 
 }
 
-/* =========================
-   PRINT
-========================= */
-
+/* PRINT */
 @media print{
 
-body *{
-visibility:hidden
-}
+body *{visibility:hidden}
 
 #receiptModal,
 #receiptModal *{
@@ -1136,9 +960,7 @@ max-width:none;
 box-shadow:none
 }
 
-.modal-box button{
-display:none
-}
+.modal-box button{display:none}
 
 }
 </style>
@@ -1160,12 +982,9 @@ alt="Kanbulo Bakery logo"
 
 </header>
 
-
 <nav>
 
-<button class="active" onclick="showPage('pos',this)">
-POS
-</button>
+<button class="active" onclick="showPage('pos',this)">POS</button>
 
 <button onclick="showPage('inventory',this)">
 📦 Inventory
@@ -1189,38 +1008,24 @@ History
 
 </nav>
 
-
-<!-- =========================
-     POS
-========================= -->
+<!-- POS -->
 
 <section id="pos" class="page active">
 
 <div class="pos-layout">
-
-<!-- LEFT / SALE -->
 
 <div class="pos-left">
 
 <div class="card">
 
 <div class="pos-heading">
-
 <h2>🧾 Sales</h2>
-
-<span class="pos-hint">
-Open orders
-</span>
-
+<span class="pos-hint">Open orders</span>
 </div>
 
-<div
-class="sales-tabs"
-id="salesTabs">
-</div>
+<div class="sales-tabs" id="salesTabs"></div>
 
 </div>
-
 
 <div class="card">
 
@@ -1235,12 +1040,9 @@ id="salesTabs">
 <div id="cart"></div>
 
 <div class="total">
-
 Total: MVR
 <span id="cartTotal">0.00</span>
-
 </div>
-
 
 <div class="payments">
 
@@ -1257,7 +1059,6 @@ Total: MVR
 </button>
 
 </div>
-
 
 <div id="cashBox" class="cash-box">
 
@@ -1300,9 +1101,6 @@ onclick="completeOrder()">
 
 </div>
 
-
-<!-- RIGHT / PRODUCTS -->
-
 <div class="pos-right">
 
 <div class="card">
@@ -1322,12 +1120,9 @@ You can change the sale price from the sale panel.
 
 </div>
 
-
 <div class="search-wrap">
 
-<span class="search-icon">
-🔎
-</span>
+<span class="search-icon">🔎</span>
 
 <input
 id="search"
@@ -1337,17 +1132,9 @@ oninput="renderProducts()"
 
 </div>
 
+<div id="categoryButtons" class="categories"></div>
 
-<div
-id="categoryButtons"
-class="categories">
-</div>
-
-
-<div
-id="products"
-class="products">
-</div>
+<div id="products" class="products"></div>
 
 </div>
 
@@ -1357,10 +1144,7 @@ class="products">
 
 </section>
 
-
-<!-- =========================
-     INVENTORY
-========================= -->
+<!-- INVENTORY -->
 
 <section id="inventory" class="page">
 
@@ -1388,7 +1172,6 @@ Sales are automatically deducted from inventory.
 </p>
 
 </div>
-
 
 <div class="card">
 
@@ -1421,7 +1204,6 @@ placeholder="Example: 12"
 </button>
 
 </div>
-
 
 <div class="card">
 
@@ -1466,7 +1248,6 @@ placeholder="Example: Damaged / Expired"
 
 </div>
 
-
 <div class="card">
 
 <h2>📊 Daily Inventory</h2>
@@ -1503,10 +1284,7 @@ Remaining
 
 </section>
 
-
-<!-- =========================
-     ADMIN
-========================= -->
+<!-- ADMIN -->
 
 <section id="admin" class="page">
 
@@ -1536,7 +1314,6 @@ placeholder="Example: Pizza"
 <div id="categoryManager"></div>
 
 </div>
-
 
 <div class="card">
 
@@ -1590,7 +1367,6 @@ placeholder="🍕"
 
 </div>
 
-
 <div class="card">
 
 <h2>✏️ Edit Products</h2>
@@ -1598,7 +1374,6 @@ placeholder="🍕"
 <div id="adminProducts"></div>
 
 </div>
-
 
 <div class="card">
 
@@ -1648,7 +1423,6 @@ type="date"
 
 </div>
 
-
 <div class="card">
 
 <h2>💾 Backup & Restore</h2>
@@ -1666,7 +1440,6 @@ Keep a backup file regularly as an extra safety copy.
 
 </div>
 
-
 <button
 class="primary backup-button"
 onclick="downloadBackup()">
@@ -1674,7 +1447,6 @@ onclick="downloadBackup()">
 💾 Download Full Backup
 
 </button>
-
 
 <button
 class="secondary backup-button"
@@ -1684,7 +1456,6 @@ onclick="document.getElementById('backupFile').click()">
 
 </button>
 
-
 <input
 id="backupFile"
 type="file"
@@ -1692,7 +1463,6 @@ accept=".json,application/json"
 style="display:none"
 onchange="restoreBackup(event)"
 >
-
 
 <button
 class="secondary backup-button"
@@ -1702,7 +1472,6 @@ onclick="downloadProductsBackup()">
 
 </button>
 
-
 <button
 class="secondary backup-button"
 onclick="document.getElementById('productsBackupFile').click()">
@@ -1711,7 +1480,6 @@ onclick="document.getElementById('productsBackupFile').click()">
 
 </button>
 
-
 <input
 id="productsBackupFile"
 type="file"
@@ -1719,7 +1487,6 @@ accept=".json,application/json"
 style="display:none"
 onchange="importProductsBackup(event)"
 >
-
 
 <hr>
 
@@ -1734,10 +1501,7 @@ USB, email, or another safe place.
 
 </section>
 
-
-<!-- =========================
-     DASHBOARD
-========================= -->
+<!-- DASHBOARD -->
 
 <section id="dashboard" class="page">
 
@@ -1789,7 +1553,6 @@ Products
 
 </div>
 
-
 <div class="card">
 
 <h2>📦 Today's Stock</h2>
@@ -1800,10 +1563,7 @@ Products
 
 </section>
 
-
-<!-- =========================
-     REPORTS
-========================= -->
+<!-- REPORTS -->
 
 <section id="reports" class="page">
 
@@ -1813,20 +1573,11 @@ Products
 
 <select id="reportPeriod" onchange="renderReports()">
 
-<option value="day">
-Today
-</option>
-
-<option value="week">
-This Week
-</option>
-
-<option value="month">
-This Month
-</option>
+<option value="day">Today</option>
+<option value="week">This Week</option>
+<option value="month">This Month</option>
 
 </select>
-
 
 <div class="stat-grid" style="margin-top:12px">
 
@@ -1862,10 +1613,7 @@ MVR <span id="reportProfit">0.00</span>
 
 </section>
 
-
-<!-- =========================
-     HISTORY
-========================= -->
+<!-- HISTORY -->
 
 <section id="history" class="page">
 
@@ -1879,10 +1627,7 @@ MVR <span id="reportProfit">0.00</span>
 
 </section>
 
-
-<!-- =========================
-     RECEIPT
-========================= -->
+<!-- RECEIPT -->
 
 <div class="modal" id="receiptModal">
 
@@ -1904,11 +1649,10 @@ Close
 
 </div>
 
-
 <script>
 
 /* =====================================================
-   SUPABASE CLOUD SYNC
+   SUPABASE
 ===================================================== */
 
 const SUPABASE_URL =
@@ -1928,11 +1672,10 @@ let cloudLoading=false;
 let cloudSaveTimer=null;
 let lastCloudUpdatedAt="";
 let lastLocalChangeAt=0;
+let cloudErrorShown=false;
 
 
-/* =========================
-   STORAGE KEYS
-========================= */
+/* STORAGE */
 
 const categoryKey="kanbuloCategories";
 const productKey="bakeryProducts";
@@ -1942,23 +1685,54 @@ const tabsKey="kanbuloSaleTabs";
 const inventoryKey="kanbuloInventory";
 
 
-/* =========================
-   DATA
-========================= */
+/* SAFE LOCAL STORAGE */
+
+function readStorage(key,fallback){
+
+try{
+
+const value=
+localStorage.getItem(key);
+
+if(value===null)
+return fallback;
+
+return JSON.parse(value);
+
+}catch(error){
+
+console.error(
+"Local storage error:",
+key,
+error
+);
+
+return fallback;
+
+}
+
+}
+
+
+/* DATA */
 
 let categories=
-JSON.parse(localStorage.getItem(categoryKey))||[
+readStorage(
+categoryKey,
+[
 "Pizza",
 "Cakes",
 "Bakery",
 "Burgers",
 "Snacks",
 "Drinks"
-];
-
+]
+);
 
 let products=
-JSON.parse(localStorage.getItem(productKey))||[
+readStorage(
+productKey,
+[
 {
 id:1,
 name:"Chicken Pizza",
@@ -2031,24 +1805,20 @@ category:"Drinks",
 emoji:"🥤",
 available:true
 }
-];
-
+]
+);
 
 let orders=
-JSON.parse(localStorage.getItem(orderKey))||[];
-
+readStorage(orderKey,[]);
 
 let expenses=
-JSON.parse(localStorage.getItem(expenseKey))||[];
-
+readStorage(expenseKey,[]);
 
 let saleTabs=
-JSON.parse(localStorage.getItem(tabsKey))||[];
-
+readStorage(tabsKey,[]);
 
 let inventory=
-JSON.parse(localStorage.getItem(inventoryKey))||{};
-
+readStorage(inventoryKey,{});
 
 let activeSaleId=null;
 let selectedCategory="All";
@@ -2056,20 +1826,18 @@ let editingOrderId=null;
 
 
 /* =====================================================
-   CLOUD DATA HELPERS
+   CLOUD HELPERS
 ===================================================== */
 
 function getCurrentState(){
 
 return{
-
-categories:categories,
-products:products,
-orders:orders,
-expenses:expenses,
-saleTabs:saleTabs,
-inventory:inventory
-
+categories,
+products,
+orders,
+expenses,
+saleTabs,
+inventory
 };
 
 }
@@ -2113,11 +1881,11 @@ JSON.stringify(inventory)
 function hasMeaningfulLocalData(){
 
 return(
-categories.length>0 ||
-products.length>0 ||
-orders.length>0 ||
-expenses.length>0 ||
-saleTabs.length>0 ||
+categories.length>0||
+products.length>0||
+orders.length>0||
+expenses.length>0||
+saleTabs.length>0||
 Object.keys(inventory||{}).length>0
 );
 
@@ -2126,44 +1894,33 @@ Object.keys(inventory||{}).length>0
 
 function isCloudEmpty(data){
 
-if(
-!data||
-typeof data!=="object"
-)
+if(!data||typeof data!=="object")
 return true;
 
 return(
-
-(!Array.isArray(data.categories)||
-data.categories.length===0)&&
-
-(!Array.isArray(data.products)||
-data.products.length===0)&&
-
-(!Array.isArray(data.orders)||
-data.orders.length===0)&&
-
-(!Array.isArray(data.expenses)||
-data.expenses.length===0)&&
-
-(!Array.isArray(data.saleTabs)||
-data.saleTabs.length===0)&&
-
+(!Array.isArray(data.categories)||data.categories.length===0)&&
+(!Array.isArray(data.products)||data.products.length===0)&&
+(!Array.isArray(data.orders)||data.orders.length===0)&&
+(!Array.isArray(data.expenses)||data.expenses.length===0)&&
+(!Array.isArray(data.saleTabs)||data.saleTabs.length===0)&&
 (!data.inventory||
 Object.keys(data.inventory).length===0)
-
 );
 
 }
 
 
-/* =========================
-   SAVE TO CLOUD
-========================= */
+/* =====================================================
+   SAVE CLOUD
+===================================================== */
 
 async function saveToCloud(){
 
-if(!cloudReady||cloudLoading)
+if(
+!cloudReady||
+cloudLoading||
+!navigator.onLine
+)
 return;
 
 try{
@@ -2172,18 +1929,12 @@ const updatedAt=
 new Date().toISOString();
 
 const payload={
-
 id:1,
-
 data:getCurrentState(),
-
 updated_at:updatedAt
-
 };
 
-
 const {error}=
-
 await supabaseClient
 .from("bakery_data")
 .upsert(
@@ -2193,10 +1944,8 @@ onConflict:"id"
 }
 );
 
-
 if(error)
 throw error;
-
 
 lastCloudUpdatedAt=
 updatedAt;
@@ -2217,63 +1966,60 @@ error
 }
 
 
-/* =========================
-   DELAY CLOUD SAVE
-========================= */
+/* =====================================================
+   SCHEDULE CLOUD SAVE
+===================================================== */
 
 function scheduleCloudSave(){
 
-if(!cloudReady||cloudLoading)
+if(
+!cloudReady||
+cloudLoading
+)
 return;
 
 clearTimeout(cloudSaveTimer);
 
 cloudSaveTimer=
 setTimeout(
-()=>{
-saveToCloud();
-},
-500
+saveToCloud,
+700
 );
 
 }
 
 
-/* =========================
-   LOAD FROM CLOUD
-========================= */
+/* =====================================================
+   LOAD CLOUD
+===================================================== */
 
 async function loadFromCloud(){
 
 cloudLoading=true;
 
+let cloudSucceeded=false;
+
 try{
 
 const {data,error}=
-
 await supabaseClient
 .from("bakery_data")
 .select("data,updated_at")
 .eq("id",1)
 .single();
 
-
 if(error)
 throw error;
 
-
 const cloudData=
-data&&data.data
-?
-data.data
-:
-null;
+data?.data||null;
 
 
 /*
-If cloud is empty but this browser
-already has data, upload the local data
-instead of destroying it.
+IMPORTANT:
+If Supabase is empty and this device
+already contains data, upload the local
+data instead of deleting it.
 */
 
 if(isCloudEmpty(cloudData)){
@@ -2284,18 +2030,12 @@ const updatedAt=
 new Date().toISOString();
 
 const payload={
-
 id:1,
-
 data:getCurrentState(),
-
 updated_at:updatedAt
-
 };
 
-
 const {error:uploadError}=
-
 await supabaseClient
 .from("bakery_data")
 .upsert(
@@ -2305,39 +2045,47 @@ onConflict:"id"
 }
 );
 
-
 if(uploadError)
 throw uploadError;
-
 
 lastCloudUpdatedAt=
 updatedAt;
 
-
 console.log(
-"Kanbulo cloud sync: local data uploaded"
+"Local data uploaded to empty cloud"
 );
 
-}else{
+}
 
-ensureSale();
+else{
+
+/*
+Both cloud and local are empty.
+Create the first sale.
+*/
+
+if(!saleTabs.length){
+
+const sale=createSale();
+
+saleTabs.push(sale);
+
+activeSaleId=sale.id;
+
+}
+
+writeLocalState();
 
 const updatedAt=
 new Date().toISOString();
 
 const payload={
-
 id:1,
-
 data:getCurrentState(),
-
 updated_at:updatedAt
-
 };
 
-
 const {error:emptyError}=
-
 await supabaseClient
 .from("bakery_data")
 .upsert(
@@ -2347,10 +2095,8 @@ onConflict:"id"
 }
 );
 
-
 if(emptyError)
 throw emptyError;
-
 
 lastCloudUpdatedAt=
 updatedAt;
@@ -2358,38 +2104,39 @@ updatedAt;
 }
 
 }else{
+
+/*
+Cloud contains data.
+Load cloud into this device.
+*/
 
 categories=
 Array.isArray(cloudData.categories)
 ?
 cloudData.categories
 :
-categories;
-
+[];
 
 products=
 Array.isArray(cloudData.products)
 ?
 cloudData.products
 :
-products;
-
+[];
 
 orders=
 Array.isArray(cloudData.orders)
 ?
 cloudData.orders
 :
-orders;
-
+[];
 
 expenses=
 Array.isArray(cloudData.expenses)
 ?
 cloudData.expenses
 :
-expenses;
-
+[];
 
 saleTabs=
 Array.isArray(cloudData.saleTabs)
@@ -2397,7 +2144,6 @@ Array.isArray(cloudData.saleTabs)
 cloudData.saleTabs
 :
 [];
-
 
 inventory=
 cloudData.inventory&&
@@ -2407,90 +2153,110 @@ cloudData.inventory
 :
 {};
 
-
 lastCloudUpdatedAt=
 data.updated_at||"";
 
+activeSaleId=null;
+editingOrderId=null;
+selectedCategory="All";
 
 writeLocalState();
+
+console.log(
+"Cloud data loaded"
+);
 
 }
 
-cloudReady=true;
-
-cloudLoading=false;
-
-
-/*
-Make sure there is always at least
-one open sale.
-*/
-
-ensureSale();
-
-writeLocalState();
-
-await saveToCloud();
-
-refresh();
-
+cloudSucceeded=true;
 
 }catch(error){
-
-cloudLoading=false;
 
 console.error(
 "Supabase load error:",
 error
 );
 
-/*
-Continue working locally if cloud
-is temporarily unavailable.
-*/
+if(!cloudErrorShown){
 
-ensureSale();
+cloudErrorShown=true;
 
-refresh();
+setTimeout(
+()=>{
 
 alert(
-"⚠️ Cloud connection problem.\n\n"+
-"The POS will continue working on this device.\n\n"+
+"⚠️ Cloud sync could not connect.\n\n"+
+"The POS will continue working normally on this device.\n\n"+
+"Your local data is safe.\n\n"+
 "Please check your internet connection and Supabase settings."
+);
+
+},
+300
 );
 
 }
 
+}finally{
+
+cloudLoading=false;
+cloudReady=true;
+
 }
 
 
-/* =========================
-   CHECK CLOUD FOR CHANGES
-========================= */
+/*
+Always make sure there is an open sale.
+*/
+
+ensureSale();
+
+writeLocalState();
+
+
+/*
+If the cloud worked, make sure the final
+state is also stored there.
+*/
+
+if(cloudSucceeded){
+
+await saveToCloud();
+
+}
+
+refresh();
+
+}
+
+
+/* =====================================================
+   SYNC CLOUD CHANGES
+===================================================== */
 
 async function syncCloud(){
 
-if(!cloudReady||cloudLoading)
+if(
+!cloudReady||
+cloudLoading||
+!navigator.onLine
+)
 return;
 
 try{
 
 const {data,error}=
-
 await supabaseClient
 .from("bakery_data")
 .select("data,updated_at")
 .eq("id",1)
 .single();
 
-
 if(error)
 throw error;
 
-
 if(!data||!data.data)
 return;
-
 
 const remoteTime=
 data.updated_at
@@ -2498,7 +2264,6 @@ data.updated_at
 new Date(data.updated_at).getTime()
 :
 0;
-
 
 const knownTime=
 lastCloudUpdatedAt
@@ -2509,7 +2274,7 @@ new Date(lastCloudUpdatedAt).getTime()
 
 
 /*
-Nothing newer than what we already have.
+Ignore the same version or an older version.
 */
 
 if(remoteTime<=knownTime)
@@ -2517,9 +2282,8 @@ return;
 
 
 /*
-If this device has just changed something,
-let its pending save finish instead of
-immediately replacing the local data.
+If we recently changed this device,
+do not replace our unsaved local work.
 */
 
 if(
@@ -2529,8 +2293,11 @@ remoteTime<=lastLocalChangeAt
 return;
 
 
-const cloudData=data.data;
+/*
+Load newer cloud data.
+*/
 
+const cloudData=data.data;
 
 categories=
 Array.isArray(cloudData.categories)
@@ -2539,14 +2306,12 @@ cloudData.categories
 :
 [];
 
-
 products=
 Array.isArray(cloudData.products)
 ?
 cloudData.products
 :
 [];
-
 
 orders=
 Array.isArray(cloudData.orders)
@@ -2555,7 +2320,6 @@ cloudData.orders
 :
 [];
 
-
 expenses=
 Array.isArray(cloudData.expenses)
 ?
@@ -2563,14 +2327,12 @@ cloudData.expenses
 :
 [];
 
-
 saleTabs=
 Array.isArray(cloudData.saleTabs)
 ?
 cloudData.saleTabs
 :
 [];
-
 
 inventory=
 cloudData.inventory&&
@@ -2580,14 +2342,12 @@ cloudData.inventory
 :
 {};
 
-
 lastCloudUpdatedAt=
 data.updated_at||"";
 
-
 activeSaleId=null;
 editingOrderId=null;
-
+selectedCategory="All";
 
 writeLocalState();
 
@@ -2597,11 +2357,9 @@ writeLocalState();
 
 refresh();
 
-
 console.log(
 "Kanbulo cloud sync: updated from cloud"
 );
-
 
 }catch(error){
 
@@ -2615,9 +2373,7 @@ error
 }
 
 
-/* =========================
-   DEVICE / TAB EVENTS
-========================= */
+/* EVENTS */
 
 document.addEventListener(
 "visibilitychange",
@@ -2631,7 +2387,6 @@ syncCloud();
 }
 );
 
-
 window.addEventListener(
 "online",
 ()=>{
@@ -2643,9 +2398,7 @@ syncCloud();
 
 
 /*
-Check the cloud every 30 seconds.
-This lets the laptop and phone notice
-changes made on the other device.
+Check every 30 seconds.
 */
 
 setInterval(
@@ -2691,11 +2444,8 @@ String(d.getDate()).padStart(2,"0");
 
 function inventoryDay(date){
 
-if(!inventory[date]){
-
+if(!inventory[date])
 inventory[date]={};
-
-}
 
 return inventory[date];
 
@@ -2725,7 +2475,7 @@ return day[id];
 function isInventoryTracked(date,id){
 
 return !!(
-inventory[date] &&
+inventory[date]&&
 inventory[date][id]
 );
 
@@ -2734,13 +2484,11 @@ inventory[date][id]
 
 function inventoryRemaining(date,id){
 
-if(!isInventoryTracked(date,id)){
-
+if(!isInventoryTracked(date,id))
 return Infinity;
 
-}
-
-const r=getInvRecord(date,id);
+const r=
+getInvRecord(date,id);
 
 return Math.max(
 0,
@@ -2817,23 +2565,20 @@ s=>s.id===activeSaleId
 function showPage(page,button){
 
 document.querySelectorAll(".page")
-.forEach(p=>
-p.classList.remove("active")
+.forEach(
+p=>p.classList.remove("active")
 );
 
 document.getElementById(page)
 .classList.add("active");
 
-
 document.querySelectorAll("nav button")
-.forEach(b=>
-b.classList.remove("active")
+.forEach(
+b=>b.classList.remove("active")
 );
-
 
 if(button)
 button.classList.add("active");
-
 
 refresh();
 
@@ -2849,31 +2594,18 @@ function refresh(){
 ensureSale();
 
 renderSalesTabs();
-
 renderCategoryButtons();
-
 renderProducts();
-
 renderCart();
-
 renderAdminCategories();
-
 renderAdminProducts();
-
 renderCategorySelect();
-
 renderExpenses();
-
 renderDashboard();
-
 renderReports();
-
 renderHistory();
-
 renderInventorySelects();
-
 renderInventory();
-
 calculateChange();
 
 }
@@ -2890,7 +2622,6 @@ document.getElementById("salesTabs");
 
 box.innerHTML="";
 
-
 saleTabs.forEach(sale=>{
 
 const wrapper=
@@ -2898,14 +2629,12 @@ document.createElement("div");
 
 wrapper.className="sale-tab-wrap";
 
-
 const button=
 document.createElement("button");
 
 button.className=
 "sale-tab"+
 (sale.id===activeSaleId?" active":"");
-
 
 button.innerHTML=
 `<span class="sale-label">${
@@ -2915,10 +2644,8 @@ escapeHtml(sale.name)
 " • "+sale.cart.length:
 "");
 
-
 button.onclick=()=>
 switchSale(sale.id);
-
 
 const close=
 document.createElement("button");
@@ -2926,7 +2653,6 @@ document.createElement("button");
 close.className="close-sale";
 
 close.textContent="✕";
-
 
 close.onclick=e=>{
 
@@ -2936,15 +2662,12 @@ deleteSale(sale.id);
 
 };
 
-
 wrapper.appendChild(button);
-
 wrapper.appendChild(close);
 
 box.appendChild(wrapper);
 
 });
-
 
 const newButton=
 document.createElement("button");
@@ -3002,12 +2725,10 @@ return;
 
 }
 
-
 const sale=
 saleTabs.find(s=>s.id===id);
 
 if(!sale)return;
-
 
 if(
 sale.cart.length &&
@@ -3018,16 +2739,13 @@ sale.cart.length &&
 )
 return;
 
-
 if(activeSaleId===id)
 editingOrderId=null;
-
 
 saleTabs=
 saleTabs.filter(
 s=>s.id!==id
 );
-
 
 if(activeSaleId===id){
 
@@ -3040,7 +2758,6 @@ saleTabs.length-1
 ].id;
 
 }
-
 
 saveAll();
 
@@ -3062,7 +2779,6 @@ document.getElementById(
 
 box.innerHTML="";
 
-
 const all=
 document.createElement("button");
 
@@ -3075,20 +2791,16 @@ selectedCategory==="All"
 :
 "";
 
-
 all.onclick=()=>{
 
 selectedCategory="All";
 
 renderCategoryButtons();
-
 renderProducts();
 
 };
 
-
 box.appendChild(all);
-
 
 const categoryIcons={
 
@@ -3100,7 +2812,6 @@ Snacks:"🍟",
 Drinks:"🥤"
 
 };
-
 
 categories.forEach(cat=>{
 
@@ -3118,17 +2829,14 @@ selectedCategory===cat
 :
 "";
 
-
 b.onclick=()=>{
 
 selectedCategory=cat;
 
 renderCategoryButtons();
-
 renderProducts();
 
 };
-
 
 box.appendChild(b);
 
@@ -3146,7 +2854,6 @@ document.getElementById(
 
 box.innerHTML="";
 
-
 if(!categories.length){
 
 box.innerHTML=
@@ -3156,7 +2863,6 @@ return;
 
 }
 
-
 categories.forEach(
 (cat,index)=>{
 
@@ -3165,12 +2871,10 @@ document.createElement("div");
 
 row.className="category-row";
 
-
 const input=
 document.createElement("input");
 
 input.value=cat;
-
 
 const save=
 document.createElement("button");
@@ -3185,7 +2889,6 @@ index,
 input.value
 );
 
-
 const del=
 document.createElement("button");
 
@@ -3196,11 +2899,8 @@ del.textContent="🗑";
 del.onclick=()=>
 deleteCategory(index);
 
-
 row.appendChild(input);
-
 row.appendChild(save);
-
 row.appendChild(del);
 
 box.appendChild(row);
@@ -3220,7 +2920,6 @@ document.getElementById(
 const name=
 input.value.trim();
 
-
 if(!name){
 
 alert(
@@ -3230,7 +2929,6 @@ alert(
 return;
 
 }
-
 
 if(
 categories.some(
@@ -3248,7 +2946,6 @@ return;
 
 }
 
-
 categories.push(name);
 
 input.value="";
@@ -3264,7 +2961,6 @@ function renameCategory(index,newName){
 
 newName=newName.trim();
 
-
 if(!newName){
 
 alert(
@@ -3277,10 +2973,8 @@ return;
 
 }
 
-
 const oldName=
 categories[index];
-
 
 if(
 categories.some(
@@ -3301,9 +2995,7 @@ return;
 
 }
 
-
 categories[index]=newName;
-
 
 products.forEach(p=>{
 
@@ -3312,10 +3004,8 @@ p.category=newName;
 
 });
 
-
 if(selectedCategory===oldName)
 selectedCategory=newName;
-
 
 saveAll();
 
@@ -3329,12 +3019,10 @@ function deleteCategory(index){
 const category=
 categories[index];
 
-
 const used=
 products.filter(
 p=>p.category===category
 );
-
 
 if(used.length){
 
@@ -3348,7 +3036,6 @@ return;
 
 }
 
-
 if(
 !confirm(
 `Delete category "${category}"?`
@@ -3356,13 +3043,10 @@ if(
 )
 return;
 
-
 categories.splice(index,1);
-
 
 if(selectedCategory===category)
 selectedCategory="All";
-
 
 saveAll();
 
@@ -3380,11 +3064,9 @@ function renderProducts(){
 const box=
 document.getElementById("products");
 
-
 const search=(
 document.getElementById("search").value||""
 ).toLowerCase();
-
 
 const list=
 products.filter(p=>{
@@ -3402,9 +3084,7 @@ return cat&&text;
 
 });
 
-
 box.innerHTML="";
-
 
 if(!list.length){
 
@@ -3415,9 +3095,7 @@ return;
 
 }
 
-
 const today=localDate();
-
 
 list.forEach(p=>{
 
@@ -3427,16 +3105,13 @@ today,
 p.id
 );
 
-
 const remaining=
 inventoryRemaining(
 today,
 p.id
 );
 
-
 let stockHTML="";
-
 
 if(tracked){
 
@@ -3465,17 +3140,14 @@ Inventory not set
 
 }
 
-
 const canSell=
 p.available &&
 (!tracked||remaining>0);
-
 
 const div=
 document.createElement("div");
 
 div.className="product";
-
 
 div.innerHTML=`
 
@@ -3517,7 +3189,6 @@ ${p.available?"Sold Out":"Unavailable"}
 
 `;
 
-
 box.appendChild(div);
 
 });
@@ -3532,32 +3203,26 @@ products.find(
 x=>x.id===id
 );
 
-
 if(!p||!p.available)
 return;
 
-
 const sale=activeSale();
-
 
 const existing=
 sale.cart.find(
 x=>x.id===id
 );
 
-
 const currentQty=
 existing?
 existing.qty:
 0;
-
 
 const remaining=
 inventoryRemaining(
 localDate(),
 id
 );
-
 
 if(
 remaining!==Infinity &&
@@ -3573,7 +3238,6 @@ return;
 
 }
 
-
 if(existing){
 
 existing.qty++;
@@ -3583,26 +3247,19 @@ existing.qty++;
 sale.cart.push({
 
 id:p.id,
-
 name:p.name,
-
 price:Number(p.price),
-
 qty:1
 
 });
 
 }
 
-
 saveAll();
 
 renderSalesTabs();
-
 renderProducts();
-
 renderCart();
-
 calculateChange();
 
 }
@@ -3612,15 +3269,12 @@ function changeQty(id,amount){
 
 const sale=activeSale();
 
-
 const item=
 sale.cart.find(
 x=>x.id===id
 );
 
-
 if(!item)return;
-
 
 if(amount>0){
 
@@ -3629,7 +3283,6 @@ inventoryRemaining(
 localDate(),
 id
 );
-
 
 if(
 remaining!==Infinity &&
@@ -3646,9 +3299,7 @@ return;
 
 }
 
-
 item.qty+=amount;
-
 
 if(item.qty<=0){
 
@@ -3659,15 +3310,11 @@ x=>x.id!==id
 
 }
 
-
 saveAll();
 
 renderSalesTabs();
-
 renderProducts();
-
 renderCart();
-
 calculateChange();
 
 }
@@ -3681,18 +3328,14 @@ function updateItemPrice(id,value){
 
 const sale=activeSale();
 
-
 const item=
 sale.cart.find(
 x=>x.id===id
 );
 
-
 if(!item)return;
 
-
 const price=Number(value);
-
 
 if(
 !Number.isFinite(price)||
@@ -3709,15 +3352,12 @@ return;
 
 }
 
-
 item.price=price;
 
 saveAll();
 
 renderSalesTabs();
-
 renderCart();
-
 calculateChange();
 
 }
@@ -3727,33 +3367,26 @@ function resetItemPrice(id){
 
 const sale=activeSale();
 
-
 const item=
 sale.cart.find(
 x=>x.id===id
 );
-
 
 const product=
 products.find(
 x=>x.id===id
 );
 
-
 if(!item||!product)
 return;
-
 
 item.price=
 Number(product.price);
 
-
 saveAll();
 
 renderSalesTabs();
-
 renderCart();
-
 calculateChange();
 
 }
@@ -3770,9 +3403,7 @@ const sale=activeSale();
 const box=
 document.getElementById("cart");
 
-
 box.innerHTML="";
-
 
 document.getElementById(
 "currentSaleTitle"
@@ -3781,7 +3412,6 @@ document.getElementById(
 (editingOrderId?
 " ✏️ EDITING":
 "");
-
 
 if(!sale.cart.length){
 
@@ -3793,14 +3423,12 @@ box.innerHTML=
 
 }
 
-
 sale.cart.forEach(item=>{
 
 const div=
 document.createElement("div");
 
 div.className="cart-item";
-
 
 div.innerHTML=`
 
@@ -3848,7 +3476,6 @@ MVR ${(item.price*item.qty).toFixed(2)}
 
 </div>
 
-
 <div class="qty">
 
 <button
@@ -3871,11 +3498,9 @@ onclick="changeQty(${item.id},1)">
 
 `;
 
-
 box.appendChild(div);
 
 });
-
 
 const total=
 sale.cart.reduce(
@@ -3884,18 +3509,15 @@ sum+(item.price*item.qty),
 0
 );
 
-
 document.getElementById(
 "cartTotal"
 ).textContent=
 total.toFixed(2);
 
-
 document.getElementById(
 "cashReceived"
 ).value=
 sale.cashReceived||"";
-
 
 document.querySelectorAll(
 ".payments button"
@@ -3904,24 +3526,20 @@ document.querySelectorAll(
 b=>b.classList.remove("active")
 );
 
-
 if(sale.payment==="Cash")
 document.getElementById(
 "payCash"
 ).classList.add("active");
-
 
 if(sale.payment==="Card")
 document.getElementById(
 "payCard"
 ).classList.add("active");
 
-
 if(sale.payment==="Transfer")
 document.getElementById(
 "payTransfer"
 ).classList.add("active");
-
 
 document.getElementById(
 "cashBox"
@@ -3939,7 +3557,6 @@ function calculateChange(){
 
 const sale=activeSale();
 
-
 const total=
 sale.cart.reduce(
 (sum,item)=>
@@ -3947,29 +3564,23 @@ sum+(item.price*item.qty),
 0
 );
 
-
 const input=
 document.getElementById(
 "cashReceived"
 );
 
-
 let received=
 Number(input.value)||0;
 
-
 sale.cashReceived=received;
-
 
 const change=
 received-total;
-
 
 const display=
 document.getElementById(
 "changeAmount"
 );
-
 
 display.textContent=
 Math.max(
@@ -3977,11 +3588,9 @@ change,
 0
 ).toFixed(2);
 
-
 display.classList.remove(
 "insufficient"
 );
-
 
 if(
 received>0 &&
@@ -3999,7 +3608,6 @@ display.textContent=
 
 }
 
-
 saveAll();
 
 }
@@ -4014,7 +3622,6 @@ sale.payment=type;
 saveAll();
 
 renderCart();
-
 calculateChange();
 
 }
@@ -4031,7 +3638,6 @@ excludeOrder
 
 const date=localDate();
 
-
 for(const item of cart){
 
 const tracked=
@@ -4040,17 +3646,14 @@ date,
 item.id
 );
 
-
 if(!tracked)
 continue;
-
 
 let soldAlready=
 getInvRecord(
 date,
 item.id
 ).sold;
-
 
 if(excludeOrder){
 
@@ -4059,15 +3662,10 @@ excludeOrder.items.find(
 x=>x.id===item.id
 );
 
-
-if(oldItem){
-
+if(oldItem)
 soldAlready-=oldItem.qty;
 
 }
-
-}
-
 
 const record=
 getInvRecord(
@@ -4075,12 +3673,10 @@ date,
 item.id
 );
 
-
 const remaining=
 Number(record.prepared||0)-
 Number(record.waste||0)-
 soldAlready;
-
 
 if(item.qty>remaining){
 
@@ -4088,7 +3684,6 @@ const p=
 products.find(
 x=>x.id===item.id
 );
-
 
 alert(
 `Not enough stock for ${
@@ -4113,7 +3708,6 @@ function addInventorySale(cart){
 
 const date=localDate();
 
-
 cart.forEach(item=>{
 
 if(
@@ -4124,20 +3718,17 @@ item.id
 )
 return;
 
-
 const record=
 getInvRecord(
 date,
 item.id
 );
 
-
 record.sold=
 Number(record.sold||0)+
 Number(item.qty);
 
 });
-
 
 saveAll();
 
@@ -4148,7 +3739,6 @@ function removeInventorySale(cart){
 
 const date=localDate();
 
-
 cart.forEach(item=>{
 
 if(
@@ -4159,13 +3749,11 @@ item.id
 )
 return;
 
-
 const record=
 getInvRecord(
 date,
 item.id
 );
-
 
 record.sold=
 Math.max(
@@ -4175,7 +3763,6 @@ Number(item.qty)
 );
 
 });
-
 
 saveAll();
 
@@ -4190,17 +3777,13 @@ function completeOrder(){
 
 const sale=activeSale();
 
-
 if(!sale.cart.length){
 
-alert(
-"Cart is empty."
-);
+alert("Cart is empty.");
 
 return;
 
 }
-
 
 const total=
 sale.cart.reduce(
@@ -4209,12 +3792,10 @@ sum+(item.price*item.qty),
 0
 );
 
-
 if(sale.payment==="Cash"){
 
 const received=
 Number(sale.cashReceived)||0;
-
 
 if(received<total){
 
@@ -4232,7 +3813,6 @@ return;
 
 }
 
-
 if(editingOrderId){
 
 const order=
@@ -4240,9 +3820,7 @@ orders.find(
 o=>o.id===editingOrderId
 );
 
-
 if(!order)return;
-
 
 if(
 !validateSaleStock(
@@ -4252,11 +3830,9 @@ order
 )
 return;
 
-
 removeInventorySale(
 order.items
 );
-
 
 order.items=
 JSON.parse(
@@ -4264,7 +3840,6 @@ JSON.stringify(
 sale.cart
 )
 );
-
 
 order.total=total;
 
@@ -4276,7 +3851,6 @@ Number(
 sale.cashReceived
 )||0;
 
-
 order.change=
 sale.payment==="Cash"
 ?
@@ -4287,18 +3861,14 @@ sale.cashReceived-total
 :
 0;
 
-
 order.editedAt=
 new Date().toISOString();
-
 
 addInventorySale(
 order.items
 );
 
-
 showReceipt(order);
-
 
 editingOrderId=null;
 
@@ -4308,7 +3878,6 @@ sale.payment="Cash";
 
 sale.cashReceived=0;
 
-
 saveAll();
 
 refresh();
@@ -4317,7 +3886,6 @@ return;
 
 }
 
-
 if(
 !validateSaleStock(
 sale.cart,
@@ -4325,7 +3893,6 @@ null
 )
 )
 return;
-
 
 const order={
 
@@ -4369,24 +3936,17 @@ sale.cashReceived-total
 
 };
 
-
 orders.unshift(order);
-
 
 addInventorySale(
 order.items
 );
 
-
 showReceipt(order);
 
-
 sale.cart=[];
-
 sale.payment="Cash";
-
 sale.cashReceived=0;
-
 
 saveAll();
 
@@ -4411,15 +3971,11 @@ document.getElementById(
 "wasteProduct"
 );
 
-
 if(!stock||!waste)
 return;
 
-
 stock.innerHTML="";
-
 waste.innerHTML="";
-
 
 products.forEach(p=>{
 
@@ -4427,20 +3983,15 @@ const a=
 document.createElement("option");
 
 a.value=p.id;
-
 a.textContent=p.name;
-
 
 const b=
 document.createElement("option");
 
 b.value=p.id;
-
 b.textContent=p.name;
 
-
 stock.appendChild(a);
-
 waste.appendChild(b);
 
 });
@@ -4448,9 +3999,7 @@ waste.appendChild(b);
 }
 
 
-/* =====================================================
-   ADD STOCK
-===================================================== */
+/* ADD STOCK */
 
 function addStock(){
 
@@ -4460,7 +4009,6 @@ document.getElementById(
 ).value||
 localDate();
 
-
 const id=
 Number(
 document.getElementById(
@@ -4468,14 +4016,12 @@ document.getElementById(
 ).value
 );
 
-
 const qty=
 Number(
 document.getElementById(
 "stockQuantity"
 ).value
 );
-
 
 if(!qty||qty<1){
 
@@ -4487,32 +4033,24 @@ return;
 
 }
 
-
 const record=
 getInvRecord(
 date,
 id
 );
 
-
 record.prepared=
-Number(record.prepared||0)+
-qty;
-
+Number(record.prepared||0)+qty;
 
 document.getElementById(
 "stockQuantity"
 ).value="";
 
-
 saveAll();
 
 renderInventory();
-
 renderProducts();
-
 renderDashboard();
-
 
 alert(
 "Stock added successfully.\n\n"+
@@ -4522,9 +4060,7 @@ alert(
 }
 
 
-/* =====================================================
-   WASTE
-===================================================== */
+/* WASTE */
 
 function addWaste(){
 
@@ -4534,14 +4070,12 @@ document.getElementById(
 ).value||
 localDate();
 
-
 const id=
 Number(
 document.getElementById(
 "wasteProduct"
 ).value
 );
-
 
 const qty=
 Number(
@@ -4550,13 +4084,11 @@ document.getElementById(
 ).value
 );
 
-
 const reason=
 document.getElementById(
 "wasteReason"
 ).value.trim()||
 "Waste";
-
 
 if(!qty||qty<1){
 
@@ -4568,19 +4100,16 @@ return;
 
 }
 
-
 const record=
 getInvRecord(
 date,
 id
 );
 
-
 const remaining=
 Number(record.prepared||0)-
 Number(record.sold||0)-
 Number(record.waste||0);
-
 
 if(qty>remaining){
 
@@ -4593,51 +4122,38 @@ return;
 
 }
 
-
 record.waste=
 Number(record.waste||0)+qty;
-
 
 record.wasteItems=
 record.wasteItems||[];
 
-
 record.wasteItems.push({
 
 qty:qty,
-
 reason:reason,
-
-time:
-new Date().toISOString()
+time:new Date().toISOString()
 
 });
-
 
 document.getElementById(
 "wasteQuantity"
 ).value="";
 
-
 document.getElementById(
 "wasteReason"
 ).value="";
 
-
 saveAll();
 
 renderInventory();
-
 renderProducts();
-
 renderDashboard();
 
 }
 
 
-/* =====================================================
-   DELETE INVENTORY ITEM
-===================================================== */
+/* DELETE INVENTORY */
 
 function deleteInventoryItem(
 date,
@@ -4649,9 +4165,7 @@ products.find(
 p=>p.id===id
 );
 
-
 if(!product)return;
-
 
 if(
 !inventory[date]||
@@ -4666,10 +4180,8 @@ return;
 
 }
 
-
 const record=
 inventory[date][id];
-
 
 let message=
 `Delete inventory for "${product.name}" on ${date}?\n\n`+
@@ -4677,7 +4189,6 @@ let message=
 `Sold: ${Number(record.sold||0)}\n`+
 `Waste: ${Number(record.waste||0)}\n\n`+
 `This will remove only this item's inventory record.`;
-
 
 if(
 Number(record.sold||0)>0
@@ -4688,13 +4199,10 @@ message+=
 
 }
 
-
 if(!confirm(message))
 return;
 
-
 delete inventory[date][id];
-
 
 if(
 inventory[date] &&
@@ -4707,21 +4215,16 @@ delete inventory[date];
 
 }
 
-
 saveAll();
 
 renderInventory();
-
 renderProducts();
-
 renderDashboard();
 
 }
 
 
-/* =====================================================
-   RENDER INVENTORY
-===================================================== */
+/* RENDER INVENTORY */
 
 function renderInventory(){
 
@@ -4730,33 +4233,26 @@ document.getElementById(
 "inventoryDate"
 );
 
-
 if(!dateInput)return;
-
 
 const date=
 dateInput.value||
 localDate();
 
-
 if(!dateInput.value)
 dateInput.value=localDate();
-
 
 const box=
 document.getElementById(
 "inventoryList"
 );
 
-
 box.innerHTML="";
-
 
 let prepared=0;
 let sold=0;
 let waste=0;
 let remaining=0;
-
 
 products.forEach(p=>{
 
@@ -4768,43 +4264,26 @@ p.id
 )
 return;
 
-
 const r=
 getInvRecord(
 date,
 p.id
 );
 
-
 const rem=
 Number(r.prepared||0)-
 Number(r.sold||0)-
 Number(r.waste||0);
 
-
-prepared+=
-Number(r.prepared||0);
-
-sold+=
-Number(r.sold||0);
-
-waste+=
-Number(r.waste||0);
-
-remaining+=
-Math.max(
-0,
-rem
-);
-
+prepared+=Number(r.prepared||0);
+sold+=Number(r.sold||0);
+waste+=Number(r.waste||0);
+remaining+=Math.max(0,rem);
 
 const div=
 document.createElement("div");
 
-
-div.className=
-"inventory-row";
-
+div.className="inventory-row";
 
 div.innerHTML=`
 
@@ -4817,10 +4296,8 @@ gap:8px
 ">
 
 <strong>
-
 ${escapeHtml(p.emoji)}
 ${escapeHtml(p.name)}
-
 </strong>
 
 <span
@@ -4838,28 +4315,21 @@ rem+" remaining"
 
 </div>
 
-
 <div class="inventory-grid">
 
 <div class="inv-stat">
 Prepared
-<strong>
-${r.prepared||0}
-</strong>
+<strong>${r.prepared||0}</strong>
 </div>
 
 <div class="inv-stat">
 Sold
-<strong>
-${r.sold||0}
-</strong>
+<strong>${r.sold||0}</strong>
 </div>
 
 <div class="inv-stat">
 Waste
-<strong>
-${r.waste||0}
-</strong>
+<strong>${r.waste||0}</strong>
 </div>
 
 <div class="inv-stat">
@@ -4877,7 +4347,6 @@ ${Math.max(0,rem)}
 </div>
 
 </div>
-
 
 ${
 r.wasteItems&&r.wasteItems.length
@@ -4900,7 +4369,6 @@ escapeHtml(w.reason)+
 ""
 }
 
-
 <div class="inventory-actions">
 
 <button
@@ -4915,11 +4383,9 @@ onclick="deleteInventoryItem('${date}',${p.id})">
 
 `;
 
-
 box.appendChild(div);
 
 });
-
 
 if(!box.innerHTML){
 
@@ -4930,21 +4396,17 @@ box.innerHTML=
 
 }
 
-
 document.getElementById(
 "invPrepared"
 ).textContent=prepared;
-
 
 document.getElementById(
 "invSold"
 ).textContent=sold;
 
-
 document.getElementById(
 "invWaste"
 ).textContent=waste;
-
 
 document.getElementById(
 "invRemaining"
@@ -4953,9 +4415,7 @@ document.getElementById(
 }
 
 
-/* =====================================================
-   DASHBOARD INVENTORY
-===================================================== */
+/* DASHBOARD INVENTORY */
 
 function renderDashboardInventory(){
 
@@ -4964,14 +4424,11 @@ document.getElementById(
 "dashboardInventory"
 );
 
-
 if(!box)return;
-
 
 const date=localDate();
 
 let html="";
-
 
 products.forEach(p=>{
 
@@ -4983,19 +4440,16 @@ p.id
 )
 return;
 
-
 const r=
 getInvRecord(
 date,
 p.id
 );
 
-
 const rem=
 Number(r.prepared||0)-
 Number(r.sold||0)-
 Number(r.waste||0);
-
 
 html+=`
 
@@ -5004,24 +4458,19 @@ html+=`
 <div>
 
 <strong>
-
 ${escapeHtml(p.emoji)}
 ${escapeHtml(p.name)}
-
 </strong>
 
 <br>
 
 <small>
-
 Prepared ${r.prepared||0}
 · Sold ${r.sold||0}
 · Waste ${r.waste||0}
-
 </small>
 
 </div>
-
 
 <strong
 class="${
@@ -5043,7 +4492,6 @@ left
 
 });
 
-
 box.innerHTML=
 html||
 '<div class="empty">'+
@@ -5064,9 +4512,7 @@ document.getElementById(
 "receiptContent"
 );
 
-
 let rows="";
-
 
 order.items.forEach(item=>{
 
@@ -5089,9 +4535,7 @@ MVR ${(item.price*item.qty).toFixed(2)}
 
 });
 
-
 let cashInfo="";
-
 
 if(order.payment==="Cash"){
 
@@ -5100,22 +4544,18 @@ cashInfo=`
 <p>
 Cash Received:
 <strong>
-MVR ${
-Number(
+MVR ${Number(
 order.cashReceived||0
-).toFixed(2)
-}
+).toFixed(2)}
 </strong>
 </p>
 
 <p>
 Change:
 <strong>
-MVR ${
-Number(
+MVR ${Number(
 order.change||0
-).toFixed(2)
-}
+).toFixed(2)}
 </strong>
 </p>
 
@@ -5123,14 +4563,11 @@ order.change||0
 
 }
 
-
 box.innerHTML=`
 
 <div style="text-align:center">
 
-<h2>
-KANBULO BAKERY
-</h2>
+<h2>KANBULO BAKERY</h2>
 
 <small>
 ${new Date(order.date).toLocaleString()}
@@ -5138,15 +4575,11 @@ ${new Date(order.date).toLocaleString()}
 
 <br>
 
-<strong>
-${order.number}
-</strong>
+<strong>${order.number}</strong>
 
 </div>
 
-
 <hr>
-
 
 <table>
 
@@ -5154,9 +4587,7 @@ ${rows}
 
 </table>
 
-
 <hr>
-
 
 <h3 style="text-align:right">
 
@@ -5165,28 +4596,20 @@ MVR ${order.total.toFixed(2)}
 
 </h3>
 
-
 <p>
 
 Payment:
-<strong>
-${order.payment}
-</strong>
+<strong>${order.payment}</strong>
 
 </p>
-
 
 ${cashInfo}
 
-
 <p style="text-align:center">
-
 Thank you!
-
 </p>
 
 `;
-
 
 document.getElementById(
 "receiptModal"
@@ -5204,9 +4627,7 @@ document.getElementById(
 }
 
 
-/* =====================================================
-   PRODUCT CATEGORY SELECT
-===================================================== */
+/* CATEGORY SELECT */
 
 function renderCategorySelect(){
 
@@ -5215,9 +4636,7 @@ document.getElementById(
 "newProductCategory"
 );
 
-
 select.innerHTML="";
-
 
 categories.forEach(cat=>{
 
@@ -5225,7 +4644,6 @@ const option=
 document.createElement("option");
 
 option.value=cat;
-
 option.textContent=cat;
 
 select.appendChild(option);
@@ -5235,9 +4653,7 @@ select.appendChild(option);
 }
 
 
-/* =====================================================
-   ADD PRODUCT
-===================================================== */
+/* ADD PRODUCT */
 
 function addProduct(){
 
@@ -5251,12 +4667,10 @@ return;
 
 }
 
-
 const name=
 document.getElementById(
 "newProductName"
 ).value.trim();
-
 
 const price=
 Number(
@@ -5265,20 +4679,16 @@ document.getElementById(
 ).value
 );
 
-
 const category=
 document.getElementById(
 "newProductCategory"
 ).value;
 
-
 const emoji=
 document.getElementById(
 "newProductEmoji"
-).value.trim()
-||
+).value.trim()||
 "🍽️";
-
 
 if(!name||!price||!category){
 
@@ -5289,7 +4699,6 @@ alert(
 return;
 
 }
-
 
 products.push({
 
@@ -5307,21 +4716,17 @@ available:true
 
 });
 
-
 document.getElementById(
 "newProductName"
 ).value="";
-
 
 document.getElementById(
 "newProductPrice"
 ).value="";
 
-
 document.getElementById(
 "newProductEmoji"
 ).value="";
-
 
 saveAll();
 
@@ -5330,9 +4735,7 @@ refresh();
 }
 
 
-/* =====================================================
-   ADMIN PRODUCTS
-===================================================== */
+/* ADMIN PRODUCTS */
 
 function renderAdminProducts(){
 
@@ -5341,9 +4744,7 @@ document.getElementById(
 "adminProducts"
 );
 
-
 box.innerHTML="";
-
 
 if(!products.length){
 
@@ -5354,16 +4755,12 @@ return;
 
 }
 
-
 products.forEach(p=>{
 
 const div=
 document.createElement("div");
 
-
-div.className=
-"admin-product";
-
+div.className="admin-product";
 
 div.innerHTML=`
 
@@ -5378,7 +4775,6 @@ onchange="updateProduct(${p.id},'name',this.value)"
 
 </label>
 
-
 <label>
 
 Price (MVR)
@@ -5390,7 +4786,6 @@ onchange="updateProduct(${p.id},'price',this.value)"
 >
 
 </label>
-
 
 <label>
 
@@ -5415,7 +4810,6 @@ ${escapeHtml(c)}
 
 </label>
 
-
 <label>
 
 Emoji
@@ -5426,7 +4820,6 @@ onchange="updateProduct(${p.id},'emoji',this.value)"
 >
 
 </label>
-
 
 <div class="admin-actions">
 
@@ -5450,7 +4843,6 @@ p.available
 
 </button>
 
-
 <button
 class="danger"
 onclick="deleteProduct(${p.id})">
@@ -5462,7 +4854,6 @@ onclick="deleteProduct(${p.id})">
 </div>
 
 `;
-
 
 box.appendChild(div);
 
@@ -5482,14 +4873,11 @@ products.find(
 x=>x.id===id
 );
 
-
 if(!p)return;
-
 
 if(field==="price"){
 
 value=Number(value);
-
 
 if(value<0){
 
@@ -5505,13 +4893,11 @@ return;
 
 }
 
-
 p[field]=value;
 
 saveAll();
 
 renderProducts();
-
 renderDashboard();
 
 }
@@ -5524,9 +4910,7 @@ products.find(
 x=>x.id===id
 );
 
-
 if(!p)return;
-
 
 p.available=!p.available;
 
@@ -5544,9 +4928,7 @@ products.find(
 x=>x.id===id
 );
 
-
 if(!p)return;
-
 
 if(
 !confirm(
@@ -5555,12 +4937,10 @@ if(
 )
 return;
 
-
 products=
 products.filter(
 x=>x.id!==id
 );
-
 
 saveAll();
 
@@ -5580,7 +4960,6 @@ document.getElementById(
 "expenseName"
 ).value.trim();
 
-
 const amount=
 Number(
 document.getElementById(
@@ -5588,12 +4967,10 @@ document.getElementById(
 ).value
 );
 
-
 const date=
 document.getElementById(
 "expenseDate"
 ).value;
-
 
 if(!name||!amount||!date){
 
@@ -5604,7 +4981,6 @@ alert(
 return;
 
 }
-
 
 expenses.unshift({
 
@@ -5618,16 +4994,13 @@ date:date
 
 });
 
-
 document.getElementById(
 "expenseName"
 ).value="";
 
-
 document.getElementById(
 "expenseAmount"
 ).value="";
-
 
 saveAll();
 
@@ -5643,9 +5016,7 @@ document.getElementById(
 "expenseList"
 );
 
-
 box.innerHTML="";
-
 
 if(!expenses.length){
 
@@ -5656,15 +5027,12 @@ return;
 
 }
 
-
 expenses.forEach(e=>{
 
 const div=
 document.createElement("div");
 
-
 div.className="cart-item";
-
 
 div.innerHTML=`
 
@@ -5679,7 +5047,6 @@ ${escapeHtml(e.name)}
 ${e.date}
 
 </div>
-
 
 <div>
 
@@ -5701,7 +5068,6 @@ Delete
 
 `;
 
-
 box.appendChild(div);
 
 });
@@ -5718,12 +5084,10 @@ if(
 )
 return;
 
-
 expenses=
 expenses.filter(
 e=>e.id!==id
 );
-
 
 saveAll();
 
@@ -5741,7 +5105,6 @@ function todayOrders(){
 const today=
 new Date().toDateString();
 
-
 return orders.filter(
 o=>
 new Date(o.date).toDateString()===
@@ -5756,13 +5119,11 @@ function renderDashboard(){
 const list=
 todayOrders();
 
-
 const sales=
 list.reduce(
 (s,o)=>s+o.total,
 0
 );
-
 
 const cash=
 list
@@ -5774,7 +5135,6 @@ o=>o.payment==="Cash"
 0
 );
 
-
 const card=
 list
 .filter(
@@ -5784,7 +5144,6 @@ o=>o.payment==="Card"
 (s,o)=>s+o.total,
 0
 );
-
 
 const transfer=
 list
@@ -5796,42 +5155,35 @@ o=>o.payment==="Transfer"
 0
 );
 
-
 document.getElementById(
 "dashSales"
 ).textContent=
 sales.toFixed(2);
-
 
 document.getElementById(
 "dashOrders"
 ).textContent=
 list.length;
 
-
 document.getElementById(
 "dashCash"
 ).textContent=
 cash.toFixed(2);
-
 
 document.getElementById(
 "dashCard"
 ).textContent=
 card.toFixed(2);
 
-
 document.getElementById(
 "dashTransfer"
 ).textContent=
 transfer.toFixed(2);
 
-
 document.getElementById(
 "dashProducts"
 ).textContent=
 products.length;
-
 
 renderDashboardInventory();
 
@@ -5847,22 +5199,14 @@ function getReportDates(period){
 const now=new Date();
 
 let start=new Date(now);
-
 let end=new Date(now);
-
 
 if(period==="day"){
 
-start.setHours(
-0,0,0,0
-);
-
-end.setHours(
-23,59,59,999
-);
+start.setHours(0,0,0,0);
+end.setHours(23,59,59,999);
 
 }
-
 
 if(period==="week"){
 
@@ -5872,16 +5216,11 @@ start.setDate(
 now.getDate()-day
 );
 
-start.setHours(
-0,0,0,0
-);
+start.setHours(0,0,0,0);
 
-end.setHours(
-23,59,59,999
-);
+end.setHours(23,59,59,999);
 
 }
-
 
 if(period==="month"){
 
@@ -5891,7 +5230,6 @@ now.getFullYear(),
 now.getMonth(),
 1
 );
-
 
 end=
 new Date(
@@ -5905,7 +5243,6 @@ now.getMonth()+1,
 );
 
 }
-
 
 return{
 start,
@@ -5922,13 +5259,11 @@ document.getElementById(
 "reportPeriod"
 ).value;
 
-
 const {
 start,
 end
 }=
 getReportDates(period);
-
 
 const list=
 orders.filter(o=>{
@@ -5940,13 +5275,11 @@ return d>=start&&d<=end;
 
 });
 
-
 const sales=
 list.reduce(
 (s,o)=>s+o.total,
 0
 );
-
 
 const exp=
 expenses
@@ -5967,24 +5300,20 @@ s+Number(e.amount),
 0
 );
 
-
 document.getElementById(
 "reportSales"
 ).textContent=
 sales.toFixed(2);
-
 
 document.getElementById(
 "reportOrders"
 ).textContent=
 list.length;
 
-
 document.getElementById(
 "reportExpenses"
 ).textContent=
 exp.toFixed(2);
-
 
 document.getElementById(
 "reportProfit"
@@ -6005,9 +5334,7 @@ document.getElementById(
 "orderHistory"
 );
 
-
 box.innerHTML="";
-
 
 if(!orders.length){
 
@@ -6018,16 +5345,12 @@ return;
 
 }
 
-
 orders.forEach(o=>{
 
 const div=
 document.createElement("div");
 
-
-div.className=
-"admin-product";
-
+div.className="admin-product";
 
 const items=
 o.items.map(
@@ -6035,9 +5358,7 @@ i=>
 `${escapeHtml(i.name)} x${i.qty}`
 ).join(", ");
 
-
 let cashInfo="";
-
 
 if(o.payment==="Cash"){
 
@@ -6067,7 +5388,6 @@ o.change||0
 
 }
 
-
 div.innerHTML=`
 
 <strong>
@@ -6094,7 +5414,6 @@ Payment: ${o.payment}
 
 ${cashInfo}
 
-
 <div class="history-actions">
 
 <button
@@ -6105,7 +5424,6 @@ onclick="editOrder(${o.id})">
 
 </button>
 
-
 <button
 class="secondary"
 onclick="showReceiptById(${o.id})">
@@ -6113,7 +5431,6 @@ onclick="showReceiptById(${o.id})">
 🧾 Receipt
 
 </button>
-
 
 <button
 class="danger"
@@ -6127,7 +5444,6 @@ onclick="deleteOrder(${o.id})">
 
 `;
 
-
 box.appendChild(div);
 
 });
@@ -6135,9 +5451,7 @@ box.appendChild(div);
 }
 
 
-/* =====================================================
-   EDIT ORDER
-===================================================== */
+/* EDIT ORDER */
 
 function editOrder(id){
 
@@ -6146,16 +5460,12 @@ orders.find(
 o=>o.id===id
 );
 
-
 if(!order)return;
-
 
 const sale=createSale();
 
-
 sale.name=
 "Edit "+order.number;
-
 
 sale.cart=
 JSON.parse(
@@ -6164,16 +5474,13 @@ order.items
 )
 );
 
-
 sale.payment=
 order.payment;
-
 
 sale.cashReceived=
 Number(
 order.cashReceived
 )||0;
-
 
 saleTabs.push(sale);
 
@@ -6183,7 +5490,6 @@ editingOrderId=id;
 
 saveAll();
 
-
 document.querySelectorAll(
 ".page"
 )
@@ -6191,11 +5497,9 @@ document.querySelectorAll(
 p=>p.classList.remove("active")
 );
 
-
 document.getElementById(
 "pos"
 ).classList.add("active");
-
 
 document.querySelectorAll(
 "nav button"
@@ -6204,21 +5508,15 @@ document.querySelectorAll(
 b=>b.classList.remove("active")
 );
 
-
 document.querySelector(
 "nav button"
 ).classList.add("active");
 
-
 refresh();
 
-
 window.scrollTo({
-
 top:0,
-
 behavior:"smooth"
-
 });
 
 }
@@ -6231,16 +5529,13 @@ orders.find(
 o=>o.id===id
 );
 
-
 if(order)
 showReceipt(order);
 
 }
 
 
-/* =====================================================
-   DELETE ORDER
-===================================================== */
+/* DELETE ORDER */
 
 function deleteOrder(id){
 
@@ -6252,26 +5547,21 @@ if(
 )
 return;
 
-
 const order=
 orders.find(
 o=>o.id===id
 );
 
-
 if(!order)return;
-
 
 removeInventorySale(
 order.items
 );
 
-
 orders=
 orders.filter(
 o=>o.id!==id
 );
-
 
 saveAll();
 
@@ -6281,37 +5571,18 @@ refresh();
 
 
 /* =====================================================
-   ESCAPE HTML
+   ESCAPE
 ===================================================== */
 
 function escapeHtml(value){
 
 return String(value)
 
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
@@ -6333,29 +5604,14 @@ const backup={
 
 app:"Kanbulo Bakery POS",
 
-version:2,
+version:3,
 
 createdAt:
 new Date().toISOString(),
 
-data:{
-
-categories:categories,
-
-products:products,
-
-orders:orders,
-
-expenses:expenses,
-
-saleTabs:saleTabs,
-
-inventory:inventory
-
-}
+data:getCurrentState()
 
 };
-
 
 const json=
 JSON.stringify(
@@ -6363,7 +5619,6 @@ backup,
 null,
 2
 );
-
 
 const blob=
 new Blob(
@@ -6373,17 +5628,13 @@ type:"application/json"
 }
 );
 
-
 const url=
 URL.createObjectURL(blob);
-
 
 const a=
 document.createElement("a");
 
-
 const date=new Date();
-
 
 const filename=
 "Kanbulo-Bakery-Backup-"+
@@ -6398,11 +5649,8 @@ date.getDate()
 ).padStart(2,"0")+
 ".json";
 
-
 a.href=url;
-
 a.download=filename;
-
 
 document.body.appendChild(a);
 
@@ -6410,9 +5658,7 @@ a.click();
 
 a.remove();
 
-
 URL.revokeObjectURL(url);
-
 
 alert(
 
@@ -6425,23 +5671,17 @@ alert(
 }
 
 
-/* =====================================================
-   RESTORE FULL BACKUP
-===================================================== */
+/* RESTORE */
 
 function restoreBackup(event){
 
 const file=
 event.target.files[0];
 
-
-if(!file)
-return;
-
+if(!file)return;
 
 const reader=
 new FileReader();
-
 
 reader.onload=function(e){
 
@@ -6451,7 +5691,6 @@ const backup=
 JSON.parse(
 e.target.result
 );
-
 
 if(
 !backup||
@@ -6467,10 +5706,8 @@ throw new Error(
 
 }
 
-
 const productCount=
 backup.data.products.length;
-
 
 const orderCount=
 Array.isArray(
@@ -6481,24 +5718,16 @@ backup.data.orders.length
 :
 0;
 
-
 if(
 !confirm(
 
 "⚠️ RESTORE BACKUP\n\n"+
-
 "This backup contains:\n\n"+
-
-"Products: "+
-productCount+
+"Products: "+productCount+
 "\n"+
-
-"Sales: "+
-orderCount+
+"Sales: "+orderCount+
 "\n\n"+
-
 "Restoring will replace the current POS data.\n\n"+
-
 "Continue?"
 
 )
@@ -6510,7 +5739,6 @@ return;
 
 }
 
-
 categories=
 Array.isArray(
 backup.data.categories
@@ -6519,7 +5747,6 @@ backup.data.categories
 backup.data.categories
 :
 [];
-
 
 products=
 Array.isArray(
@@ -6530,7 +5757,6 @@ backup.data.products
 :
 [];
 
-
 orders=
 Array.isArray(
 backup.data.orders
@@ -6539,7 +5765,6 @@ backup.data.orders
 backup.data.orders
 :
 [];
-
 
 expenses=
 Array.isArray(
@@ -6550,7 +5775,6 @@ backup.data.expenses
 :
 [];
 
-
 saleTabs=
 Array.isArray(
 backup.data.saleTabs
@@ -6560,7 +5784,6 @@ backup.data.saleTabs
 :
 [];
 
-
 inventory=
 backup.data.inventory&&
 typeof backup.data.inventory==="object"
@@ -6569,20 +5792,15 @@ backup.data.inventory
 :
 {};
 
-
 activeSaleId=null;
-
 editingOrderId=null;
-
 selectedCategory="All";
-
 
 ensureSale();
 
 saveAll();
 
 refresh();
-
 
 alert(
 
@@ -6591,14 +5809,11 @@ alert(
 
 );
 
-
 event.target.value="";
-
 
 }catch(error){
 
 console.error(error);
-
 
 alert(
 
@@ -6607,13 +5822,11 @@ alert(
 
 );
 
-
 event.target.value="";
 
 }
 
 };
-
 
 reader.readAsText(file);
 
@@ -6621,7 +5834,7 @@ reader.readAsText(file);
 
 
 /* =====================================================
-   PRODUCTS ONLY BACKUP
+   PRODUCTS BACKUP
 ===================================================== */
 
 function downloadProductsBackup(){
@@ -6632,7 +5845,7 @@ app:"Kanbulo Bakery POS",
 
 type:"products",
 
-version:2,
+version:3,
 
 createdAt:
 new Date().toISOString(),
@@ -6643,14 +5856,12 @@ products:products
 
 };
 
-
 const json=
 JSON.stringify(
 backup,
 null,
 2
 );
-
 
 const blob=
 new Blob(
@@ -6660,17 +5871,13 @@ type:"application/json"
 }
 );
 
-
 const url=
 URL.createObjectURL(blob);
-
 
 const a=
 document.createElement("a");
 
-
 const date=new Date();
-
 
 const filename=
 "Kanbulo-Bakery-Products-"+
@@ -6685,11 +5892,8 @@ date.getDate()
 ).padStart(2,"0")+
 ".json";
 
-
 a.href=url;
-
 a.download=filename;
-
 
 document.body.appendChild(a);
 
@@ -6697,9 +5901,7 @@ a.click();
 
 a.remove();
 
-
 URL.revokeObjectURL(url);
-
 
 alert(
 
@@ -6711,23 +5913,17 @@ alert(
 }
 
 
-/* =====================================================
-   IMPORT PRODUCTS
-===================================================== */
+/* IMPORT PRODUCTS */
 
 function importProductsBackup(event){
 
 const file=
 event.target.files[0];
 
-
-if(!file)
-return;
-
+if(!file)return;
 
 const reader=
 new FileReader();
-
 
 reader.onload=function(e){
 
@@ -6738,11 +5934,8 @@ JSON.parse(
 e.target.result
 );
 
-
 let importedProducts=null;
-
 let importedCategories=null;
-
 
 if(
 backup&&
@@ -6755,7 +5948,6 @@ backup.products
 importedProducts=
 backup.products;
 
-
 importedCategories=
 Array.isArray(
 backup.categories
@@ -6764,7 +5956,6 @@ backup.categories
 backup.categories
 :
 [];
-
 
 }else if(
 backup&&
@@ -6776,7 +5967,6 @@ backup.data.products
 
 importedProducts=
 backup.data.products;
-
 
 importedCategories=
 Array.isArray(
@@ -6795,7 +5985,6 @@ throw new Error(
 
 }
 
-
 if(
 !importedProducts.length
 ){
@@ -6810,18 +5999,14 @@ return;
 
 }
 
-
 if(
 !confirm(
 
 "IMPORT PRODUCTS\n\n"+
-
 "Products found: "+
 importedProducts.length+
 "\n\n"+
-
 "This will replace your current product list.\n\n"+
-
 "Continue?"
 
 )
@@ -6833,7 +6018,6 @@ return;
 
 }
 
-
 if(
 importedCategories.length
 ){
@@ -6843,15 +6027,12 @@ importedCategories;
 
 }
 
-
 products=
 importedProducts;
-
 
 saveAll();
 
 refresh();
-
 
 alert(
 
@@ -6861,14 +6042,11 @@ importedProducts.length+
 
 );
 
-
 event.target.value="";
-
 
 }catch(error){
 
 console.error(error);
-
 
 alert(
 
@@ -6877,13 +6055,11 @@ alert(
 
 );
 
-
 event.target.value="";
 
 }
 
 };
-
 
 reader.readAsText(file);
 
@@ -6894,11 +6070,39 @@ reader.readAsText(file);
    START APP
 ===================================================== */
 
+function initialiseLocalState(){
+
+/*
+Create a local sale without triggering
+a cloud save before cloud loading.
+*/
+
+if(!saleTabs.length){
+
+const sale=createSale();
+
+saleTabs.push(sale);
+
+activeSaleId=sale.id;
+
+}else if(!activeSaleId){
+
+activeSaleId=
+saleTabs[0].id;
+
+}
+
+writeLocalState();
+
+}
+
+
+async function startApp(){
+
 document.getElementById(
 "expenseDate"
 ).value=
 localDate();
-
 
 document.getElementById(
 "inventoryDate"
@@ -6907,19 +6111,36 @@ localDate();
 
 
 /*
-First show the local POS immediately,
-then load/sync the cloud data.
+Show the POS immediately.
 */
 
-ensureSale();
+initialiseLocalState();
 
 refresh();
 
-loadFromCloud();
+
+/*
+Then load the cloud.
+If cloud has data, use it.
+If cloud is empty, preserve/upload
+the local data.
+*/
+
+await loadFromCloud();
+
+}
+
+
+/*
+Start the application.
+*/
+
+startApp();
 
 </script>
 
 </body>
 </html>
 ```
+
 
