@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,13 +319,11 @@ z-index:2
 /* CATEGORIES */
 .categories{
 display:flex;
+flex-wrap:wrap;
 gap:8px;
-overflow-x:auto;
 padding:2px 0 12px;
-scrollbar-width:none
+width:100%;
 }
-
-.categories::-webkit-scrollbar{display:none}
 
 .categories button{
 white-space:nowrap;
@@ -334,7 +331,8 @@ background:#f1d8dc;
 color:#700d1d;
 padding:11px 15px;
 border-radius:22px;
-min-height:44px
+min-height:44px;
+flex:0 0 auto
 }
 
 .categories button.active{
@@ -732,6 +730,16 @@ grid-template-columns:repeat(5,minmax(150px,1fr));
 gap:15px
 }
 
+/* CATEGORY BUTTONS */
+.categories{
+gap:9px;
+padding-bottom:14px
+}
+
+.categories button{
+padding:11px 16px
+}
+
 }
 
 /* MEDIUM LAPTOP */
@@ -745,6 +753,17 @@ gap:15px
 .products{
 grid-template-columns:repeat(4,minmax(125px,1fr));
 gap:11px
+}
+
+/* CATEGORY BUTTONS */
+.categories{
+gap:8px;
+padding-bottom:14px
+}
+
+.categories button{
+padding:10px 13px;
+min-height:42px
 }
 
 }
@@ -762,6 +781,18 @@ grid-template-columns:repeat(3,minmax(115px,1fr))
 
 .stat-grid{
 grid-template-columns:repeat(2,1fr)
+}
+
+/* CATEGORY BUTTONS */
+.categories{
+gap:7px;
+padding-bottom:12px
+}
+
+.categories button{
+padding:10px 12px;
+min-height:42px;
+font-size:13px
 }
 
 }
@@ -841,14 +872,26 @@ min-width:120px;
 margin-top:0
 }
 
+/* CATEGORY BUTTONS - MULTIPLE LINES */
+.pos-right .categories{
+display:flex;
+flex-wrap:wrap;
+overflow:visible;
+gap:7px;
+padding:2px 0 12px;
+width:100%
+}
+
+.pos-right .categories button{
+flex:0 0 auto;
+padding:10px 12px;
+min-height:42px;
+font-size:13px
+}
+
 .pos-right .products{
 grid-template-columns:repeat(2,minmax(0,1fr));
 gap:9px
-}
-
-.pos-right .categories{
-flex-wrap:nowrap;
-overflow-x:auto
 }
 
 .product{
@@ -935,6 +978,18 @@ padding:7px 6px
 }
 
 .stat strong{font-size:17px}
+
+/* CATEGORY BUTTONS */
+.pos-right .categories{
+gap:6px;
+padding-bottom:10px
+}
+
+.pos-right .categories button{
+padding:9px 10px;
+min-height:40px;
+font-size:12px
+}
 
 }
 
@@ -6141,6 +6196,5 @@ startApp();
 
 </body>
 </html>
-```
 
 
