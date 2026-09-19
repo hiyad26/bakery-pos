@@ -1,1306 +1,1049 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#700d1d">
-
-<title>KANBULO BAKERY POS</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#fff8f5;
-color:#351015;
-font-size:15px;
-padding-bottom:20px
-}
-
-/* HEADER */
-header{
-background:#700d1d;
-color:white;
-padding:14px 16px 16px;
-text-align:center;
-box-shadow:0 3px 12px rgba(0,0,0,.16)
-}
-
-.header-logo{
-width:78px;
-height:78px;
-border-radius:50%;
-object-fit:cover;
-display:block;
-margin:0 auto 7px;
-border:3px solid #e6b33d;
-box-shadow:0 3px 12px rgba(0,0,0,.18)
-}
-
-header h1{
-margin:0;
-font-size:25px;
-letter-spacing:.6px
-}
-
-header p{
-margin:5px 0 0;
-font-size:13px;
-opacity:.92
-}
-
-/* NAV */
-nav{
-display:flex;
-overflow-x:auto;
-background:#4d0713;
-position:sticky;
-top:0;
-z-index:50;
-box-shadow:0 2px 8px rgba(0,0,0,.18);
-scrollbar-width:none
-}
-
-nav::-webkit-scrollbar{display:none}
-
-nav button{
-flex:1;
-min-width:105px;
-padding:14px 9px;
-border:0;
-border-radius:0;
-background:transparent;
-color:white;
-font-weight:bold;
-font-size:14px;
-white-space:nowrap
-}
-
-nav button.active{background:#9b1c31}
-
-/* PAGES */
-.page{
-display:none;
-padding:16px;
-width:100%;
-max-width:1500px;
-margin:auto
-}
-
-.page.active{display:block}
-
-/* CARDS */
-.card{
-background:white;
-border-radius:16px;
-padding:16px;
-margin-bottom:15px;
-box-shadow:0 3px 14px rgba(80,0,0,.08);
-border:1px solid #f0e0e2
-}
-
-h2,h3{
-margin-top:0;
-color:#700d1d
-}
-
-h2{font-size:21px}
-h3{font-size:17px}
-
-/* BUTTONS */
-button{
-border:0;
-border-radius:10px;
-padding:10px 13px;
-font-weight:bold;
-cursor:pointer;
-min-height:43px;
-font-family:inherit
-}
-
-button:disabled{
-opacity:.55;
-cursor:not-allowed
-}
-
-.primary{
-background:#700d1d;
-color:white
-}
-
-.secondary{
-background:#f1d8dc;
-color:#700d1d
-}
-
-.danger{
-background:#b51d35;
-color:white
-}
-
-.success{
-background:#19734a;
-color:white
-}
-
-.gold{
-background:#d39b19;
-color:white
-}
-
-/* INPUTS */
-input,select{
-width:100%;
-padding:12px;
-border:1px solid #d9b8be;
-border-radius:10px;
-background:white;
-margin-top:5px;
-font-size:16px;
-font-family:inherit;
-outline:none
-}
-
-input:focus,select:focus{
-border-color:#9b1c31;
-box-shadow:0 0 0 2px rgba(155,28,49,.08)
-}
-
-label{
-display:block;
-font-size:13px;
-font-weight:bold;
-margin-bottom:11px
-}
-
-/* POS */
-.pos-intro{
-background:linear-gradient(135deg,#fff4ef,#fff);
-border:1px solid #efd9d2;
-border-radius:14px;
-padding:13px;
-margin-bottom:13px
-}
-
-.pos-intro strong{color:#700d1d}
-
-.pos-layout{
-display:grid;
-grid-template-columns:440px minmax(0,1fr);
-gap:20px;
-align-items:start
-}
-
-.pos-left{
-position:sticky;
-top:62px;
-min-width:0
-}
-
-.pos-right{min-width:0}
-
-.pos-left .card,
-.pos-right .card{margin-bottom:13px}
-
-.pos-heading{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-margin-bottom:12px
-}
-
-.pos-heading h2{margin:0}
-
-.pos-hint{
-font-size:12px;
-color:#777;
-background:#fff4ef;
-padding:6px 9px;
-border-radius:20px
-}
-
-/* SALES TABS */
-.sales-tabs{
-display:flex;
-flex-direction:column;
-gap:8px;
-overflow:visible
-}
-
-.sale-tab-wrap{
-display:flex;
-gap:6px;
-width:100%
-}
-
-.sale-tab{
-white-space:nowrap;
-background:#f1d8dc;
-color:#700d1d;
-display:flex;
-align-items:center;
-gap:8px;
-padding:10px 10px 10px 14px;
-min-height:46px
-}
-
-.sale-tab-wrap .sale-tab{
-flex:1;
-width:auto;
-justify-content:flex-start
-}
-
-.sale-tab.active{
-background:#700d1d;
-color:white
-}
-
-.sale-label{
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap
-}
-
-.close-sale{
-width:32px;
-height:32px;
-min-height:32px;
-padding:0;
-border-radius:50%;
-background:rgba(0,0,0,.10);
-color:inherit;
-font-size:14px;
-line-height:32px;
-text-align:center;
-flex:none
-}
-
-.close-sale:hover{
-background:#b51d35;
-color:white
-}
-
-.new-sale{
-width:100%;
-background:#19734a;
-color:white;
-margin-top:2px
-}
-
-/* SEARCH */
-.search-wrap{
-position:relative;
-margin-bottom:12px
-}
-
-.search-wrap input{
-padding-left:42px;
-height:50px
-}
-
-.search-icon{
-position:absolute;
-left:14px;
-top:15px;
-font-size:18px;
-pointer-events:none;
-z-index:2
-}
-
-/* CATEGORIES */
-.categories{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-padding:2px 0 12px;
-width:100%
-}
-
-.categories button{
-white-space:nowrap;
-background:#f1d8dc;
-color:#700d1d;
-padding:11px 15px;
-border-radius:22px;
-min-height:44px;
-flex:0 0 auto
-}
-
-.categories button.active{
-background:#700d1d;
-color:white
-}
-
-/* PRODUCTS */
-.products{
-display:grid;
-grid-template-columns:repeat(5,minmax(145px,1fr));
-gap:14px
-}
-
-.product{
-background:white;
-border:1px solid #ead2d6;
-border-radius:16px;
-padding:14px;
-min-height:215px;
-display:flex;
-flex-direction:column;
-transition:transform .12s,box-shadow .12s;
-box-shadow:0 2px 7px rgba(80,0,0,.04)
-}
-
-.product:active{transform:scale(.98)}
-
-.product:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 16px rgba(80,0,0,.10)
-}
-
-.product .emoji{
-font-size:42px;
-text-align:center;
-line-height:1.1;
-margin-bottom:6px
-}
-
-.product h3{
-font-size:16px;
-margin:5px 0 4px;
-text-align:center;
-line-height:1.25
-}
-
-.product .price{
-font-weight:bold;
-color:#700d1d;
-text-align:center;
-font-size:18px;
-margin-top:6px
-}
-
-.product small{
-color:#777;
-text-align:center;
-min-height:17px
-}
-
-.stock-label{
-font-size:11px;
-font-weight:bold;
-margin-top:6px;
-color:#19734a;
-text-align:center
-}
-
-.stock-out{color:#b51d35}
-
-.product .add-btn{
-margin-top:auto;
-width:100%;
-font-size:15px;
-padding:12px 8px
-}
-
-/* CART */
-.cart-item{
-display:grid;
-grid-template-columns:minmax(0,1fr) auto;
-gap:10px;
-align-items:center;
-border-bottom:1px solid #eee;
-padding:13px 0
-}
-
-.cart-item:last-child{border-bottom:0}
-
-.cart-main{min-width:0}
-
-.cart-name{
-font-weight:bold;
-display:block;
-line-height:1.3
-}
-
-.price-editor{
-display:flex;
-align-items:center;
-gap:5px;
-margin-top:8px
-}
-
-.price-editor span{
-font-size:12px;
-color:#777;
-white-space:nowrap
-}
-
-.price-editor input{
-width:105px;
-margin:0;
-padding:8px 9px;
-font-size:14px
-}
-
-.price-reset{
-padding:7px 9px;
-min-height:36px;
-background:#f7ecee;
-color:#700d1d;
-font-size:12px
-}
-
-.line-total{
-text-align:right;
-font-size:12px;
-color:#777;
-margin-top:6px
-}
-
-.qty{
-display:flex;
-align-items:center;
-gap:5px
-}
-
-.qty button{
-width:40px;
-height:40px;
-min-height:40px;
-padding:0;
-background:#f1d8dc;
-color:#700d1d;
-font-size:20px
-}
-
-.qty strong{
-min-width:25px;
-text-align:center
-}
-
-.total{
-font-size:24px;
-font-weight:bold;
-color:#700d1d;
-text-align:right;
-margin:16px 0
-}
-
-/* PAYMENTS */
-.payments{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px
-}
-
-.payments button{
-background:#f1d8dc;
-color:#700d1d;
-min-height:50px;
-font-size:14px
-}
-
-.payments button.active{
-background:#700d1d;
-color:white
-}
-
-.cash-box{
-background:#fff4ef;
-border:1px solid #e7c7cd;
-border-radius:12px;
-padding:12px;
-margin-top:12px
-}
-
-.change-display{
-font-size:22px;
-font-weight:bold;
-color:#19734a;
-text-align:right;
-margin-top:8px
-}
-
-.insufficient{color:#b51d35}
-
-/* STATS */
-.stat-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px
-}
-
-.stat{
-background:#fff;
-padding:15px;
-border-radius:13px;
-box-shadow:0 2px 8px rgba(80,0,0,.07);
-border:1px solid #f0e0e2
-}
-
-.stat strong{
-display:block;
-font-size:21px;
-color:#700d1d;
-margin-top:6px
-}
-
-/* TABLES */
-table{
-width:100%;
-border-collapse:collapse;
-font-size:13px
-}
-
-td,th{
-padding:9px 5px;
-border-bottom:1px solid #eee;
-text-align:left
-}
-
-/* ADMIN */
-.admin-product{
-border:1px solid #ead2d6;
-border-radius:13px;
-padding:13px;
-margin-bottom:10px;
-background:#fffafa
-}
-
-.admin-actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:7px;
-margin-top:7px
-}
-
-.category-row{
-display:grid;
-grid-template-columns:1fr auto auto;
-gap:7px;
-align-items:center;
-margin-bottom:8px
-}
-
-.category-row input{margin:0}
-
-/* INVENTORY */
-.inventory-row{
-border:1px solid #ead2d6;
-border-radius:13px;
-padding:13px;
-margin-bottom:10px;
-background:#fffafa
-}
-
-.inventory-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:10px
-}
-
-.inv-stat{
-background:#fff4ef;
-padding:10px;
-border-radius:9px;
-text-align:center
-}
-
-.inv-stat strong{
-display:block;
-color:#700d1d;
-font-size:18px;
-margin-top:3px
-}
-
-.remaining-good{color:#19734a}
-.remaining-zero{color:#b51d35}
-
-.badge{
-display:inline-block;
-padding:5px 9px;
-border-radius:20px;
-font-size:11px;
-font-weight:bold;
-background:#f1d8dc;
-color:#700d1d
-}
-
-.badge.green{
-background:#d9f0e4;
-color:#19734a
-}
-
-.badge.red{
-background:#f8d5db;
-color:#b51d35
-}
-
-.inventory-actions{
-display:flex;
-gap:7px;
-margin-top:10px
-}
-
-.inventory-actions button{flex:1}
-
-/* HISTORY */
-.history-actions{
-display:flex;
-gap:7px;
-flex-wrap:wrap
-}
-
-/* SHOP BUNS */
-.shop-layout{
-display:grid;
-grid-template-columns:330px minmax(0,1fr);
-gap:16px;
-align-items:start
-}
-
-.shop-list{
-display:flex;
-flex-direction:column;
-gap:8px
-}
-
-.shop-button{
-width:100%;
-background:#fff4ef;
-border:1px solid #ead2d6;
-color:#700d1d;
-text-align:left;
-padding:13px;
-min-height:60px
-}
-
-.shop-button.active{
-background:#700d1d;
-color:white
-}
-
-.shop-button small{
-display:block;
-margin-top:4px;
-opacity:.8
-}
-
-.shop-form-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px
-}
-
-.shop-stat-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px
-}
-
-.shop-stat{
-background:#fff4ef;
-border:1px solid #ead2d6;
-border-radius:12px;
-padding:12px;
-text-align:center
-}
-
-.shop-stat strong{
-display:block;
-font-size:20px;
-color:#700d1d;
-margin-top:4px
-}
-
-.balance-card{
-background:linear-gradient(135deg,#700d1d,#9b1c31);
-color:white;
-border-radius:15px;
-padding:18px;
-margin-bottom:14px
-}
-
-.balance-card h2{
-color:white;
-margin-bottom:5px
-}
-
-.balance-number{
-font-size:30px;
-font-weight:bold;
-margin-top:8px
-}
-
-.shop-record{
-border:1px solid #ead2d6;
-border-radius:13px;
-padding:13px;
-margin-bottom:9px;
-background:#fffafa
-}
-
-.shop-record-top{
-display:flex;
-justify-content:space-between;
-gap:10px;
-align-items:center
-}
-
-.shop-record-actions{
-display:flex;
-gap:6px;
-margin-top:10px
-}
-
-.shop-record-actions button{
-flex:1
-}
-
-.payment-box{
-background:#f4faf6;
-border:1px solid #cce5d5;
-border-radius:12px;
-padding:13px;
-margin-top:12px
-}
-
-.statement-header{
-background:#fff4ef;
-border-radius:12px;
-padding:13px;
-margin-bottom:12px
-}
-
-.month-row{
-display:flex;
-justify-content:space-between;
-gap:10px;
-padding:9px 0;
-border-bottom:1px solid #eee
-}
-
-.checkbox-row{
-display:flex;
-align-items:center;
-gap:8px;
-font-size:13px;
-font-weight:bold;
-margin:5px 0 12px
-}
-
-.checkbox-row input{
-width:20px;
-height:20px;
-margin:0
-}
-
-.info-box{
-background:#fff8e8;
-border:1px solid #ead59a;
-border-radius:12px;
-padding:12px;
-font-size:13px;
-margin-bottom:12px
-}
-
-/* MODAL */
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.55);
-display:none;
-align-items:center;
-justify-content:center;
-padding:15px;
-z-index:100
-}
-
-.modal.show{display:flex}
-
-.modal-box{
-background:white;
-width:100%;
-max-width:500px;
-border-radius:15px;
-padding:18px;
-max-height:90vh;
-overflow:auto
-}
-
-/* EMPTY */
-.empty{
-text-align:center;
-padding:28px 15px;
-color:#777
-}
-
-/* BACKUP */
-hr{
-border:0;
-border-top:1px solid #eee;
-margin:18px 0
-}
-
-.backup-box{
-background:#fff4ef;
-border:1px solid #e7c7cd;
-border-radius:12px;
-padding:13px;
-margin-bottom:12px
-}
-
-.backup-button{
-width:100%;
-margin-bottom:8px
-}
-
-/* LARGE */
-@media(min-width:1200px){
-
-.page{
-padding:20px 24px;
-max-width:1550px
-}
-
-.pos-layout{
-grid-template-columns:450px minmax(0,1fr);
-gap:22px
-}
-
-.products{
-grid-template-columns:repeat(5,minmax(150px,1fr));
-gap:15px
-}
-
-.categories{
-gap:9px;
-padding-bottom:14px
-}
-
-.categories button{
-padding:11px 16px
-}
-
-}
-
-/* MEDIUM */
-@media(max-width:1199px) and (min-width:701px){
-
-.pos-layout{
-grid-template-columns:390px minmax(0,1fr);
-gap:15px
-}
-
-.products{
-grid-template-columns:repeat(4,minmax(125px,1fr));
-gap:11px
-}
-
-.categories{
-gap:8px;
-padding-bottom:14px
-}
-
-.categories button{
-padding:10px 13px;
-min-height:42px
-}
-
-}
-
-/* TABLET */
-@media(max-width:900px) and (min-width:701px){
-
-.pos-layout{
-grid-template-columns:350px minmax(0,1fr)
-}
-
-.products{
-grid-template-columns:repeat(3,minmax(115px,1fr))
-}
-
-.stat-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-.shop-layout{
-grid-template-columns:270px minmax(0,1fr)
-}
-
-.shop-stat-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-}
-
-/* PHONE */
-@media(max-width:700px){
-
-body{font-size:14px}
-
-header{
-padding:10px 12px 13px
-}
-
-.header-logo{
-width:65px;
-height:65px
-}
-
-header h1{font-size:21px}
-header p{font-size:12px}
-
-nav button{
-min-width:91px;
-font-size:12px;
-padding:12px 7px
-}
-
-.page{padding:10px}
-
-.card{
-padding:13px;
-border-radius:14px;
-margin-bottom:11px
-}
-
-h2{font-size:19px}
-
-.pos-layout{
-display:flex;
-flex-direction:column;
-gap:0
-}
-
-.pos-left{
-position:static;
-width:100%;
-order:0
-}
-
-.pos-right{
-width:100%;
-order:1
-}
-
-.sales-tabs{
-flex-direction:row;
-overflow-x:auto;
-padding-bottom:4px;
-scrollbar-width:none
-}
-
-.sales-tabs::-webkit-scrollbar{display:none}
-
-.sale-tab-wrap{
-width:auto;
-min-width:135px
-}
-
-.sale-tab-wrap .sale-tab{
-width:auto
-}
-
-.new-sale{
-width:auto;
-min-width:120px;
-margin-top:0
-}
-
-/* CATEGORY BUTTONS */
-.pos-right .categories{
-display:flex;
-flex-wrap:wrap;
-overflow:visible;
-gap:7px;
-padding:2px 0 12px;
-width:100%
-}
-
-.pos-right .categories button{
-flex:0 0 auto;
-padding:10px 12px;
-min-height:42px;
-font-size:13px
-}
-
-.pos-right .products{
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:9px
-}
-
-.product{
-min-height:195px;
-padding:11px
-}
-
-.product .emoji{font-size:35px}
-.product h3{font-size:14px}
-.product .price{font-size:16px}
-
-.product .add-btn{
-font-size:13px;
-padding:11px 6px
-}
-
-.pos-intro{font-size:13px}
-
-.cart-item{padding:11px 0}
-
-.price-editor input{width:95px}
-
-.total{font-size:21px}
-
-.payments button{
-font-size:12px;
-padding:8px 5px
-}
-
-.stat-grid{
-grid-template-columns:repeat(2,1fr);
-gap:9px
-}
-
-.stat{padding:12px}
-.stat strong{font-size:18px}
-
-.inventory-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-.category-row{
-grid-template-columns:minmax(0,1fr) auto auto
-}
-
-.history-actions button{
-flex:1;
-min-width:90px
-}
-
-/* SHOP BUNS PHONE */
-.shop-layout{
-display:flex;
-flex-direction:column
-}
-
-.shop-layout>div{
-width:100%
-}
-
-.shop-form-grid{
-grid-template-columns:1fr
-}
-
-.shop-stat-grid{
-grid-template-columns:repeat(2,1fr);
-gap:8px
-}
-
-.shop-stat strong{
-font-size:17px
-}
-
-.balance-number{
-font-size:26px
-}
-
-.shop-record-actions{
-flex-wrap:wrap
-}
-
-.shop-record-actions button{
-min-width:90px
-}
-
-}
-
-/* SMALL PHONE */
-@media(max-width:380px){
-
-.page{padding:8px}
-.card{padding:11px}
-
-.pos-right .products{gap:7px}
-
-.product{
-padding:9px;
-min-height:180px
-}
-
-.product h3{font-size:13px}
-.product .emoji{font-size:31px}
-
-.payments button{
-font-size:11px;
-padding:8px 4px
-}
-
-.price-editor input{width:88px}
-
-.price-reset{
-font-size:11px;
-padding:7px 6px
-}
-
-.stat strong{font-size:17px}
-
-.pos-right .categories{
-gap:6px;
-padding-bottom:10px
-}
-
-.pos-right .categories button{
-padding:9px 10px;
-min-height:40px;
-font-size:12px
-}
-
-}
-
-/* PRINT */
-@media print{
-
-body *{visibility:hidden}
-
-#printArea,
-#printArea *{
-visibility:visible
-}
-
-#printArea{
-position:absolute;
-left:0;
-top:0;
-width:100%;
-background:white;
-display:block!important
-}
-
-#printArea button{
-display:none
-}
-
-#receiptModal,
-#shopStatementModal{
-display:none!important
-}
-
-}
-</style>
-</head>
-
-<body>
-
-<header>
-
-<img
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width,initial-scale=1.0">  
+<meta name="theme-color" content="#700d1d">  <title>KANBULO BAKERY POS</title>  <!-- SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>  
+*{box-sizing:border-box}  
+  
+html{scroll-behavior:smooth}  
+  
+body{  
+margin:0;  
+font-family:Arial,sans-serif;  
+background:#fff8f5;  
+color:#351015;  
+font-size:15px;  
+padding-bottom:20px  
+}  
+  
+/* HEADER */  
+header{  
+background:#700d1d;  
+color:white;  
+padding:14px 16px 16px;  
+text-align:center;  
+box-shadow:0 3px 12px rgba(0,0,0,.16)  
+}  
+  
+.header-logo{  
+width:78px;  
+height:78px;  
+border-radius:50%;  
+object-fit:cover;  
+display:block;  
+margin:0 auto 7px;  
+border:3px solid #e6b33d;  
+box-shadow:0 3px 12px rgba(0,0,0,.18)  
+}  
+  
+header h1{  
+margin:0;  
+font-size:25px;  
+letter-spacing:.6px  
+}  
+  
+header p{  
+margin:5px 0 0;  
+font-size:13px;  
+opacity:.92  
+}  
+  
+/* NAV */  
+nav{  
+display:flex;  
+overflow-x:auto;  
+background:#4d0713;  
+position:sticky;  
+top:0;  
+z-index:50;  
+box-shadow:0 2px 8px rgba(0,0,0,.18);  
+scrollbar-width:none  
+}  
+  
+nav::-webkit-scrollbar{display:none}  
+  
+nav button{  
+flex:1;  
+min-width:105px;  
+padding:14px 9px;  
+border:0;  
+border-radius:0;  
+background:transparent;  
+color:white;  
+font-weight:bold;  
+font-size:14px;  
+white-space:nowrap  
+}  
+  
+nav button.active{background:#9b1c31}  
+  
+/* PAGES */  
+.page{  
+display:none;  
+padding:16px;  
+width:100%;  
+max-width:1500px;  
+margin:auto  
+}  
+  
+.page.active{display:block}  
+  
+/* CARDS */  
+.card{  
+background:white;  
+border-radius:16px;  
+padding:16px;  
+margin-bottom:15px;  
+box-shadow:0 3px 14px rgba(80,0,0,.08);  
+border:1px solid #f0e0e2  
+}  
+  
+h2,h3{  
+margin-top:0;  
+color:#700d1d  
+}  
+  
+h2{font-size:21px}  
+h3{font-size:17px}  
+  
+/* BUTTONS */  
+button{  
+border:0;  
+border-radius:10px;  
+padding:10px 13px;  
+font-weight:bold;  
+cursor:pointer;  
+min-height:43px;  
+font-family:inherit  
+}  
+  
+button:disabled{  
+opacity:.55;  
+cursor:not-allowed  
+}  
+  
+.primary{  
+background:#700d1d;  
+color:white  
+}  
+  
+.secondary{  
+background:#f1d8dc;  
+color:#700d1d  
+}  
+  
+.danger{  
+background:#b51d35;  
+color:white  
+}  
+  
+.success{  
+background:#19734a;  
+color:white  
+}  
+  
+/* INPUTS */  
+input,select{  
+width:100%;  
+padding:12px;  
+border:1px solid #d9b8be;  
+border-radius:10px;  
+background:white;  
+margin-top:5px;  
+font-size:16px;  
+font-family:inherit;  
+outline:none  
+}  
+  
+input:focus,select:focus{  
+border-color:#9b1c31;  
+box-shadow:0 0 0 2px rgba(155,28,49,.08)  
+}  
+  
+label{  
+display:block;  
+font-size:13px;  
+font-weight:bold;  
+margin-bottom:11px  
+}  
+  
+/* POS INTRO */  
+.pos-intro{  
+background:linear-gradient(135deg,#fff4ef,#fff);  
+border:1px solid #efd9d2;  
+border-radius:14px;  
+padding:13px;  
+margin-bottom:13px  
+}  
+  
+.pos-intro strong{color:#700d1d}  
+  
+/* POS LAYOUT */  
+.pos-layout{  
+display:grid;  
+grid-template-columns:440px minmax(0,1fr);  
+gap:20px;  
+align-items:start  
+}  
+  
+.pos-left{  
+position:sticky;  
+top:62px;  
+min-width:0  
+}  
+  
+.pos-right{min-width:0}  
+  
+.pos-left .card,  
+.pos-right .card{margin-bottom:13px}  
+  
+/* POS HEADING */  
+.pos-heading{  
+display:flex;  
+align-items:center;  
+justify-content:space-between;  
+gap:10px;  
+margin-bottom:12px  
+}  
+  
+.pos-heading h2{margin:0}  
+  
+.pos-hint{  
+font-size:12px;  
+color:#777;  
+background:#fff4ef;  
+padding:6px 9px;  
+border-radius:20px  
+}  
+  
+/* SALES TABS */  
+.sales-tabs{  
+display:flex;  
+flex-direction:column;  
+gap:8px;  
+overflow:visible  
+}  
+  
+.sale-tab-wrap{  
+display:flex;  
+gap:6px;  
+width:100%  
+}  
+  
+.sale-tab{  
+white-space:nowrap;  
+background:#f1d8dc;  
+color:#700d1d;  
+display:flex;  
+align-items:center;  
+gap:8px;  
+padding:10px 10px 10px 14px;  
+min-height:46px  
+}  
+  
+.sale-tab-wrap .sale-tab{  
+flex:1;  
+width:auto;  
+justify-content:flex-start  
+}  
+  
+.sale-tab.active{  
+background:#700d1d;  
+color:white  
+}  
+  
+.sale-label{  
+overflow:hidden;  
+text-overflow:ellipsis;  
+white-space:nowrap  
+}  
+  
+.close-sale{  
+width:32px;  
+height:32px;  
+min-height:32px;  
+padding:0;  
+border-radius:50%;  
+background:rgba(0,0,0,.10);  
+color:inherit;  
+font-size:14px;  
+line-height:32px;  
+text-align:center;  
+flex:none  
+}  
+  
+.sale-tab.active + .close-sale{  
+background:rgba(255,255,255,.2)  
+}  
+  
+.close-sale:hover{  
+background:#b51d35;  
+color:white  
+}  
+  
+.new-sale{  
+width:100%;  
+background:#19734a;  
+color:white;  
+margin-top:2px  
+}  
+  
+/* SEARCH */  
+.search-wrap{  
+position:relative;  
+margin-bottom:12px  
+}  
+  
+.search-wrap input{  
+padding-left:42px;  
+height:50px  
+}  
+  
+.search-icon{  
+position:absolute;  
+left:14px;  
+top:15px;  
+font-size:18px;  
+pointer-events:none;  
+z-index:2  
+}  
+  
+/* CATEGORIES */  
+.categories{  
+display:flex;  
+flex-wrap:wrap;  
+gap:8px;  
+padding:2px 0 12px;  
+width:100%;  
+}  
+  
+.categories button{  
+white-space:nowrap;  
+background:#f1d8dc;  
+color:#700d1d;  
+padding:11px 15px;  
+border-radius:22px;  
+min-height:44px;  
+flex:0 0 auto  
+}  
+  
+.categories button.active{  
+background:#700d1d;  
+color:white  
+}  
+  
+/* PRODUCTS */  
+.products{  
+display:grid;  
+grid-template-columns:repeat(5,minmax(145px,1fr));  
+gap:14px  
+}  
+  
+.product{  
+background:white;  
+border:1px solid #ead2d6;  
+border-radius:16px;  
+padding:14px;  
+min-height:215px;  
+display:flex;  
+flex-direction:column;  
+transition:transform .12s,box-shadow .12s;  
+box-shadow:0 2px 7px rgba(80,0,0,.04)  
+}  
+  
+.product:active{transform:scale(.98)}  
+  
+.product:hover{  
+transform:translateY(-2px);  
+box-shadow:0 6px 16px rgba(80,0,0,.10)  
+}  
+  
+.product .emoji{  
+font-size:42px;  
+text-align:center;  
+line-height:1.1;  
+margin-bottom:6px  
+}  
+  
+.product h3{  
+font-size:16px;  
+margin:5px 0 4px;  
+text-align:center;  
+line-height:1.25  
+}  
+  
+.product .price{  
+font-weight:bold;  
+color:#700d1d;  
+text-align:center;  
+font-size:18px;  
+margin-top:6px  
+}  
+  
+.product small{  
+color:#777;  
+text-align:center;  
+min-height:17px  
+}  
+  
+.stock-label{  
+font-size:11px;  
+font-weight:bold;  
+margin-top:6px;  
+color:#19734a;  
+text-align:center  
+}  
+  
+.stock-out{color:#b51d35}  
+  
+.product .add-btn{  
+margin-top:auto;  
+width:100%;  
+font-size:15px;  
+padding:12px 8px  
+}  
+  
+/* CART */  
+.cart-item{  
+display:grid;  
+grid-template-columns:minmax(0,1fr) auto;  
+gap:10px;  
+align-items:center;  
+border-bottom:1px solid #eee;  
+padding:13px 0  
+}  
+  
+.cart-item:last-child{border-bottom:0}  
+  
+.cart-main{min-width:0}  
+  
+.cart-name{  
+font-weight:bold;  
+display:block;  
+line-height:1.3  
+}  
+  
+.price-editor{  
+display:flex;  
+align-items:center;  
+gap:5px;  
+margin-top:8px  
+}  
+  
+.price-editor span{  
+font-size:12px;  
+color:#777;  
+white-space:nowrap  
+}  
+  
+.price-editor input{  
+width:105px;  
+margin:0;  
+padding:8px 9px;  
+font-size:14px  
+}  
+  
+.price-reset{  
+padding:7px 9px;  
+min-height:36px;  
+background:#f7ecee;  
+color:#700d1d;  
+font-size:12px  
+}  
+  
+.line-total{  
+text-align:right;  
+font-size:12px;  
+color:#777;  
+margin-top:6px  
+}  
+  
+.qty{  
+display:flex;  
+align-items:center;  
+gap:5px  
+}  
+  
+.qty button{  
+width:40px;  
+height:40px;  
+min-height:40px;  
+padding:0;  
+background:#f1d8dc;  
+color:#700d1d;  
+font-size:20px  
+}  
+  
+.qty strong{  
+min-width:25px;  
+text-align:center  
+}  
+  
+.total{  
+font-size:24px;  
+font-weight:bold;  
+color:#700d1d;  
+text-align:right;  
+margin:16px 0  
+}  
+  
+/* PAYMENTS */  
+.payments{  
+display:grid;  
+grid-template-columns:repeat(3,1fr);  
+gap:7px  
+}  
+  
+.payments button{  
+background:#f1d8dc;  
+color:#700d1d;  
+min-height:50px;  
+font-size:14px  
+}  
+  
+.payments button.active{  
+background:#700d1d;  
+color:white  
+}  
+  
+.cash-box{  
+background:#fff4ef;  
+border:1px solid #e7c7cd;  
+border-radius:12px;  
+padding:12px;  
+margin-top:12px  
+}  
+  
+.change-display{  
+font-size:22px;  
+font-weight:bold;  
+color:#19734a;  
+text-align:right;  
+margin-top:8px  
+}  
+  
+.insufficient{color:#b51d35}  
+  
+/* STATS */  
+.stat-grid{  
+display:grid;  
+grid-template-columns:repeat(4,1fr);  
+gap:12px  
+}  
+  
+.stat{  
+background:#fff;  
+padding:15px;  
+border-radius:13px;  
+box-shadow:0 2px 8px rgba(80,0,0,.07);  
+border:1px solid #f0e0e2  
+}  
+  
+.stat strong{  
+display:block;  
+font-size:21px;  
+color:#700d1d;  
+margin-top:6px  
+}  
+  
+/* TABLES */  
+table{  
+width:100%;  
+border-collapse:collapse;  
+font-size:13px  
+}  
+  
+td,th{  
+padding:9px 5px;  
+border-bottom:1px solid #eee;  
+text-align:left  
+}  
+  
+/* ADMIN */  
+.admin-product{  
+border:1px solid #ead2d6;  
+border-radius:13px;  
+padding:13px;  
+margin-bottom:10px;  
+background:#fffafa  
+}  
+  
+.admin-actions{  
+display:grid;  
+grid-template-columns:1fr 1fr;  
+gap:7px;  
+margin-top:7px  
+}  
+  
+.category-row{  
+display:grid;  
+grid-template-columns:1fr auto auto;  
+gap:7px;  
+align-items:center;  
+margin-bottom:8px  
+}  
+  
+.category-row input{margin:0}  
+  
+/* INVENTORY */  
+.inventory-row{  
+border:1px solid #ead2d6;  
+border-radius:13px;  
+padding:13px;  
+margin-bottom:10px;  
+background:#fffafa  
+}  
+  
+.inventory-grid{  
+display:grid;  
+grid-template-columns:repeat(4,1fr);  
+gap:8px;  
+margin-top:10px  
+}  
+  
+.inv-stat{  
+background:#fff4ef;  
+padding:10px;  
+border-radius:9px;  
+text-align:center  
+}  
+  
+.inv-stat strong{  
+display:block;  
+color:#700d1d;  
+font-size:18px;  
+margin-top:3px  
+}  
+  
+.remaining-good{color:#19734a}  
+.remaining-zero{color:#b51d35}  
+  
+.badge{  
+display:inline-block;  
+padding:5px 9px;  
+border-radius:20px;  
+font-size:11px;  
+font-weight:bold;  
+background:#f1d8dc;  
+color:#700d1d  
+}  
+  
+.badge.green{  
+background:#d9f0e4;  
+color:#19734a  
+}  
+  
+.badge.red{  
+background:#f8d5db;  
+color:#b51d35  
+}  
+  
+.inventory-actions{  
+display:flex;  
+gap:7px;  
+margin-top:10px  
+}  
+  
+.inventory-actions button{flex:1}  
+  
+/* HISTORY */  
+.history-actions{  
+display:flex;  
+gap:7px;  
+flex-wrap:wrap  
+}  
+  
+/* MODAL */  
+.modal{  
+position:fixed;  
+inset:0;  
+background:rgba(0,0,0,.55);  
+display:none;  
+align-items:center;  
+justify-content:center;  
+padding:15px;  
+z-index:100  
+}  
+  
+.modal.show{display:flex}  
+  
+.modal-box{  
+background:white;  
+width:100%;  
+max-width:450px;  
+border-radius:15px;  
+padding:18px;  
+max-height:90vh;  
+overflow:auto  
+}  
+  
+/* EMPTY */  
+.empty{  
+text-align:center;  
+padding:28px 15px;  
+color:#777  
+}  
+  
+/* BACKUP */  
+hr{  
+border:0;  
+border-top:1px solid #eee;  
+margin:18px 0  
+}  
+  
+.backup-box{  
+background:#fff4ef;  
+border:1px solid #e7c7cd;  
+border-radius:12px;  
+padding:13px;  
+margin-bottom:12px  
+}  
+  
+.backup-button{  
+width:100%;  
+margin-bottom:8px  
+}  
+  
+/* LARGE LAPTOP */  
+@media(min-width:1200px){  
+  
+.page{  
+padding:20px 24px;  
+max-width:1550px  
+}  
+  
+.pos-layout{  
+grid-template-columns:450px minmax(0,1fr);  
+gap:22px  
+}  
+  
+.products{  
+grid-template-columns:repeat(5,minmax(150px,1fr));  
+gap:15px  
+}  
+  
+/* CATEGORY BUTTONS */  
+.categories{  
+gap:9px;  
+padding-bottom:14px  
+}  
+  
+.categories button{  
+padding:11px 16px  
+}  
+  
+}  
+  
+/* MEDIUM LAPTOP */  
+@media(max-width:1199px) and (min-width:701px){  
+  
+.pos-layout{  
+grid-template-columns:390px minmax(0,1fr);  
+gap:15px  
+}  
+  
+.products{  
+grid-template-columns:repeat(4,minmax(125px,1fr));  
+gap:11px  
+}  
+  
+/* CATEGORY BUTTONS */  
+.categories{  
+gap:8px;  
+padding-bottom:14px  
+}  
+  
+.categories button{  
+padding:10px 13px;  
+min-height:42px  
+}  
+  
+}  
+  
+/* TABLET */  
+@media(max-width:900px) and (min-width:701px){  
+  
+.pos-layout{  
+grid-template-columns:350px minmax(0,1fr)  
+}  
+  
+.products{  
+grid-template-columns:repeat(3,minmax(115px,1fr))  
+}  
+  
+.stat-grid{  
+grid-template-columns:repeat(2,1fr)  
+}  
+  
+/* CATEGORY BUTTONS */  
+.categories{  
+gap:7px;  
+padding-bottom:12px  
+}  
+  
+.categories button{  
+padding:10px 12px;  
+min-height:42px;  
+font-size:13px  
+}  
+  
+}  
+  
+/* PHONE */  
+@media(max-width:700px){  
+  
+body{font-size:14px}  
+  
+header{  
+padding:10px 12px 13px  
+}  
+  
+.header-logo{  
+width:65px;  
+height:65px  
+}  
+  
+header h1{font-size:21px}  
+  
+header p{font-size:12px}  
+  
+nav button{  
+min-width:91px;  
+font-size:12px;  
+padding:12px 7px  
+}  
+  
+.page{padding:10px}  
+  
+.card{  
+padding:13px;  
+border-radius:14px;  
+margin-bottom:11px  
+}  
+  
+h2{font-size:19px}  
+  
+.pos-layout{  
+display:flex;  
+flex-direction:column;  
+gap:0  
+}  
+  
+.pos-left{  
+position:static;  
+width:100%;  
+order:0  
+}  
+  
+.pos-right{  
+width:100%;  
+order:1  
+}  
+  
+.sales-tabs{  
+flex-direction:row;  
+overflow-x:auto;  
+padding-bottom:4px;  
+scrollbar-width:none  
+}  
+  
+.sales-tabs::-webkit-scrollbar{display:none}  
+  
+.sale-tab-wrap{  
+width:auto;  
+min-width:135px  
+}  
+  
+.sale-tab-wrap .sale-tab{  
+width:auto  
+}  
+  
+.new-sale{  
+width:auto;  
+min-width:120px;  
+margin-top:0  
+}  
+  
+/* CATEGORY BUTTONS - MULTIPLE LINES */  
+.pos-right .categories{  
+display:flex;  
+flex-wrap:wrap;  
+overflow:visible;  
+gap:7px;  
+padding:2px 0 12px;  
+width:100%  
+}  
+  
+.pos-right .categories button{  
+flex:0 0 auto;  
+padding:10px 12px;  
+min-height:42px;  
+font-size:13px  
+}  
+  
+.pos-right .products{  
+grid-template-columns:repeat(2,minmax(0,1fr));  
+gap:9px  
+}  
+  
+.product{  
+min-height:195px;  
+padding:11px  
+}  
+  
+.product .emoji{font-size:35px}  
+  
+.product h3{font-size:14px}  
+  
+.product .price{font-size:16px}  
+  
+.product .add-btn{  
+font-size:13px;  
+padding:11px 6px  
+}  
+  
+.pos-intro{font-size:13px}  
+  
+.cart-item{padding:11px 0}  
+  
+.price-editor input{width:95px}  
+  
+.total{font-size:21px}  
+  
+.payments button{  
+font-size:12px;  
+padding:8px 5px  
+}  
+  
+.stat-grid{  
+grid-template-columns:repeat(2,1fr);  
+gap:9px  
+}  
+  
+.stat{padding:12px}  
+  
+.stat strong{font-size:18px}  
+  
+.inventory-grid{  
+grid-template-columns:repeat(2,1fr)  
+}  
+  
+.category-row{  
+grid-template-columns:minmax(0,1fr) auto auto  
+}  
+  
+.history-actions button{  
+flex:1;  
+min-width:90px  
+}  
+  
+}  
+  
+/* SMALL PHONE */  
+@media(max-width:380px){  
+  
+.page{padding:8px}  
+  
+.card{padding:11px}  
+  
+.pos-right .products{gap:7px}  
+  
+.product{  
+padding:9px;  
+min-height:180px  
+}  
+  
+.product h3{font-size:13px}  
+  
+.product .emoji{font-size:31px}  
+  
+.payments button{  
+font-size:11px;  
+padding:8px 4px  
+}  
+  
+.price-editor input{width:88px}  
+  
+.price-reset{  
+font-size:11px;  
+padding:7px 6px  
+}  
+  
+.stat strong{font-size:17px}  
+  
+/* CATEGORY BUTTONS */  
+.pos-right .categories{  
+gap:6px;  
+padding-bottom:10px  
+}  
+  
+.pos-right .categories button{  
+padding:9px 10px;  
+min-height:40px;  
+font-size:12px  
+}  
+  
+}  
+  
+/* PRINT */  
+@media print{  
+  
+body *{visibility:hidden}  
+  
+#receiptModal,  
+#receiptModal *{  
+visibility:visible  
+}  
+  
+#receiptModal{  
+position:absolute;  
+inset:0;  
+background:white;  
+display:block!important  
+}  
+  
+.modal-box{  
+max-width:none;  
+box-shadow:none  
+}  
+  
+.modal-box button{display:none}  
+  
+}  
+</style>  </head>  <body>  <header>  <img
 class="header-logo"
 src="kanbulo-logo.png"
 alt="Kanbulo Bakery logo"
->
 
-<h1>KANBULO BAKERY</h1>
+> 
 
-<p>Friendly POS • Fast & Easy Sales</p>
+<h1>KANBULO BAKERY</h1>  <p>Friendly POS • Fast & Easy Sales</p>  </header>  <nav>  <button class="active" onclick="showPage('pos',this)">POS</button>
 
-</header>
-
-<nav>
-
-<button class="active" onclick="showPage('pos',this)">
-POS
-</button>
-
-<button onclick="showPage('shopBuns',this)">
-🥖 Shop Buns
-</button>
-
-<button onclick="showPage('inventory',this)">
-📦 Inventory
-</button>
-
-<button onclick="showPage('admin',this)">
-Admin
-</button>
-
-<button onclick="showPage('dashboard',this)">
-Dashboard
-</button>
-
-<button onclick="showPage('reports',this)">
-Reports
-</button>
-
-<button onclick="showPage('history',this)">
-History
-</button>
-
-</nav>
-
-
-<!-- =====================================================
-     POS
-===================================================== -->
-
-<section id="pos" class="page active">
-
-<div class="pos-layout">
-
-<div class="pos-left">
-
-<div class="card">
-
-<div class="pos-heading">
-<h2>🧾 Sales</h2>
-<span class="pos-hint">Open orders</span>
-</div>
-
-<div class="sales-tabs" id="salesTabs"></div>
-
-</div>
-
-<div class="card">
-
-<div class="pos-heading">
-<h2 id="currentSaleTitle">🛒 Sale 1</h2>
-</div>
-
-<div id="cart"></div>
-
-<div class="total">
-Total: MVR
-<span id="cartTotal">0.00</span>
-</div>
-
-<div class="payments">
-
-<button id="payCash" onclick="selectPayment('Cash')">
-💵 Cash
-</button>
-
-<button id="payCard" onclick="selectPayment('Card')">
-💳 Card
-</button>
-
-<button id="payTransfer" onclick="selectPayment('Transfer')">
-🏦 Transfer
-</button>
-
-</div>
-
-<div id="cashBox" class="cash-box">
-
-<label>
-
-Customer Gives (MVR)
+<button onclick="showPage('inventory',this)">  
+📦 Inventory  
+</button>  <button onclick="showPage('admin',this)">  
+Admin  
+</button>  <button onclick="showPage('dashboard',this)">  
+Dashboard  
+</button>  <button onclick="showPage('reports',this)">  
+Reports  
+</button>  <button onclick="showPage('history',this)">  
+History  
+</button>  </nav>  <!-- POS -->  <section id="pos" class="page active">  <div class="pos-layout">  <div class="pos-left">  <div class="card">  <div class="pos-heading">  
+<h2>🧾 Sales</h2>  
+<span class="pos-hint">Open orders</span>  
+</div>  <div class="sales-tabs" id="salesTabs"></div>  </div>  <div class="card">  <div class="pos-heading">  <h2 id="currentSaleTitle">  
+🛒 Sale 1  
+</h2>  </div>  <div id="cart"></div>  <div class="total">  
+Total: MVR  
+<span id="cartTotal">0.00</span>  
+</div>  <div class="payments">  <button id="payCash" onclick="selectPayment('Cash')">  
+💵 Cash  
+</button>  <button id="payCard" onclick="selectPayment('Card')">  
+💳 Card  
+</button>  <button id="payTransfer" onclick="selectPayment('Transfer')">  
+🏦 Transfer  
+</button>  </div>  <div id="cashBox" class="cash-box">  <label>  Customer Gives (MVR)
 
 <input
 id="cashReceived"
@@ -1309,206 +1052,50 @@ min="0"
 step="0.01"
 placeholder="Example: 500"
 oninput="calculateChange()"
->
 
-</label>
+> 
 
-<div class="change-display">
-
-Change: MVR
+</label>  <div class="change-display">  Change: MVR
 <span id="changeAmount">0.00</span>
 
-</div>
-
-</div>
-
-<br>
-
-<button
-class="primary"
-style="width:100%;font-size:16px;padding:14px"
+</div>  </div>  <br>  <button  
+class="primary"  
+style="width:100%;font-size:16px;padding:14px"  
 onclick="completeOrder()">
 
 ✅ Complete Sale
 
-</button>
+</button>  </div>  </div>  <div class="pos-right">  <div class="card">  <div class="pos-intro">  <strong>👋 Select items</strong>
 
-</div>
-
-</div>
-
-<div class="pos-right">
-
-<div class="card">
-
-<div class="pos-intro">
-
-<strong>👋 Select items</strong>
-
-<br>
-
-<span style="font-size:13px;color:#666">
-
-Pick a category, then tap an item.
+<br>  <span style="font-size:13px;color:#666">  Pick a category, then tap an item.
 You can change the sale price from the sale panel.
 
-</span>
-
-</div>
-
-<div class="search-wrap">
-
-<span class="search-icon">🔎</span>
+</span>  </div>  <div class="search-wrap">  <span class="search-icon">🔎</span>
 
 <input
 id="search"
 placeholder="Search products..."
 oninput="renderProducts()"
->
 
-</div>
+> 
 
-<div id="categoryButtons" class="categories"></div>
-
-<div id="products" class="products"></div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     SHOP BUNS
-===================================================== -->
-
-<section id="shopBuns" class="page">
-
-<div class="card">
-
-<div class="pos-heading">
-
-<div>
-<h2>🥖 Shop Buns</h2>
-
-<div style="font-size:13px;color:#777">
-Daily bun deliveries • Monthly payment
-</div>
-</div>
-
-<button
-class="primary"
-onclick="openAddShopModal()">
-
-＋ Add Shop
-
-</button>
-
-</div>
-
-<div class="info-box">
-
-<strong>How this works</strong><br>
-
-Shops can take buns every day without paying immediately.
-Record each delivery here. Their balance will automatically
-increase, and when they pay at the end of the month, record
-the payment to reduce the balance.
-
-</div>
-
-<div id="shopSummary"></div>
-
-</div>
-
-
-<div class="shop-layout">
-
-<div>
-
-<div class="card">
-
-<h3>🏪 Shops</h3>
-
-<div id="shopList"></div>
-
-</div>
-
-</div>
-
-
-<div>
-
-<div id="selectedShopArea">
-
-<div class="card">
-
-<div class="empty">
-🏪 Select a shop to view its bun deliveries.
-<br>
-<small>Or add a new shop using the button above.</small>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     INVENTORY
-===================================================== -->
-
-<section id="inventory" class="page">
-
-<div class="card">
-
-<h2>📦 Inventory Management</h2>
-
-<label>
-
-Inventory Date
+</div>  <div id="categoryButtons" class="categories"></div>  <div id="products" class="products"></div>  </div>  </div>  </div>  </section>  <!-- INVENTORY -->  <section id="inventory" class="page">  <div class="card">  <h2>📦 Inventory Management</h2>  <label>  Inventory Date
 
 <input
 type="date"
 id="inventoryDate"
 onchange="renderInventory()"
->
 
-</label>
+> 
 
-<p style="font-size:13px;color:#777">
+</label>  <p style="font-size:13px;color:#777">  Add the quantity you prepared at the beginning of the day.
+Sales are automatically deducted from inventory.
 
-Add the quantity you prepared at the beginning of the day.
-Normal POS sales are automatically deducted from inventory.
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>➕ Add Prepared Stock</h3>
-
-<label>
-
-Product
+</p>  </div>  <div class="card">  <h3>➕ Add Prepared Stock</h3>  <label>  Product
 
 <select id="stockProduct"></select>
 
-</label>
-
-<label>
-
-Quantity Prepared
+</label>  <label>  Quantity Prepared
 
 <input
 id="stockQuantity"
@@ -1516,31 +1103,16 @@ type="number"
 min="1"
 step="1"
 placeholder="Example: 12"
->
 
-</label>
+> 
 
-<button class="primary" onclick="addStock()">
-＋ Add Stock
-</button>
-
-</div>
-
-<div class="card">
-
-<h3>🗑 Record Waste / Damaged Items</h3>
-
-<label>
-
-Product
+</label>  <button class="primary" onclick="addStock()">  
+＋ Add Stock  
+</button>  </div>  <div class="card">  <h3>🗑 Record Waste / Damaged Items</h3>  <label>  Product
 
 <select id="wasteProduct"></select>
 
-</label>
-
-<label>
-
-Quantity Wasted
+</label>  <label>  Quantity Wasted
 
 <input
 id="wasteQuantity"
@@ -1548,6417 +1120,4688 @@ type="number"
 min="1"
 step="1"
 placeholder="Example: 2"
->
 
-</label>
+> 
 
-<label>
-
-Reason
+</label>  <label>  Reason
 
 <input
 id="wasteReason"
 placeholder="Example: Damaged / Expired"
->
 
-</label>
+> 
 
-<button class="danger" onclick="addWaste()">
-🗑 Record Waste
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>📊 Daily Inventory</h2>
-
-<div class="stat-grid">
-
-<div class="stat">
-Prepared
-<strong id="invPrepared">0</strong>
-</div>
-
-<div class="stat">
-Sold
-<strong id="invSold">0</strong>
-</div>
-
-<div class="stat">
-Waste
-<strong id="invWaste">0</strong>
-</div>
-
-<div class="stat">
-Remaining
-<strong id="invRemaining">0</strong>
-</div>
-
-</div>
-
-<hr>
-
-<div id="inventoryList"></div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     ADMIN
-===================================================== -->
-
-<section id="admin" class="page">
-
-<div class="card">
-
-<h2>🏷️ Category Management</h2>
-
-<label>
-
-New Category
+</label>  <button class="danger" onclick="addWaste()">  
+🗑 Record Waste  
+</button>  </div>  <div class="card">  <h2>📊 Daily Inventory</h2>  <div class="stat-grid">  <div class="stat">  
+Prepared  
+<strong id="invPrepared">0</strong>  
+</div>  <div class="stat">  
+Sold  
+<strong id="invSold">0</strong>  
+</div>  <div class="stat">  
+Waste  
+<strong id="invWaste">0</strong>  
+</div>  <div class="stat">  
+Remaining  
+<strong id="invRemaining">0</strong>  
+</div>  </div>  <hr>  <div id="inventoryList"></div>  </div>  </section>  <!-- ADMIN -->  <section id="admin" class="page">  <div class="card">  <h2>🏷️ Category Management</h2>  <label>  New Category
 
 <input
 id="newCategory"
 placeholder="Example: Pizza"
->
 
-</label>
+> 
 
-<button class="primary" onclick="addCategory()">
-＋ Add Category
-</button>
-
-<hr>
-
-<h3>Existing Categories</h3>
-
-<div id="categoryManager"></div>
-
-</div>
-
-<div class="card">
-
-<h2>📦 Product Management</h2>
-
-<label>
-
-Product Name
+</label>  <button class="primary" onclick="addCategory()">  
+＋ Add Category  
+</button>  <hr>  <h3>Existing Categories</h3>  <div id="categoryManager"></div>  </div>  <div class="card">  <h2>📦 Product Management</h2>  <label>  Product Name
 
 <input
 id="newProductName"
 placeholder="Example: Chicken Pizza"
->
 
-</label>
+> 
 
-<label>
-
-Price (MVR)
+</label>  <label>  Price (MVR)
 
 <input
 id="newProductPrice"
 type="number"
 placeholder="150"
->
 
-</label>
+> 
 
-<label>
-
-Category
+</label>  <label>  Category
 
 <select id="newProductCategory"></select>
 
-</label>
-
-<label>
-
-Emoji
+</label>  <label>  Emoji
 
 <input
 id="newProductEmoji"
 placeholder="🍕"
->
 
-</label>
+> 
 
-<button class="primary" onclick="addProduct()">
-＋ Add Product
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>✏️ Edit Products</h2>
-
-<div id="adminProducts"></div>
-
-</div>
-
-<div class="card">
-
-<h2>💸 Expenses</h2>
-
-<label>
-
-Expense Name
+</label>  <button class="primary" onclick="addProduct()">  
+＋ Add Product  
+</button>  </div>  <div class="card">  <h2>✏️ Edit Products</h2>  <div id="adminProducts"></div>  </div>  <div class="card">  <h2>💸 Expenses</h2>  <label>  Expense Name
 
 <input
 id="expenseName"
 placeholder="Example: Ingredients"
->
 
-</label>
+> 
 
-<label>
-
-Amount (MVR)
+</label>  <label>  Amount (MVR)
 
 <input
 id="expenseAmount"
 type="number"
 placeholder="500"
->
 
-</label>
+> 
 
-<label>
-
-Date
+</label>  <label>  Date
 
 <input
 id="expenseDate"
 type="date"
->
 
-</label>
+> 
 
-<button class="primary" onclick="addExpense()">
-＋ Add Expense
-</button>
+</label>  <button class="primary" onclick="addExpense()">  
+＋ Add Expense  
+</button>  <hr>  <div id="expenseList"></div>  </div>  <div class="card">  <h2>💾 Backup & Restore</h2>  <div class="backup-box">  <strong>⚠️ Protect your bakery data</strong>
 
-<hr>
-
-<div id="expenseList"></div>
-
-</div>
-
-<div class="card">
-
-<h2>💾 Backup & Restore</h2>
-
-<div class="backup-box">
-
-<strong>⚠️ Protect your bakery data</strong>
-
-<p style="font-size:13px;color:#666;margin-bottom:0">
-
-Your bakery data is stored in the cloud and on this device.
+<p style="font-size:13px;color:#666;margin-bottom:0">  Your bakery data is stored in the cloud and on this device.
 Keep a backup file regularly as an extra safety copy.
 
-</p>
-
-</div>
-
-<button
-class="primary backup-button"
+</p>  </div>  <button  
+class="primary backup-button"  
 onclick="downloadBackup()">
 
 💾 Download Full Backup
 
-</button>
-
-<button
-class="secondary backup-button"
+</button>  <button  
+class="secondary backup-button"  
 onclick="document.getElementById('backupFile').click()">
 
 ♻️ Restore Full Backup
 
-</button>
-
-<input
+</button>  <input
 id="backupFile"
 type="file"
 accept=".json,application/json"
 style="display:none"
 onchange="restoreBackup(event)"
->
 
-<button
-class="secondary backup-button"
+> 
+
+<button  
+class="secondary backup-button"  
 onclick="downloadProductsBackup()">
 
 📦 Export Products Only
 
-</button>
-
-<button
-class="secondary backup-button"
+</button>  <button  
+class="secondary backup-button"  
 onclick="document.getElementById('productsBackupFile').click()">
 
 📥 Import Products
 
-</button>
-
-<input
+</button>  <input
 id="productsBackupFile"
 type="file"
 accept=".json,application/json"
 style="display:none"
 onchange="importProductsBackup(event)"
->
 
-<hr>
+> 
 
-<div style="font-size:12px;color:#777;text-align:center">
-
-💡 Keep your backup file in Google Drive,
+<hr>  <div style="font-size:12px;color:#777;text-align:center">  💡 Keep your backup file in Google Drive,
 USB, email, or another safe place.
 
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
-
-<section id="dashboard" class="page">
-
-<div class="card">
-
-<h2>📊 Today's Dashboard</h2>
-
-<div class="stat-grid">
-
-<div class="stat">
-POS Sales
-<strong>
-MVR <span id="dashSales">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Orders
-<strong id="dashOrders">0</strong>
-</div>
-
-<div class="stat">
-Cash
-<strong>
-MVR <span id="dashCash">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Card
-<strong>
-MVR <span id="dashCard">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Transfer
-<strong>
-MVR <span id="dashTransfer">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Shop Bun Credit
-<strong>
-MVR <span id="dashShopCredit">0.00</span>
-</strong>
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>🥖 Shop Bun Summary</h2>
-
-<div id="dashboardShopBuns"></div>
-
-</div>
-
-<div class="card">
-
-<h2>📦 Today's Stock</h2>
-
-<div id="dashboardInventory"></div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     REPORTS
-===================================================== -->
-
-<section id="reports" class="page">
-
-<div class="card">
-
-<h2>📈 Reports</h2>
-
-<select id="reportPeriod" onchange="renderReports()">
-
-<option value="day">Today</option>
-<option value="week">This Week</option>
-<option value="month">This Month</option>
-
-</select>
-
-<div class="stat-grid" style="margin-top:12px">
-
-<div class="stat">
-POS Sales
-<strong>
-MVR <span id="reportSales">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Orders
-<strong id="reportOrders">0</strong>
-</div>
-
-<div class="stat">
-Expenses
-<strong>
-MVR <span id="reportExpenses">0.00</span>
-</strong>
-</div>
-
-<div class="stat">
-Net Profit
-<strong>
-MVR <span id="reportProfit">0.00</span>
-</strong>
-</div>
-
-</div>
-
-<hr>
-
-<h3>🥖 Shop Bun Credit</h3>
-
-<div class="shop-stat-grid">
-
-<div class="shop-stat">
-Delivered
-<strong>
-MVR <span id="reportShopDelivered">0.00</span>
-</strong>
-</div>
-
-<div class="shop-stat">
-Payments
-<strong>
-MVR <span id="reportShopPayments">0.00</span>
-</strong>
-</div>
-
-<div class="shop-stat">
-New Credit
-<strong>
-MVR <span id="reportShopCredit">0.00</span>
-</strong>
-</div>
-
-<div class="shop-stat">
-Outstanding
-<strong>
-MVR <span id="reportShopOutstanding">0.00</span>
-</strong>
-</div>
-
-</div>
-
-<p style="font-size:12px;color:#777">
-Shop Bun figures are tracked separately from immediate POS payments.
-</p>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     HISTORY
-===================================================== -->
-
-<section id="history" class="page">
-
-<div class="card">
-
-<h2>🧾 Order History</h2>
-
-<div id="orderHistory"></div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     RECEIPT MODAL
-===================================================== -->
-
-<div class="modal" id="receiptModal">
-
-<div class="modal-box">
-
-<div id="receiptContent"></div>
-
-<br>
-
-<button class="primary" onclick="window.print()">
-🖨️ Print Receipt
-</button>
-
-<button class="secondary" onclick="closeReceipt()">
-Close
-</button>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     SHOP MODAL
-===================================================== -->
-
-<div class="modal" id="shopModal">
-
-<div class="modal-box">
-
-<h2 id="shopModalTitle">🏪 Add Shop</h2>
-
-<label>
-
-Shop Name
-
-<input
-id="shopName"
-placeholder="Example: ABC Store"
->
-
-</label>
-
-<label>
-
-Contact / Phone
-
-<input
-id="shopContact"
-placeholder="Optional"
->
-
-</label>
-
-<div style="display:flex;gap:8px">
-
-<button
-class="primary"
-style="flex:1"
-onclick="saveShop()">
-
-Save Shop
-
-</button>
-
-<button
-class="secondary"
-style="flex:1"
-onclick="closeShopModal()">
-
-Cancel
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     SHOP STATEMENT MODAL
-===================================================== -->
-
-<div class="modal" id="shopStatementModal">
-
-<div class="modal-box">
-
-<div id="shopStatementContent"></div>
-
-<br>
-
-<button
-class="primary"
-onclick="printShopStatement()">
-
-🖨️ Print Statement
-
-</button>
-
-<button
-class="secondary"
-onclick="closeShopStatement()">
-
-Close
-
-</button>
-
-</div>
-
-</div>
-
-
-<script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-"https://sruykenacpcgsbvqujgg.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_oZIJK_dLjNBOAzkdcsWXSQ_KkczNfb7";
-
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
-);
-
-let cloudReady=false;
-let cloudLoading=false;
-let cloudSaveTimer=null;
-let lastCloudUpdatedAt="";
-let lastLocalChangeAt=0;
-let cloudErrorShown=false;
-
-
-/* =====================================================
-   STORAGE
-===================================================== */
-
-const categoryKey="kanbuloCategories";
-const productKey="bakeryProducts";
-const orderKey="bakeryOrders";
-const expenseKey="bakeryExpenses";
-const tabsKey="kanbuloSaleTabs";
-const inventoryKey="kanbuloInventory";
-
-/* NEW SHOP BUN STORAGE */
-const shopBunsKey="kanbuloShopBuns";
-
-
-/* =====================================================
-   SAFE STORAGE
-===================================================== */
-
-function readStorage(key,fallback){
-
-try{
-
-const value=localStorage.getItem(key);
-
-if(value===null)
-return fallback;
-
-return JSON.parse(value);
-
-}catch(error){
-
-console.error("Local storage error:",key,error);
-
-return fallback;
-
-}
-
-}
-
-
-/* =====================================================
-   DATA
-===================================================== */
-
-let categories=
-readStorage(
-categoryKey,
-[
-"Pizza",
-"Cakes",
-"Bakery",
-"Burgers",
-"Snacks",
-"Drinks"
-]
-);
-
-let products=
-readStorage(
-productKey,
-[
-{
-id:1,
-name:"Chicken Pizza",
-price:150,
-category:"Pizza",
-emoji:"🍕",
-available:true
-},
-{
-id:2,
-name:"Beef Pizza",
-price:160,
-category:"Pizza",
-emoji:"🍕",
-available:true
-},
-{
-id:3,
-name:"Tuna Pizza",
-price:150,
-category:"Pizza",
-emoji:"🍕",
-available:true
-},
-{
-id:4,
-name:"Chocolate Cake",
-price:120,
-category:"Cakes",
-emoji:"🍰",
-available:true
-},
-{
-id:5,
-name:"Croissant",
-price:45,
-category:"Bakery",
-emoji:"🥐",
-available:true
-},
-{
-id:6,
-name:"Chicken Burger",
-price:95,
-category:"Burgers",
-emoji:"🍔",
-available:true
-},
-{
-id:7,
-name:"French Fries",
-price:55,
-category:"Snacks",
-emoji:"🍟",
-available:true
-},
-{
-id:8,
-name:"Coffee",
-price:35,
-category:"Drinks",
-emoji:"☕",
-available:true
-},
-{
-id:9,
-name:"Fresh Juice",
-price:50,
-category:"Drinks",
-emoji:"🥤",
-available:true
-}
-]
-);
-
-let orders=
-readStorage(orderKey,[]);
-
-let expenses=
-readStorage(expenseKey,[]);
-
-let saleTabs=
-readStorage(tabsKey,[]);
-
-let inventory=
-readStorage(inventoryKey,{});
-
-
-/* =====================================================
-   NEW SHOP BUN DATA
-===================================================== */
-
-let shopBuns=
-readStorage(
-shopBunsKey,
-{
-shops:[],
-deliveries:[],
-payments:[]
-}
-);
-
-if(!shopBuns||typeof shopBuns!=="object")
-shopBuns={shops:[],deliveries:[],payments:[]};
-
-if(!Array.isArray(shopBuns.shops))
-shopBuns.shops=[];
-
-if(!Array.isArray(shopBuns.deliveries))
-shopBuns.deliveries=[];
-
-if(!Array.isArray(shopBuns.payments))
-shopBuns.payments=[];
-
-
-let activeSaleId=null;
-let selectedCategory="All";
-let editingOrderId=null;
-let selectedShopId=null;
-let editingShopId=null;
-let editingDeliveryId=null;
-
-
-/* =====================================================
-   CLOUD HELPERS
-===================================================== */
-
-function getCurrentState(){
-
-return{
-categories,
-products,
-orders,
-expenses,
-saleTabs,
-inventory,
-shopBuns
-};
-
-}
-
-
-function writeLocalState(){
-
-localStorage.setItem(
-categoryKey,
-JSON.stringify(categories)
-);
-
-localStorage.setItem(
-productKey,
-JSON.stringify(products)
-);
-
-localStorage.setItem(
-orderKey,
-JSON.stringify(orders)
-);
-
-localStorage.setItem(
-expenseKey,
-JSON.stringify(expenses)
-);
-
-localStorage.setItem(
-tabsKey,
-JSON.stringify(saleTabs)
-);
-
-localStorage.setItem(
-inventoryKey,
-JSON.stringify(inventory)
-);
-
-localStorage.setItem(
-shopBunsKey,
-JSON.stringify(shopBuns)
-);
-
-}
-
-
-function hasMeaningfulLocalData(){
-
-return(
-categories.length>0||
-products.length>0||
-orders.length>0||
-expenses.length>0||
-saleTabs.length>0||
-Object.keys(inventory||{}).length>0||
-shopBuns.shops.length>0||
-shopBuns.deliveries.length>0||
-shopBuns.payments.length>0
-);
-
-}
-
-
-function isCloudEmpty(data){
-
-if(!data||typeof data!=="object")
-return true;
-
-return(
-(!Array.isArray(data.categories)||data.categories.length===0)&&
-(!Array.isArray(data.products)||data.products.length===0)&&
-(!Array.isArray(data.orders)||data.orders.length===0)&&
-(!Array.isArray(data.expenses)||data.expenses.length===0)&&
-(!Array.isArray(data.saleTabs)||data.saleTabs.length===0)&&
-(!data.inventory||
-Object.keys(data.inventory).length===0)&&
-(!data.shopBuns||
-(
-(!Array.isArray(data.shopBuns.shops)||data.shopBuns.shops.length===0)&&
-(!Array.isArray(data.shopBuns.deliveries)||data.shopBuns.deliveries.length===0)&&
-(!Array.isArray(data.shopBuns.payments)||data.shopBuns.payments.length===0)
-)
-);
-
-}
-
-
-/* =====================================================
-   SAVE CLOUD
-===================================================== */
-
-async function saveToCloud(){
-
-if(
-!cloudReady||
-cloudLoading||
-!navigator.onLine
-)
-return;
-
-try{
-
-const updatedAt=
-new Date().toISOString();
-
-const payload={
-id:1,
-data:getCurrentState(),
-updated_at:updatedAt
-};
-
-const {error}=
-await supabaseClient
-.from("bakery_data")
-.upsert(
-payload,
-{onConflict:"id"}
-);
-
-if(error)
-throw error;
-
-lastCloudUpdatedAt=updatedAt;
-
-console.log("Kanbulo cloud sync: saved");
-
-}catch(error){
-
-console.error("Supabase save error:",error);
-
-}
-
-}
-
-
-/* =====================================================
-   SCHEDULE CLOUD
-===================================================== */
-
-function scheduleCloudSave(){
-
-if(
-!cloudReady||
-cloudLoading
-)
-return;
-
-clearTimeout(cloudSaveTimer);
-
-cloudSaveTimer=
-setTimeout(
-saveToCloud,
-700
-);
-
-}
-
-
-/* =====================================================
-   LOAD CLOUD
-===================================================== */
-
-async function loadFromCloud(){
-
-cloudLoading=true;
-
-let cloudSucceeded=false;
-
-try{
-
-const {data,error}=
-await supabaseClient
-.from("bakery_data")
-.select("data,updated_at")
-.eq("id",1)
-.single();
-
-if(error)
-throw error;
-
-const cloudData=data?.data||null;
-
-if(isCloudEmpty(cloudData)){
-
-if(hasMeaningfulLocalData()){
-
-const updatedAt=
-new Date().toISOString();
-
-const payload={
-id:1,
-data:getCurrentState(),
-updated_at:updatedAt
-};
-
-const {error:uploadError}=
-await supabaseClient
-.from("bakery_data")
-.upsert(
-payload,
-{onConflict:"id"}
-);
-
-if(uploadError)
-throw uploadError;
-
-lastCloudUpdatedAt=updatedAt;
-
-}else{
-
-if(!saleTabs.length){
-
-const sale=createSale();
-
-saleTabs.push(sale);
-
-activeSaleId=sale.id;
-
-}
-
-writeLocalState();
-
-const updatedAt=
-new Date().toISOString();
-
-const payload={
-id:1,
-data:getCurrentState(),
-updated_at:updatedAt
-};
-
-const {error:emptyError}=
-await supabaseClient
-.from("bakery_data")
-.upsert(
-payload,
-{onConflict:"id"}
-);
-
-if(emptyError)
-throw emptyError;
-
-lastCloudUpdatedAt=updatedAt;
-
-}
-
-}else{
-
-categories=
-Array.isArray(cloudData.categories)
-?
-cloudData.categories
-:
-[];
-
-products=
-Array.isArray(cloudData.products)
-?
-cloudData.products
-:
-[];
-
-orders=
-Array.isArray(cloudData.orders)
-?
-cloudData.orders
-:
-[];
-
-expenses=
-Array.isArray(cloudData.expenses)
-?
-cloudData.expenses
-:
-[];
-
-saleTabs=
-Array.isArray(cloudData.saleTabs)
-?
-cloudData.saleTabs
-:
-[];
-
-inventory=
-cloudData.inventory&&
-typeof cloudData.inventory==="object"
-?
-cloudData.inventory
-:
-{};
-
-shopBuns=
-cloudData.shopBuns&&
-typeof cloudData.shopBuns==="object"
-?
-cloudData.shopBuns
-:
-{
-shops:[],
-deliveries:[],
-payments:[]
-};
-
-if(!Array.isArray(shopBuns.shops))
-shopBuns.shops=[];
-
-if(!Array.isArray(shopBuns.deliveries))
-shopBuns.deliveries=[];
-
-if(!Array.isArray(shopBuns.payments))
-shopBuns.payments=[];
-
-lastCloudUpdatedAt=
-data.updated_at||"";
-
-activeSaleId=null;
-editingOrderId=null;
-selectedCategory="All";
-
-writeLocalState();
-
-}
-
-cloudSucceeded=true;
-
-}catch(error){
-
-console.error("Supabase load error:",error);
-
-if(!cloudErrorShown){
-
-cloudErrorShown=true;
-
-setTimeout(
-()=>{
-
-alert(
-"⚠️ Cloud sync could not connect.\n\n"+
-"The POS will continue working normally on this device.\n\n"+
-"Your local data is safe."
-);
-
-},
-300
-);
-
-}
-
-}finally{
-
-cloudLoading=false;
-cloudReady=true;
-
-}
-
-ensureSale();
-
-writeLocalState();
-
-if(cloudSucceeded)
-await saveToCloud();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   CLOUD SYNC
-===================================================== */
-
-async function syncCloud(){
-
-if(
-!cloudReady||
-cloudLoading||
-!navigator.onLine
-)
-return;
-
-try{
-
-const {data,error}=
-await supabaseClient
-.from("bakery_data")
-.select("data,updated_at")
-.eq("id",1)
-.single();
-
-if(error)
-throw error;
-
-if(!data||!data.data)
-return;
-
-const remoteTime=
-data.updated_at
-?
-new Date(data.updated_at).getTime()
-:
-0;
-
-const knownTime=
-lastCloudUpdatedAt
-?
-new Date(lastCloudUpdatedAt).getTime()
-:
-0;
-
-if(remoteTime<=knownTime)
-return;
-
-if(
-lastLocalChangeAt &&
-remoteTime<=lastLocalChangeAt
-)
-return;
-
-const cloudData=data.data;
-
-categories=
-Array.isArray(cloudData.categories)
-?
-cloudData.categories
-:
-[];
-
-products=
-Array.isArray(cloudData.products)
-?
-cloudData.products
-:
-[];
-
-orders=
-Array.isArray(cloudData.orders)
-?
-cloudData.orders
-:
-[];
-
-expenses=
-Array.isArray(cloudData.expenses)
-?
-cloudData.expenses
-:
-[];
-
-saleTabs=
-Array.isArray(cloudData.saleTabs)
-?
-cloudData.saleTabs
-:
-[];
-
-inventory=
-cloudData.inventory&&
-typeof cloudData.inventory==="object"
-?
-cloudData.inventory
-:
-{};
-
-shopBuns=
-cloudData.shopBuns&&
-typeof cloudData.shopBuns==="object"
-?
-cloudData.shopBuns
-:
-{
-shops:[],
-deliveries:[],
-payments:[]
-};
-
-if(!Array.isArray(shopBuns.shops))
-shopBuns.shops=[];
-
-if(!Array.isArray(shopBuns.deliveries))
-shopBuns.deliveries=[];
-
-if(!Array.isArray(shopBuns.payments))
-shopBuns.payments=[];
-
-lastCloudUpdatedAt=
-data.updated_at||"";
-
-activeSaleId=null;
-editingOrderId=null;
-selectedCategory="All";
-
-writeLocalState();
-
-ensureSale();
-
-writeLocalState();
-
-refresh();
-
-console.log(
-"Kanbulo cloud sync: updated from cloud"
-);
-
-}catch(error){
-
-console.error(
-"Supabase sync error:",
-error
-);
-
-}
-
-}
-
-
-/* EVENTS */
-
-document.addEventListener(
-"visibilitychange",
-()=>{
-
-if(document.visibilityState==="visible")
-syncCloud();
-
-}
-);
-
-window.addEventListener(
-"online",
-()=>syncCloud()
-);
-
-setInterval(
-syncCloud,
-30000
-);
-
-
-/* =====================================================
-   SAVE ALL
-===================================================== */
-
-function saveAll(){
-
-writeLocalState();
-
-lastLocalChangeAt=Date.now();
-
-scheduleCloudSave();
-
-}
-
-
-/* =====================================================
-   DATE
-===================================================== */
-
-function localDate(){
-
-const d=new Date();
-
-return d.getFullYear()+"-"+
-String(d.getMonth()+1).padStart(2,"0")+"-"+
-String(d.getDate()).padStart(2,"0");
-
-}
-
-
-/* =====================================================
-   INVENTORY
-===================================================== */
-
-function inventoryDay(date){
-
-if(!inventory[date])
-inventory[date]={};
-
-return inventory[date];
-
-}
-
-
-function getInvRecord(date,id){
-
-const day=inventoryDay(date);
-
-if(!day[id]){
-
-day[id]={
-prepared:0,
-sold:0,
-waste:0,
-wasteItems:[]
-};
-
-}
-
-return day[id];
-
-}
-
-
-function isInventoryTracked(date,id){
-
-return !!(
-inventory[date]&&
-inventory[date][id]
-);
-
-}
-
-
-function inventoryRemaining(date,id){
-
-if(!isInventoryTracked(date,id))
-return Infinity;
-
-const r=
-getInvRecord(date,id);
-
-return Math.max(
-0,
-Number(r.prepared||0)-
-Number(r.sold||0)-
-Number(r.waste||0)
-);
-
-}
-
-
-/* =====================================================
-   NORMAL SALES
-===================================================== */
-
-function createSale(){
-
-return{
-
-id:
-Date.now()+
-Math.floor(Math.random()*1000),
-
-name:
-"Sale "+(saleTabs.length+1),
-
-cart:[],
-
-payment:"Cash",
-
-cashReceived:0
-
-};
-
-}
-
-
-function ensureSale(){
-
-if(!saleTabs.length){
-
-const sale=createSale();
-
-saleTabs.push(sale);
-
-activeSaleId=sale.id;
-
-saveAll();
-
-}else if(!activeSaleId){
-
-activeSaleId=saleTabs[0].id;
-
-}
-
-}
-
-
-function activeSale(){
-
-ensureSale();
-
-return saleTabs.find(
-s=>s.id===activeSaleId
-);
-
-}
-
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-function showPage(page,button){
-
-document.querySelectorAll(".page")
-.forEach(
-p=>p.classList.remove("active")
-);
-
-document.getElementById(page)
-.classList.add("active");
-
-document.querySelectorAll("nav button")
-.forEach(
-b=>b.classList.remove("active")
-);
-
-if(button)
-button.classList.add("active");
-
-refresh();
-
-}
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-function refresh(){
-
-ensureSale();
-
-renderSalesTabs();
-renderCategoryButtons();
-renderProducts();
-renderCart();
-
-renderAdminCategories();
-renderAdminProducts();
-renderCategorySelect();
-renderExpenses();
-
-renderDashboard();
-renderReports();
-renderHistory();
-
-renderInventorySelects();
-renderInventory();
-
-renderShopSummary();
-renderShopList();
-renderSelectedShop();
-
-calculateChange();
-
-}
-
-
-/* =====================================================
-   SALES TABS
-===================================================== */
-
-function renderSalesTabs(){
-
-const box=
-document.getElementById("salesTabs");
-
-box.innerHTML="";
-
-saleTabs.forEach(sale=>{
-
-const wrapper=
-document.createElement("div");
-
-wrapper.className="sale-tab-wrap";
-
-const button=
-document.createElement("button");
-
-button.className=
-"sale-tab"+
-(sale.id===activeSaleId?" active":"");
-
-button.innerHTML=
-`<span class="sale-label">${
-escapeHtml(sale.name)
-}</span>`+
-(sale.cart.length?
-" • "+sale.cart.length:
-"");
-
-button.onclick=()=>
-switchSale(sale.id);
-
-const close=
-document.createElement("button");
-
-close.className="close-sale";
-close.textContent="✕";
-
-close.onclick=e=>{
-
-e.stopPropagation();
-
-deleteSale(sale.id);
-
-};
-
-wrapper.appendChild(button);
-wrapper.appendChild(close);
-
-box.appendChild(wrapper);
-
-});
-
-const newButton=
-document.createElement("button");
-
-newButton.className="new-sale";
-newButton.textContent="＋ New Sale";
-newButton.onclick=newSale;
-
-box.appendChild(newButton);
-
-}
-
-
-function newSale(){
-
-const sale=createSale();
-
-saleTabs.push(sale);
-
-activeSaleId=sale.id;
-
-editingOrderId=null;
-
-saveAll();
-
-refresh();
-
-}
-
-
-function switchSale(id){
-
-activeSaleId=id;
-
-editingOrderId=null;
-
-saveAll();
-
-refresh();
-
-}
-
-
-function deleteSale(id){
-
-if(saleTabs.length<=1){
-
-alert("You must keep at least one sale open.");
-
-return;
-
-}
-
-const sale=
-saleTabs.find(s=>s.id===id);
-
-if(!sale)return;
-
-if(
-sale.cart.length &&
-!confirm(
-"This sale has items.\n\n"+
-"Close this sale and discard the current items?"
-)
-)
-return;
-
-if(activeSaleId===id)
-editingOrderId=null;
-
-saleTabs=
-saleTabs.filter(
-s=>s.id!==id
-);
-
-if(activeSaleId===id){
-
-activeSaleId=
-saleTabs[
-Math.max(0,saleTabs.length-1)
-].id;
-
-}
-
-saveAll();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   CATEGORIES
-===================================================== */
-
-function renderCategoryButtons(){
-
-const box=
-document.getElementById("categoryButtons");
-
-box.innerHTML="";
-
-const all=
-document.createElement("button");
-
-all.textContent="✨ All";
-
-all.className=
-selectedCategory==="All"
-?
-"active"
-:
-"";
-
-all.onclick=()=>{
-
-selectedCategory="All";
-
-renderCategoryButtons();
-renderProducts();
-
-};
-
-box.appendChild(all);
-
-const categoryIcons={
-Pizza:"🍕",
-Cakes:"🍰",
-Bakery:"🥐",
-Burgers:"🍔",
-Snacks:"🍟",
-Drinks:"🥤"
-};
-
-categories.forEach(cat=>{
-
-const b=
-document.createElement("button");
-
-b.textContent=
-(categoryIcons[cat]||"🍽️")+
-" "+cat;
-
-b.className=
-selectedCategory===cat
-?
-"active"
-:
-"";
-
-b.onclick=()=>{
-
-selectedCategory=cat;
-
-renderCategoryButtons();
-renderProducts();
-
-};
-
-box.appendChild(b);
-
-});
-
-}
-
-
-function renderAdminCategories(){
-
-const box=
-document.getElementById("categoryManager");
-
-box.innerHTML="";
-
-if(!categories.length){
-
-box.innerHTML=
-'<div class="empty">No categories yet.</div>';
-
-return;
-
-}
-
-categories.forEach(
-(cat,index)=>{
-
-const row=
-document.createElement("div");
-
-row.className="category-row";
-
-const input=
-document.createElement("input");
-
-input.value=cat;
-
-const save=
-document.createElement("button");
-
-save.className="secondary";
-save.textContent="💾";
-
-save.onclick=()=>
-renameCategory(
-index,
-input.value
-);
-
-const del=
-document.createElement("button");
-
-del.className="danger";
-del.textContent="🗑";
-
-del.onclick=()=>
-deleteCategory(index);
-
-row.appendChild(input);
-row.appendChild(save);
-row.appendChild(del);
-
-box.appendChild(row);
-
-});
-
-}
-
-
-function addCategory(){
-
-const input=
-document.getElementById("newCategory");
-
-const name=input.value.trim();
-
-if(!name){
-
-alert("Please enter a category name.");
-return;
-
-}
-
-if(
-categories.some(
-c=>c.toLowerCase()===name.toLowerCase()
-)
-){
-
-alert("This category already exists.");
-return;
-
-}
-
-categories.push(name);
-
-input.value="";
-
-saveAll();
-
-refresh();
-
-}
-
-
-function renameCategory(index,newName){
-
-newName=newName.trim();
-
-if(!newName){
-
-alert("Category name cannot be empty.");
-renderAdminCategories();
-return;
-
-}
-
-const oldName=categories[index];
-
-if(
-categories.some(
-(c,i)=>
-i!==index &&
-c.toLowerCase()===newName.toLowerCase()
-)
-){
-
-alert("Another category already has this name.");
-renderAdminCategories();
-return;
-
-}
-
-categories[index]=newName;
-
-products.forEach(p=>{
-
-if(p.category===oldName)
-p.category=newName;
-
-});
-
-if(selectedCategory===oldName)
-selectedCategory=newName;
-
-saveAll();
-
-refresh();
-
-}
-
-
-function deleteCategory(index){
-
-const category=categories[index];
-
-const used=
-products.filter(
-p=>p.category===category
-);
-
-if(used.length){
-
-alert(
-`Cannot delete "${category}".\n\n`+
-`${used.length} product(s) are using it.\n\n`+
-`Change those products first.`
-);
-
-return;
-
-}
-
-if(!confirm(`Delete category "${category}"?`))
-return;
-
-categories.splice(index,1);
-
-if(selectedCategory===category)
-selectedCategory="All";
-
-saveAll();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   PRODUCTS
-===================================================== */
-
-function renderProducts(){
-
-const box=
-document.getElementById("products");
-
-const search=(
-document.getElementById("search").value||""
-).toLowerCase();
-
-const list=
-products.filter(p=>{
-
-const cat=
-selectedCategory==="All"||
-p.category===selectedCategory;
-
-const text=
-p.name.toLowerCase().includes(search);
-
-return cat&&text;
-
-});
-
-box.innerHTML="";
-
-if(!list.length){
-
-box.innerHTML=
-'<div class="empty">No products found.</div>';
-
-return;
-
-}
-
-const today=localDate();
-
-list.forEach(p=>{
-
-const tracked=
-isInventoryTracked(today,p.id);
-
-const remaining=
-inventoryRemaining(today,p.id);
-
-let stockHTML="";
-
-if(tracked){
-
-if(remaining<=0){
-
-stockHTML=
-`<div class="stock-label stock-out">
-● Sold Out — 0 left
-</div>`;
-
-}else{
-
-stockHTML=
-`<div class="stock-label">
-● ${remaining} left
-</div>`;
-
-}
-
-}else{
-
-stockHTML=
-`<div class="stock-label" style="color:#777">
-Inventory not set
-</div>`;
-
-}
-
-const canSell=
-p.available &&
-(!tracked||remaining>0);
-
-const div=
-document.createElement("div");
-
-div.className="product";
-
-div.innerHTML=`
-
-<div class="emoji">
-${escapeHtml(p.emoji)}
-</div>
-
-<h3>${escapeHtml(p.name)}</h3>
-
-<small>${escapeHtml(p.category)}</small>
-
-<div class="price">
-MVR ${Number(p.price).toFixed(2)}
-</div>
-
-${stockHTML}
-
-<br>
-
-${
-canSell
-?
-`<button
-class="primary add-btn"
-onclick="addToCart(${p.id})">
-＋ Add to Sale
-</button>`
-:
-`<button
-class="secondary add-btn"
-disabled>
-${p.available?"Sold Out":"Unavailable"}
-</button>`
-}
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-function addToCart(id){
-
-const p=
-products.find(x=>x.id===id);
-
-if(!p||!p.available)
-return;
-
-const sale=activeSale();
-
-const existing=
-sale.cart.find(x=>x.id===id);
-
-const currentQty=
-existing?existing.qty:0;
-
-const remaining=
-inventoryRemaining(localDate(),id);
-
-if(
-remaining!==Infinity &&
-currentQty>=remaining
-){
-
-alert(
-`No more ${p.name} available.\n\n`+
-`Remaining stock: ${remaining}`
-);
-
-return;
-
-}
-
-if(existing)
-existing.qty++;
-else{
-
-sale.cart.push({
-id:p.id,
-name:p.name,
-price:Number(p.price),
-qty:1
-});
-
-}
-
-saveAll();
-
-renderSalesTabs();
-renderProducts();
-renderCart();
-calculateChange();
-
-}
-
-
-function changeQty(id,amount){
-
-const sale=activeSale();
-
-const item=
-sale.cart.find(x=>x.id===id);
-
-if(!item)return;
-
-if(amount>0){
-
-const remaining=
-inventoryRemaining(localDate(),id);
-
-if(
-remaining!==Infinity &&
-item.qty>=remaining
-){
-
-alert(
-"You cannot add more than the available stock."
-);
-
-return;
-
-}
-
-}
-
-item.qty+=amount;
-
-if(item.qty<=0){
-
-sale.cart=
-sale.cart.filter(x=>x.id!==id);
-
-}
-
-saveAll();
-
-renderSalesTabs();
-renderProducts();
-renderCart();
-calculateChange();
-
-}
-
-
-/* =====================================================
-   PRICE
-===================================================== */
-
-function updateItemPrice(id,value){
-
-const sale=activeSale();
-
-const item=
-sale.cart.find(x=>x.id===id);
-
-if(!item)return;
-
-const price=Number(value);
-
-if(
-!Number.isFinite(price)||
-price<0
-){
-
-alert("Price cannot be negative.");
-
-renderCart();
-
-return;
-
-}
-
-item.price=price;
-
-saveAll();
-
-renderSalesTabs();
-renderCart();
-calculateChange();
-
-}
-
-
-function resetItemPrice(id){
-
-const sale=activeSale();
-
-const item=
-sale.cart.find(x=>x.id===id);
-
-const product=
-products.find(x=>x.id===id);
-
-if(!item||!product)
-return;
-
-item.price=Number(product.price);
-
-saveAll();
-
-renderSalesTabs();
-renderCart();
-calculateChange();
-
-}
-
-
-/* =====================================================
-   CART
-===================================================== */
-
-function renderCart(){
-
-const sale=activeSale();
-
-const box=
-document.getElementById("cart");
-
-box.innerHTML="";
-
-document.getElementById(
-"currentSaleTitle"
-).textContent=
-"🛒 "+sale.name+
-(editingOrderId?" ✏️ EDITING":"");
-
-if(!sale.cart.length){
-
-box.innerHTML=
-'<div class="empty">🛍️ Your sale is empty.<br>'+
-'<small>Tap a product to add it.</small></div>';
-
-}
-
-sale.cart.forEach(item=>{
-
-const div=
-document.createElement("div");
-
-div.className="cart-item";
-
-div.innerHTML=`
-
-<div class="cart-main">
-
-<span class="cart-name">
-${escapeHtml(item.name)}
-</span>
-
-<div class="price-editor">
-
-<span>Price:</span>
-
-<input
-type="number"
-min="0"
-step="0.01"
-value="${Number(item.price).toFixed(2)}"
-onchange="updateItemPrice(${item.id},this.value)"
->
-
-<button
-class="price-reset"
-type="button"
-onclick="resetItemPrice(${item.id})">
-↺ Reset
-</button>
-
-</div>
-
-<div class="line-total">
-
-${item.qty}
-× MVR ${Number(item.price).toFixed(2)}
-=
-<strong>
-MVR ${(item.price*item.qty).toFixed(2)}
-</strong>
-
-</div>
-
-</div>
-
-<div class="qty">
-
-<button
-type="button"
-onclick="changeQty(${item.id},-1)">
-−
-</button>
-
-<strong>${item.qty}</strong>
-
-<button
-type="button"
-onclick="changeQty(${item.id},1)">
-+
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-const total=
-sale.cart.reduce(
-(sum,item)=>
-sum+(item.price*item.qty),
-0
-);
-
-document.getElementById("cartTotal")
-.textContent=total.toFixed(2);
-
-document.getElementById("cashReceived")
-.value=sale.cashReceived||"";
-
-document.querySelectorAll(".payments button")
-.forEach(
-b=>b.classList.remove("active")
-);
-
-if(sale.payment==="Cash")
-document.getElementById("payCash")
-.classList.add("active");
-
-if(sale.payment==="Card")
-document.getElementById("payCard")
-.classList.add("active");
-
-if(sale.payment==="Transfer")
-document.getElementById("payTransfer")
-.classList.add("active");
-
-document.getElementById("cashBox")
-.style.display=
-sale.payment==="Cash"
-?
-"block"
-:
-"none";
-
-}
-
-
-function calculateChange(){
-
-const sale=activeSale();
-
-const total=
-sale.cart.reduce(
-(sum,item)=>
-sum+(item.price*item.qty),
-0
-);
-
-const input=
-document.getElementById("cashReceived");
-
-let received=
-Number(input.value)||0;
-
-sale.cashReceived=received;
-
-const change=received-total;
-
-const display=
-document.getElementById("changeAmount");
-
-display.textContent=
-Math.max(change,0).toFixed(2);
-
-display.classList.remove("insufficient");
-
-if(
-received>0 &&
-received<total
-){
-
-display.classList.add("insufficient");
-
-display.textContent=
-"Need "+
-(total-received).toFixed(2)+
-" more";
-
-}
-
-saveAll();
-
-}
-
-
-function selectPayment(type){
-
-const sale=activeSale();
-
-sale.payment=type;
-
-saveAll();
-
-renderCart();
-calculateChange();
-
-}
-
-
-/* =====================================================
-   INVENTORY SALES
-===================================================== */
-
-function validateSaleStock(cart,excludeOrder){
-
-const date=localDate();
-
-for(const item of cart){
-
-const tracked=
-isInventoryTracked(date,item.id);
-
-if(!tracked)
-continue;
-
-let soldAlready=
-getInvRecord(date,item.id).sold;
-
-if(excludeOrder){
-
-const oldItem=
-excludeOrder.items.find(x=>x.id===item.id);
-
-if(oldItem)
-soldAlready-=oldItem.qty;
-
-}
-
-const record=
-getInvRecord(date,item.id);
-
-const remaining=
-Number(record.prepared||0)-
-Number(record.waste||0)-
-soldAlready;
-
-if(item.qty>remaining){
-
-const p=
-products.find(x=>x.id===item.id);
-
-alert(
-`Not enough stock for ${
-p?p.name:item.name
-}.\n\nAvailable: ${remaining}\nRequested: ${item.qty}`
-);
-
-return false;
-
-}
-
-}
-
-return true;
-
-}
-
-
-function addInventorySale(cart){
-
-const date=localDate();
-
-cart.forEach(item=>{
-
-if(!isInventoryTracked(date,item.id))
-return;
-
-const record=
-getInvRecord(date,item.id);
-
-record.sold=
-Number(record.sold||0)+Number(item.qty);
-
-});
-
-saveAll();
-
-}
-
-
-function removeInventorySale(cart){
-
-const date=localDate();
-
-cart.forEach(item=>{
-
-if(!isInventoryTracked(date,item.id))
-return;
-
-const record=
-getInvRecord(date,item.id);
-
-record.sold=
-Math.max(
-0,
-Number(record.sold||0)-Number(item.qty)
-);
-
-});
-
-saveAll();
-
-}
-
-
-/* =====================================================
-   COMPLETE SALE
-===================================================== */
-
-function completeOrder(){
-
-const sale=activeSale();
-
-if(!sale.cart.length){
-
-alert("Cart is empty.");
-return;
-
-}
-
-const total=
-sale.cart.reduce(
-(sum,item)=>
-sum+(item.price*item.qty),
-0
-);
-
-if(sale.payment==="Cash"){
-
-const received=
-Number(sale.cashReceived)||0;
-
-if(received<total){
-
-alert(
-"Customer has not given enough cash.\n\n"+
-"Total: MVR "+total.toFixed(2)+"\n"+
-"Received: MVR "+received.toFixed(2)+"\n"+
-"Still needed: MVR "+
-(total-received).toFixed(2)
-);
-
-return;
-
-}
-
-}
-
-if(editingOrderId){
-
-const order=
-orders.find(o=>o.id===editingOrderId);
-
-if(!order)return;
-
-if(!validateSaleStock(sale.cart,order))
-return;
-
-removeInventorySale(order.items);
-
-order.items=
-JSON.parse(JSON.stringify(sale.cart));
-
-order.total=total;
-order.payment=sale.payment;
-
-order.cashReceived=
-Number(sale.cashReceived)||0;
-
-order.change=
-sale.payment==="Cash"
-?
-Math.max(0,sale.cashReceived-total)
-:
-0;
-
-order.editedAt=
-new Date().toISOString();
-
-addInventorySale(order.items);
-
-showReceipt(order);
-
-editingOrderId=null;
-
-sale.cart=[];
-sale.payment="Cash";
-sale.cashReceived=0;
-
-saveAll();
-
-refresh();
-
-return;
-
-}
-
-if(!validateSaleStock(sale.cart,null))
-return;
-
-const order={
-
-id:Date.now(),
-
-number:
-"KB-"+
-String(orders.length+1).padStart(4,"0"),
-
-date:
-new Date().toISOString(),
-
-items:
-JSON.parse(JSON.stringify(sale.cart)),
-
-total:total,
-
-payment:sale.payment,
-
-cashReceived:
-Number(sale.cashReceived)||0,
-
-change:
-sale.payment==="Cash"
-?
-Math.max(0,sale.cashReceived-total)
-:
-0
-
-};
-
-orders.unshift(order);
-
-addInventorySale(order.items);
-
-showReceipt(order);
-
-sale.cart=[];
-sale.payment="Cash";
-sale.cashReceived=0;
-
-saveAll();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   INVENTORY SELECTS
-===================================================== */
-
-function renderInventorySelects(){
-
-const stock=
-document.getElementById("stockProduct");
-
-const waste=
-document.getElementById("wasteProduct");
-
-if(!stock||!waste)
-return;
-
-stock.innerHTML="";
-waste.innerHTML="";
-
-products.forEach(p=>{
-
-const a=document.createElement("option");
-a.value=p.id;
-a.textContent=p.name;
-
-const b=document.createElement("option");
-b.value=p.id;
-b.textContent=p.name;
-
-stock.appendChild(a);
-waste.appendChild(b);
-
-});
-
-}
-
-
-/* =====================================================
-   ADD STOCK
-===================================================== */
-
-function addStock(){
-
-const date=
-document.getElementById("inventoryDate").value||
-localDate();
-
-const id=
-Number(document.getElementById("stockProduct").value);
-
-const qty=
-Number(document.getElementById("stockQuantity").value);
-
-if(!qty||qty<1){
-
-alert("Enter a valid stock quantity.");
-return;
-
-}
-
-const record=
-getInvRecord(date,id);
-
-record.prepared=
-Number(record.prepared||0)+qty;
-
-document.getElementById("stockQuantity").value="";
-
-saveAll();
-
-renderInventory();
-renderProducts();
-renderDashboard();
-
-alert(
-"Stock added successfully.\n\n"+
-"Prepared quantity added: "+qty
-);
-
-}
-
-
-/* =====================================================
-   WASTE
-===================================================== */
-
-function addWaste(){
-
-const date=
-document.getElementById("inventoryDate").value||
-localDate();
-
-const id=
-Number(document.getElementById("wasteProduct").value);
-
-const qty=
-Number(document.getElementById("wasteQuantity").value);
-
-const reason=
-document.getElementById("wasteReason").value.trim()||
-"Waste";
-
-if(!qty||qty<1){
-
-alert("Enter a valid waste quantity.");
-return;
-
-}
-
-const record=
-getInvRecord(date,id);
-
-const remaining=
-Number(record.prepared||0)-
-Number(record.sold||0)-
-Number(record.waste||0);
-
-if(qty>remaining){
-
-alert(
-"Cannot record that much waste.\n\n"+
-"Available remaining: "+remaining
-);
-
-return;
-
-}
-
-record.waste=
-Number(record.waste||0)+qty;
-
-record.wasteItems=
-record.wasteItems||[];
-
-record.wasteItems.push({
-qty:qty,
-reason:reason,
-time:new Date().toISOString()
-});
-
-document.getElementById("wasteQuantity").value="";
-document.getElementById("wasteReason").value="";
-
-saveAll();
-
-renderInventory();
-renderProducts();
-renderDashboard();
-
-}
-
-
-/* =====================================================
-   DELETE INVENTORY
-===================================================== */
-
-function deleteInventoryItem(date,id){
-
-const product=
-products.find(p=>p.id===id);
-
-if(!product)return;
-
-if(
-!inventory[date]||
-!inventory[date][id]
-){
-
-alert("No inventory record found for this item.");
-return;
-
-}
-
-const record=inventory[date][id];
-
-let message=
-`Delete inventory for "${product.name}" on ${date}?\n\n`+
-`Prepared: ${Number(record.prepared||0)}\n`+
-`Sold: ${Number(record.sold||0)}\n`+
-`Waste: ${Number(record.waste||0)}`;
-
-if(Number(record.sold||0)>0){
-
-message+=
-`\n\n⚠️ This item already has ${record.sold} recorded sale(s).`;
-
-}
-
-if(!confirm(message))
-return;
-
-delete inventory[date][id];
-
-if(
-inventory[date] &&
-Object.keys(inventory[date]).length===0
-)
-delete inventory[date];
-
-saveAll();
-
-renderInventory();
-renderProducts();
-renderDashboard();
-
-}
-
-
-/* =====================================================
-   RENDER INVENTORY
-===================================================== */
-
-function renderInventory(){
-
-const dateInput=
-document.getElementById("inventoryDate");
-
-if(!dateInput)return;
-
-const date=
-dateInput.value||localDate();
-
-if(!dateInput.value)
-dateInput.value=localDate();
-
-const box=
-document.getElementById("inventoryList");
-
-box.innerHTML="";
-
-let prepared=0;
-let sold=0;
-let waste=0;
-let remaining=0;
-
-products.forEach(p=>{
-
-if(!isInventoryTracked(date,p.id))
-return;
-
-const r=
-getInvRecord(date,p.id);
-
-const rem=
-Number(r.prepared||0)-
-Number(r.sold||0)-
-Number(r.waste||0);
-
-prepared+=Number(r.prepared||0);
-sold+=Number(r.sold||0);
-waste+=Number(r.waste||0);
-remaining+=Math.max(0,rem);
-
-const div=document.createElement("div");
-
-div.className="inventory-row";
-
-div.innerHTML=`
-
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:8px">
-
-<strong>
-${escapeHtml(p.emoji)}
-${escapeHtml(p.name)}
-</strong>
-
-<span class="badge ${rem>0?"green":"red"}">
-
-${rem>0?rem+" remaining":"SOLD OUT"}
-
-</span>
-
-</div>
-
-<div class="inventory-grid">
-
-<div class="inv-stat">
-Prepared
-<strong>${r.prepared||0}</strong>
-</div>
-
-<div class="inv-stat">
-Sold
-<strong>${r.sold||0}</strong>
-</div>
-
-<div class="inv-stat">
-Waste
-<strong>${r.waste||0}</strong>
-</div>
-
-<div class="inv-stat">
-Remaining
-<strong class="${rem>0?"remaining-good":"remaining-zero"}">
-${Math.max(0,rem)}
-</strong>
-</div>
-
-</div>
-
-${
-r.wasteItems&&r.wasteItems.length
-?
-`<small style="display:block;margin-top:8px;color:#777">
-Waste:
-${
-r.wasteItems.map(
-w=>escapeHtml(w.reason)+" ("+w.qty+")"
-).join(", ")
-}
-</small>`
-:
-""
-}
-
-<div class="inventory-actions">
-
-<button
-class="danger"
-onclick="deleteInventoryItem('${date}',${p.id})">
-
-🗑 Delete Inventory
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-if(!box.innerHTML){
-
-box.innerHTML=
-'<div class="empty">No inventory has been added for this date yet.</div>';
-
-}
-
-document.getElementById("invPrepared").textContent=prepared;
-document.getElementById("invSold").textContent=sold;
-document.getElementById("invWaste").textContent=waste;
-document.getElementById("invRemaining").textContent=remaining;
-
-}
-
-
-/* =====================================================
-   DASHBOARD INVENTORY
-===================================================== */
-
-function renderDashboardInventory(){
-
-const box=
-document.getElementById("dashboardInventory");
-
-if(!box)return;
-
-const date=localDate();
-
-let html="";
-
-products.forEach(p=>{
-
-if(!isInventoryTracked(date,p.id))
-return;
-
-const r=
-getInvRecord(date,p.id);
-
-const rem=
-Number(r.prepared||0)-
-Number(r.sold||0)-
-Number(r.waste||0);
-
-html+=`
-
-<div class="cart-item">
-
-<div>
-
-<strong>
-${escapeHtml(p.emoji)}
-${escapeHtml(p.name)}
-</strong>
-
-<br>
-
-<small>
-Prepared ${r.prepared||0}
-· Sold ${r.sold||0}
-· Waste ${r.waste||0}
-</small>
-
-</div>
-
-<strong class="${rem>0?"remaining-good":"remaining-zero"}">
-
-${Math.max(0,rem)} left
-
-</strong>
-
-</div>
-
-`;
-
-});
-
-box.innerHTML=
-html||
-'<div class="empty">No inventory added today.</div>';
-
-}
-
-
-/* =====================================================
-   RECEIPT
-===================================================== */
-
-function showReceipt(order){
-
-const box=
-document.getElementById("receiptContent");
-
-let rows="";
-
-order.items.forEach(item=>{
-
-rows+=`
-
-<tr>
-
-<td>
-${escapeHtml(item.name)} x${item.qty}
-</td>
-
-<td>
-MVR ${(item.price*item.qty).toFixed(2)}
-</td>
-
-</tr>
-
-`;
-
-});
-
-let cashInfo="";
-
-if(order.payment==="Cash"){
-
-cashInfo=`
-
-<p>
-Cash Received:
-<strong>
-MVR ${Number(order.cashReceived||0).toFixed(2)}
-</strong>
-</p>
-
-<p>
-Change:
-<strong>
-MVR ${Number(order.change||0).toFixed(2)}
-</strong>
-</p>
-
-`;
-
-}
-
-box.innerHTML=`
-
-<div style="text-align:center">
-
-<h2>KANBULO BAKERY</h2>
-
-<small>
-${new Date(order.date).toLocaleString()}
-</small>
-
-<br>
-
-<strong>${order.number}</strong>
-
-</div>
-
-<hr>
-
-<table>
-
-${rows}
-
-</table>
-
-<hr>
-
-<h3 style="text-align:right">
-Total: MVR ${order.total.toFixed(2)}
-</h3>
-
-<p>
-Payment:
-<strong>${order.payment}</strong>
-</p>
-
-${cashInfo}
-
-<p style="text-align:center">
-Thank you!
-</p>
-
-`;
-
-document.getElementById("receiptModal")
-.classList.add("show");
-
-}
-
-
-function closeReceipt(){
-
-document.getElementById("receiptModal")
-.classList.remove("show");
-
-}
-
-
-/* =====================================================
-   CATEGORY SELECT
-===================================================== */
-
-function renderCategorySelect(){
-
-const select=
-document.getElementById("newProductCategory");
-
-select.innerHTML="";
-
-categories.forEach(cat=>{
-
-const option=
-document.createElement("option");
-
-option.value=cat;
-option.textContent=cat;
-
-select.appendChild(option);
-
-});
-
-}
-
-
-/* =====================================================
-   ADD PRODUCT
-===================================================== */
-
-function addProduct(){
-
-if(!categories.length){
-
-alert("Please create a category first.");
-return;
-
-}
-
-const name=
-document.getElementById("newProductName").value.trim();
-
-const price=
-Number(document.getElementById("newProductPrice").value);
-
-const category=
-document.getElementById("newProductCategory").value;
-
-const emoji=
-document.getElementById("newProductEmoji").value.trim()||
-"🍽️";
-
-if(!name||!price||!category){
-
-alert("Please fill in product name, price and category.");
-return;
-
-}
-
-products.push({
-
-id:Date.now(),
-name:name,
-price:price,
-category:category,
-emoji:emoji,
-available:true
-
-});
-
-document.getElementById("newProductName").value="";
-document.getElementById("newProductPrice").value="";
-document.getElementById("newProductEmoji").value="";
-
-saveAll();
-refresh();
-
-}
-
-
-/* =====================================================
-   ADMIN PRODUCTS
-===================================================== */
-
-function renderAdminProducts(){
-
-const box=
-document.getElementById("adminProducts");
-
-box.innerHTML="";
-
-if(!products.length){
-
-box.innerHTML='<div class="empty">No products yet.</div>';
-return;
-
-}
-
-products.forEach(p=>{
-
-const div=document.createElement("div");
-
-div.className="admin-product";
-
-div.innerHTML=`
-
-<label>
-
-Product Name
-
-<input
-value="${escapeAttr(p.name)}"
-onchange="updateProduct(${p.id},'name',this.value)"
->
-
-</label>
-
-<label>
-
-Price (MVR)
-
-<input
-type="number"
-value="${p.price}"
-onchange="updateProduct(${p.id},'price',this.value)"
->
-
-</label>
-
-<label>
-
-Category
-
-<select
-onchange="updateProduct(${p.id},'category',this.value)">
-
-${categories.map(c=>`
-
-<option
-value="${escapeAttr(c)}"
-${c===p.category?"selected":""}>
-
-${escapeHtml(c)}
-
-</option>
-
-`).join("")}
-
-</select>
-
-</label>
-
-<label>
-
-Emoji
-
-<input
-value="${escapeAttr(p.emoji)}"
-onchange="updateProduct(${p.id},'emoji',this.value)"
->
-
-</label>
-
-<div class="admin-actions">
-
-<button
-class="${p.available?"success":"secondary"}"
-onclick="toggleProduct(${p.id})">
-
-${p.available?"✅ Available":"❌ Sold Out"}
-
-</button>
-
-<button
-class="danger"
-onclick="deleteProduct(${p.id})">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-function updateProduct(id,field,value){
-
-const p=
-products.find(x=>x.id===id);
-
-if(!p)return;
-
-if(field==="price"){
-
-value=Number(value);
-
-if(value<0){
-
-alert("Price cannot be negative.");
-renderAdminProducts();
-return;
-
-}
-
-}
-
-p[field]=value;
-
-saveAll();
-
-renderProducts();
-renderDashboard();
-
-}
-
-
-function toggleProduct(id){
-
-const p=
-products.find(x=>x.id===id);
-
-if(!p)return;
-
-p.available=!p.available;
-
-saveAll();
-refresh();
-
-}
-
-
-function deleteProduct(id){
-
-const p=
-products.find(x=>x.id===id);
-
-if(!p)return;
-
-if(!confirm(`Delete "${p.name}"?`))
-return;
-
-products=
-products.filter(x=>x.id!==id);
-
-saveAll();
-refresh();
-
-}
-
-
-/* =====================================================
-   EXPENSES
-===================================================== */
-
-function addExpense(){
-
-const name=
-document.getElementById("expenseName").value.trim();
-
-const amount=
-Number(document.getElementById("expenseAmount").value);
-
-const date=
-document.getElementById("expenseDate").value;
-
-if(!name||!amount||!date){
-
-alert("Please fill in all expense fields.");
-return;
-
-}
-
-expenses.unshift({
-
-id:Date.now(),
-name:name,
-amount:amount,
-date:date
-
-});
-
-document.getElementById("expenseName").value="";
-document.getElementById("expenseAmount").value="";
-
-saveAll();
-refresh();
-
-}
-
-
-function renderExpenses(){
-
-const box=
-document.getElementById("expenseList");
-
-box.innerHTML="";
-
-if(!expenses.length){
-
-box.innerHTML=
-'<div class="empty">No expenses yet.</div>';
-
-return;
-
-}
-
-expenses.forEach(e=>{
-
-const div=document.createElement("div");
-
-div.className="cart-item";
-
-div.innerHTML=`
-
-<div>
-
-<strong>${escapeHtml(e.name)}</strong>
-
-<br>
-
-${e.date}
-
-</div>
-
-<div>
-
-<strong>
-MVR ${Number(e.amount).toFixed(2)}
-</strong>
-
-<br>
-
-<button
-class="danger"
-onclick="deleteExpense(${e.id})">
-
-Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-function deleteExpense(id){
-
-if(!confirm("Delete this expense?"))
-return;
-
-expenses=
-expenses.filter(e=>e.id!==id);
-
-saveAll();
-refresh();
-
-}
-
-
-/* =====================================================
-   SHOP BUNS
-===================================================== */
-
-/*
-SHOP OBJECT:
-
-{
- id,
- name,
- contact,
- createdAt
-}
-
-DELIVERY OBJECT:
-
-{
- id,
- shopId,
- date,
- quantity,
- price,
- total,
- productId,
- deductInventory
-}
-
-PAYMENT OBJECT:
-
-{
- id,
- shopId,
- date,
- amount,
- method,
- note
-}
-*/
-
-
-function createShopId(){
-
-return Date.now()+
-Math.floor(Math.random()*10000);
-
-}
-
-
-function openAddShopModal(){
-
-editingShopId=null;
-
-document.getElementById("shopModalTitle")
-.textContent="🏪 Add Shop";
-
-document.getElementById("shopName").value="";
-document.getElementById("shopContact").value="";
-
-document.getElementById("shopModal")
-.classList.add("show");
-
-setTimeout(
-()=>document.getElementById("shopName").focus(),
-100
-);
-
-}
-
-
-function closeShopModal(){
-
-document.getElementById("shopModal")
-.classList.remove("show");
-
-editingShopId=null;
-
-}
-
-
-function editShop(id){
-
-const shop=
-shopBuns.shops.find(s=>s.id===id);
-
-if(!shop)return;
-
-editingShopId=id;
-
-document.getElementById("shopModalTitle")
-.textContent="✏️ Edit Shop";
-
-document.getElementById("shopName").value=
-shop.name||"";
-
-document.getElementById("shopContact").value=
-shop.contact||"";
-
-document.getElementById("shopModal")
-.classList.add("show");
-
-}
-
-
-function saveShop(){
-
-const name=
-document.getElementById("shopName")
-.value.trim();
-
-const contact=
-document.getElementById("shopContact")
-.value.trim();
-
-if(!name){
-
-alert("Please enter the shop name.");
-return;
-
-}
-
-if(editingShopId){
-
-const shop=
-shopBuns.shops.find(
-s=>s.id===editingShopId
-);
-
-if(shop){
-
-shop.name=name;
-shop.contact=contact;
-
-}
-
-}else{
-
-const shop={
-
-id:createShopId(),
-name:name,
-contact:contact,
-createdAt:new Date().toISOString()
-
-};
-
-shopBuns.shops.push(shop);
-
-selectedShopId=shop.id;
-
-}
-
-saveAll();
-
-closeShopModal();
-
-refresh();
-
-}
-
-
-function deleteShop(id){
-
-const shop=
-shopBuns.shops.find(s=>s.id===id);
-
-if(!shop)return;
-
-const deliveryCount=
-shopBuns.deliveries.filter(
-d=>d.shopId===id
-).length;
-
-const paymentCount=
-shopBuns.payments.filter(
-p=>p.shopId===id
-).length;
-
-if(
-deliveryCount||
-paymentCount
-){
-
-alert(
-`Cannot delete "${shop.name}".\n\n`+
-`This shop already has financial records.\n\n`+
-`Keep the shop so its history and statements remain safe.`
-);
-
-return;
-
-}
-
-if(!confirm(`Delete shop "${shop.name}"?`))
-return;
-
-shopBuns.shops=
-shopBuns.shops.filter(s=>s.id!==id);
-
-if(selectedShopId===id)
-selectedShopId=null;
-
-saveAll();
-refresh();
-
-}
-
-
-function getShop(id){
-
-return shopBuns.shops.find(
-s=>s.id===id
-);
-
-}
-
-
-function shopDeliveries(id){
-
-return shopBuns.deliveries
-.filter(d=>d.shopId===id)
-.sort(
-(a,b)=>
-new Date(b.date)-
-new Date(a.date)
-);
-
-}
-
-
-function shopPayments(id){
-
-return shopBuns.payments
-.filter(p=>p.shopId===id)
-.sort(
-(a,b)=>
-new Date(b.date)-
-new Date(a.date)
-);
-
-}
-
-
-function shopDeliveredTotal(id){
-
-return shopDeliveries(id)
-.reduce(
-(sum,d)=>sum+Number(d.total||0),
-0
-);
-
-}
-
-
-function shopPaidTotal(id){
-
-return shopPayments(id)
-.reduce(
-(sum,p)=>sum+Number(p.amount||0),
-0
-);
-
-}
-
-
-function shopBalance(id){
-
-return Math.max(
-0,
-shopDeliveredTotal(id)-
-shopPaidTotal(id)
-);
-
-}
-
-
-function renderShopSummary(){
-
-const box=
-document.getElementById("shopSummary");
-
-if(!box)return;
-
-const delivered=
-shopBuns.deliveries.reduce(
-(s,d)=>s+Number(d.total||0),
-0
-);
-
-const paid=
-shopBuns.payments.reduce(
-(s,p)=>s+Number(p.amount||0),
-0
-);
-
-const outstanding=
-Math.max(0,delivered-paid);
-
-box.innerHTML=`
-
-<div class="shop-stat-grid">
-
-<div class="shop-stat">
-Total Delivered
-<strong>MVR ${delivered.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Payments Received
-<strong>MVR ${paid.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Outstanding
-<strong>MVR ${outstanding.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Active Shops
-<strong>${shopBuns.shops.length}</strong>
-</div>
-
-</div>
-
-`;
-
-}
-
-
-function renderShopList(){
-
-const box=
-document.getElementById("shopList");
-
-if(!box)return;
-
-box.innerHTML="";
-
-if(!shopBuns.shops.length){
-
-box.innerHTML=
-'<div class="empty">No shops added yet.</div>';
-
-return;
-
-}
-
-shopBuns.shops.forEach(shop=>{
-
-const balance=
-shopBalance(shop.id);
-
-const button=
-document.createElement("button");
-
-button.className=
-"shop-button"+
-(
-selectedShopId===shop.id
-?
-" active"
-:
-""
-);
-
-button.onclick=()=>{
-
-selectedShopId=shop.id;
-
-renderShopList();
-renderSelectedShop();
-
-};
-
-button.innerHTML=`
-
-<strong>
-🏪 ${escapeHtml(shop.name)}
-</strong>
-
-<small>
-Balance:
-MVR ${balance.toFixed(2)}
-</small>
-
-`;
-
-box.appendChild(button);
-
-});
-
-}
-
-
-/* =====================================================
-   SHOP SELECTED
-===================================================== */
-
-function renderSelectedShop(){
-
-const box=
-document.getElementById("selectedShopArea");
-
-if(!box)return;
-
-if(!selectedShopId){
-
-box.innerHTML=`
-
-<div class="card">
-
-<div class="empty">
-
-🏪 Select a shop to view its bun deliveries.
-
-<br>
-
-<small>
-Or add a new shop using the button above.
-</small>
-
-</div>
-
-</div>
-
-`;
-
-return;
-
-}
-
-const shop=getShop(selectedShopId);
-
-if(!shop){
-
-selectedShopId=null;
-renderSelectedShop();
-return;
-
-}
-
-const delivered=
-shopDeliveredTotal(shop.id);
-
-const paid=
-shopPaidTotal(shop.id);
-
-const balance=
-shopBalance(shop.id);
-
-const deliveries=
-shopDeliveries(shop.id);
-
-const payments=
-shopPayments(shop.id);
-
-box.innerHTML=`
-
-<div class="balance-card">
-
-<h2>🏪 ${escapeHtml(shop.name)}</h2>
-
-${
-shop.contact
-?
-`<div style="font-size:13px;opacity:.9">
-📞 ${escapeHtml(shop.contact)}
-</div>`
-:
-""
-}
-
-<div style="margin-top:15px;font-size:13px;opacity:.9">
-Outstanding Balance
-</div>
-
-<div class="balance-number">
-MVR ${balance.toFixed(2)}
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="pos-heading">
-
-<h3>➕ Record Bun Delivery</h3>
-
-</div>
-
-<div class="shop-form-grid">
-
-<label>
-
-Delivery Date
-
-<input
-type="date"
-id="shopDeliveryDate"
-value="${localDate()}"
->
-
-</label>
-
-<label>
-
-Quantity of Buns
-
-<input
-type="number"
-id="shopDeliveryQty"
-min="1"
-step="1"
-placeholder="Example: 100"
->
-
-</label>
-
-<label>
-
-Price Per Bun (MVR)
-
-<input
-type="number"
-id="shopDeliveryPrice"
-min="0"
-step="0.01"
-placeholder="Example: 2.00"
->
-
-</label>
-
-<label>
-
-Bun Product
-
-<select id="shopDeliveryProduct">
-
-<option value="">
-Do not link to inventory
-</option>
-
-${products.map(p=>`
-
-<option value="${p.id}">
-${escapeHtml(p.name)}
-</option>
-
-`).join("")}
-
-</select>
-
-</label>
-
-</div>
-
-<div class="checkbox-row">
-
-<input
-type="checkbox"
-id="shopDeductInventory"
->
-
-<label
-for="shopDeductInventory"
-style="margin:0">
-
-Deduct these buns from inventory
-
-</label>
-
-</div>
-
-<div
-style="
-background:#fff4ef;
-padding:12px;
-border-radius:10px;
-margin-bottom:12px">
-
-<strong>
-Delivery Total:
-MVR
-<span id="shopDeliveryTotal">0.00</span>
-</strong>
-
-</div>
-
-<button
-class="primary"
-style="width:100%"
-onclick="addShopDelivery()">
-
-🥖 Record Daily Bun Delivery
-
-</button>
-
-</div>
-
-
-<div class="card">
-
-<div class="pos-heading">
-
-<h3>💵 Record Payment</h3>
-
-</div>
-
-<div class="payment-box">
-
-<div class="shop-form-grid">
-
-<label>
-
-Payment Date
-
-<input
-type="date"
-id="shopPaymentDate"
-value="${localDate()}"
->
-
-</label>
-
-<label>
-
-Amount Paid (MVR)
-
-<input
-type="number"
-id="shopPaymentAmount"
-min="0"
-step="0.01"
-placeholder="${balance.toFixed(2)}"
->
-
-</label>
-
-<label>
-
-Payment Method
-
-<select id="shopPaymentMethod">
-
-<option>Cash</option>
-<option>Card</option>
-<option>Transfer</option>
-
-</select>
-
-</label>
-
-<label>
-
-Note
-
-<input
-id="shopPaymentNote"
-placeholder="Example: September payment"
->
-
-</label>
-
-</div>
-
-<button
-class="success"
-style="width:100%"
-onclick="addShopPayment()">
-
-💰 Record Shop Payment
-
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="pos-heading">
-
-<h3>📋 Shop Statement</h3>
-
-<div style="font-size:12px;color:#777">
-${deliveries.length} deliveries
-</div>
-
-</div>
-
-<div class="shop-stat-grid">
-
-<div class="shop-stat">
-Delivered
-<strong>MVR ${delivered.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Paid
-<strong>MVR ${paid.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Balance
-<strong>MVR ${balance.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Buns
-<strong>${deliveries.reduce((s,d)=>s+Number(d.quantity||0),0)}</strong>
-</div>
-
-</div>
-
-<br>
-
-<button
-class="primary"
-style="width:100%"
-onclick="showShopStatement(${shop.id})">
-
-🧾 View / Print Full Statement
-
-</button>
-
-<button
-class="secondary"
-style="width:100%;margin-top:8px"
-onclick="editShop(${shop.id})">
-
-✏️ Edit Shop Details
-
-</button>
-
-<button
-class="danger"
-style="width:100%;margin-top:8px"
-onclick="deleteShop(${shop.id})">
-
-🗑 Delete Shop
-
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>🥖 Delivery History</h3>
-
-<div id="shopDeliveryHistory"></div>
-
-</div>
-
-
-<div class="card">
-
-<h3>💵 Payment History</h3>
-
-<div id="shopPaymentHistory"></div>
-
-</div>
-
-`;
-
-const qtyInput=
-document.getElementById("shopDeliveryQty");
-
-const priceInput=
-document.getElementById("shopDeliveryPrice");
-
-if(qtyInput)
-qtyInput.oninput=updateShopDeliveryTotal;
-
-if(priceInput)
-priceInput.oninput=updateShopDeliveryTotal;
-
-renderShopDeliveryHistory();
-renderShopPaymentHistory();
-
-}
-
-
-/* =====================================================
-   SHOP DELIVERY TOTAL
-===================================================== */
-
-function updateShopDeliveryTotal(){
-
-const qty=
-Number(
-document.getElementById("shopDeliveryQty")?.value
-)||0;
-
-const price=
-Number(
-document.getElementById("shopDeliveryPrice")?.value
-)||0;
-
-const total=qty*price;
-
-const output=
-document.getElementById("shopDeliveryTotal");
-
-if(output)
-output.textContent=total.toFixed(2);
-
-}
-
-
-/* =====================================================
-   ADD SHOP DELIVERY
-===================================================== */
-
-function addShopDelivery(){
-
-if(!selectedShopId){
-
-alert("Please select a shop first.");
-return;
-
-}
-
-const date=
-document.getElementById("shopDeliveryDate").value||
-localDate();
-
-const qty=
-Number(
-document.getElementById("shopDeliveryQty").value
-);
-
-const price=
-Number(
-document.getElementById("shopDeliveryPrice").value
-);
-
-const productId=
-Number(
-document.getElementById("shopDeliveryProduct").value
-)||null;
-
-const deduct=
-document.getElementById("shopDeductInventory").checked;
-
-if(!date){
-
-alert("Please select a delivery date.");
-return;
-
-}
-
-if(!qty||qty<1){
-
-alert("Please enter a valid bun quantity.");
-return;
-
-}
-
-if(
-!Number.isFinite(price)||
-price<0
-){
-
-alert("Please enter a valid price per bun.");
-return;
-
-}
-
-const total=qty*price;
-
-
-/*
-If inventory deduction is requested,
-check available stock first.
-*/
-
-if(deduct){
-
-if(!productId){
-
-alert(
-"Please select the bun product to deduct from inventory."
-);
-
-return;
-
-}
-
-const remaining=
-inventoryRemaining(date,productId);
-
-if(remaining===Infinity){
-
-alert(
-"No inventory record exists for this product on "+date+".\n\n"+
-"Add prepared stock first, or untick the inventory deduction option."
-);
-
-return;
-
-}
-
-if(qty>remaining){
-
-const product=
-products.find(p=>p.id===productId);
-
-alert(
-`Not enough inventory for ${
-product?product.name:"this product"
-}.\n\n`+
-`Available: ${remaining}\n`+
-`Requested: ${qty}`
-);
-
-return;
-
-}
-
-}
-
-
-/*
-Deduct from inventory if requested.
-*/
-
-if(deduct){
-
-const record=
-getInvRecord(date,productId);
-
-record.sold=
-Number(record.sold||0)+qty;
-
-}
-
-
-/*
-Save delivery.
-*/
-
-shopBuns.deliveries.unshift({
-
-id:createShopId(),
-
-shopId:selectedShopId,
-
-date:date,
-
-quantity:qty,
-
-price:price,
-
-total:total,
-
-productId:productId,
-
-deductInventory:deduct,
-
-createdAt:new Date().toISOString()
-
-});
-
-saveAll();
-
-refresh();
-
-alert(
-"✅ Bun delivery recorded.\n\n"+
-"Quantity: "+qty+
-"\nTotal: MVR "+total.toFixed(2)+
-"\n\nThe shop balance has been updated."
-);
-
-}
-
-
-/* =====================================================
-   DELIVERY HISTORY
-===================================================== */
-
-function renderShopDeliveryHistory(){
-
-const box=
-document.getElementById("shopDeliveryHistory");
-
-if(!box||!selectedShopId)
-return;
-
-const deliveries=
-shopDeliveries(selectedShopId);
-
-if(!deliveries.length){
-
-box.innerHTML=
-'<div class="empty">No bun deliveries recorded yet.</div>';
-
-return;
-
-}
-
-box.innerHTML="";
-
-deliveries.forEach(d=>{
-
-const product=
-products.find(p=>p.id===d.productId);
-
-const div=
-document.createElement("div");
-
-div.className="shop-record";
-
-div.innerHTML=`
-
-<div class="shop-record-top">
-
-<div>
-
-<strong>
-🥖 ${d.quantity} buns
-</strong>
-
-<br>
-
-<small>
-${escapeHtml(d.date)}
-</small>
-
-</div>
-
-<strong>
-MVR ${Number(d.total).toFixed(2)}
-</strong>
-
-</div>
-
-<div style="font-size:12px;color:#777;margin-top:7px">
-
-${d.quantity}
-× MVR ${Number(d.price).toFixed(2)}
-
-${
-product
-?
-` • ${escapeHtml(product.name)}`
-:
-""
-}
-
-${
-d.deductInventory
-?
-" • Inventory deducted"
-:
-""
-}
-
-</div>
-
-<div class="shop-record-actions">
-
-<button
-class="secondary"
-onclick="editShopDelivery(${d.id})">
-
-✏️ Edit
-
-</button>
-
-<button
-class="danger"
-onclick="deleteShopDelivery(${d.id})">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-/* =====================================================
-   EDIT DELIVERY
-===================================================== */
-
-function editShopDelivery(id){
-
-const d=
-shopBuns.deliveries.find(
-x=>x.id===id
-);
-
-if(!d)return;
-
-const shop=getShop(d.shopId);
-
-if(!shop)return;
-
-selectedShopId=shop.id;
-
-editingDeliveryId=id;
-
-const newDate=
-prompt(
-"Delivery date (YYYY-MM-DD):",
-d.date
-);
-
-if(newDate===null)
-return;
-
-if(!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){
-
-alert("Please use YYYY-MM-DD.");
-return;
-
-}
-
-const newQty=
-prompt(
-"Quantity of buns:",
-d.quantity
-);
-
-if(newQty===null)
-return;
-
-const qty=Number(newQty);
-
-if(!qty||qty<1){
-
-alert("Invalid quantity.");
-return;
-
-}
-
-const newPrice=
-prompt(
-"Price per bun (MVR):",
-d.price
-);
-
-if(newPrice===null)
-return;
-
-const price=Number(newPrice);
-
-if(!Number.isFinite(price)||price<0){
-
-alert("Invalid price.");
-return;
-
-}
-
-
-/*
-If old delivery deducted inventory,
-return the old quantity first.
-*/
-
-if(d.deductInventory&&d.productId){
-
-const oldRecord=
-getInvRecord(d.date,d.productId);
-
-oldRecord.sold=
-Math.max(
-0,
-Number(oldRecord.sold||0)-
-Number(d.quantity||0)
-);
-
-}
-
-
-/*
-Ask whether inventory should be deducted
-for the edited delivery.
-*/
-
-let deduct=d.deductInventory;
-
-if(confirm(
-"Should this delivery be deducted from inventory?\n\n"+
-"OK = Yes\nCancel = No"
-)){
-
-deduct=true;
-
-}else{
-
-deduct=false;
-
-}
-
-let productId=d.productId;
-
-if(deduct){
-
-const productChoice=
-prompt(
-"Enter the product ID for inventory deduction.\n\n"+
-"Available products:\n"+
-products.map(p=>p.id+" = "+p.name).join("\n"),
-productId||""
-);
-
-if(productChoice===null){
-
-/*
-Restore old inventory deduction
-if user cancels.
-*/
-
-if(d.deductInventory&&d.productId){
-
-const oldRecord=
-getInvRecord(d.date,d.productId);
-
-oldRecord.sold=
-Number(oldRecord.sold||0)+
-Number(d.quantity||0);
-
-}
-
-return;
-
-}
-
-productId=Number(productChoice);
-
-const product=
-products.find(p=>p.id===productId);
-
-if(!product){
-
-alert("Invalid product ID.");
-
-return;
-
-}
-
-const remaining=
-inventoryRemaining(newDate,productId);
-
-if(remaining===Infinity){
-
-alert(
-"No inventory record exists for this product on "+newDate+"."
-);
-
-return;
-
-}
-
-if(qty>remaining){
-
-alert(
-"Not enough inventory.\n\n"+
-"Available: "+remaining+
-"\nRequested: "+qty
-);
-
-return;
-
-}
-
-const record=
-getInvRecord(newDate,productId);
-
-record.sold=
-Number(record.sold||0)+qty;
-
-}else{
-
-productId=null;
-
-}
-
-d.date=newDate;
-d.quantity=qty;
-d.price=price;
-d.total=qty*price;
-d.productId=productId;
-d.deductInventory=deduct;
-d.editedAt=new Date().toISOString();
-
-editingDeliveryId=null;
-
-saveAll();
-
-refresh();
-
-alert("✅ Bun delivery updated.");
-
-}
-
-
-/* =====================================================
-   DELETE DELIVERY
-===================================================== */
-
-function deleteShopDelivery(id){
-
-const d=
-shopBuns.deliveries.find(
-x=>x.id===id
-);
-
-if(!d)return;
-
-if(!confirm(
-"Delete this bun delivery?\n\n"+
-"Quantity: "+d.quantity+
-"\nTotal: MVR "+Number(d.total).toFixed(2)+
-"\n\nThe shop balance will decrease by this amount."
-))
-return;
-
-
-/*
-Return inventory if it was deducted.
-*/
-
-if(d.deductInventory&&d.productId){
-
-const record=
-getInvRecord(d.date,d.productId);
-
-record.sold=
-Math.max(
-0,
-Number(record.sold||0)-
-Number(d.quantity||0)
-);
-
-}
-
-shopBuns.deliveries=
-shopBuns.deliveries.filter(
-x=>x.id!==id
-);
-
-saveAll();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   SHOP PAYMENTS
-===================================================== */
-
-function addShopPayment(){
-
-if(!selectedShopId){
-
-alert("Please select a shop first.");
-return;
-
-}
-
-const date=
-document.getElementById("shopPaymentDate").value||
-localDate();
-
-const amount=
-Number(
-document.getElementById("shopPaymentAmount").value
-);
-
-const method=
-document.getElementById("shopPaymentMethod").value;
-
-const note=
-document.getElementById("shopPaymentNote").value.trim();
-
-if(!amount||amount<=0){
-
-alert("Please enter a valid payment amount.");
-return;
-
-}
-
-const balance=
-shopBalance(selectedShopId);
-
-if(amount>balance){
-
-if(!confirm(
-"The payment is greater than the current outstanding balance.\n\n"+
-"Current balance: MVR "+balance.toFixed(2)+
-"\nPayment: MVR "+amount.toFixed(2)+
-"\n\nRecord it anyway?"
-))
-return;
-
-}
-
-shopBuns.payments.unshift({
-
-id:createShopId(),
-
-shopId:selectedShopId,
-
-date:date,
-
-amount:amount,
-
-method:method,
-
-note:note,
-
-createdAt:new Date().toISOString()
-
-});
-
-saveAll();
-
-refresh();
-
-alert(
-"✅ Shop payment recorded.\n\n"+
-"Payment: MVR "+amount.toFixed(2)
-);
-
-}
-
-
-/* =====================================================
-   PAYMENT HISTORY
-===================================================== */
-
-function renderShopPaymentHistory(){
-
-const box=
-document.getElementById("shopPaymentHistory");
-
-if(!box||!selectedShopId)
-return;
-
-const payments=
-shopPayments(selectedShopId);
-
-if(!payments.length){
-
-box.innerHTML=
-'<div class="empty">No payments recorded yet.</div>';
-
-return;
-
-}
-
-box.innerHTML="";
-
-payments.forEach(p=>{
-
-const div=
-document.createElement("div");
-
-div.className="shop-record";
-
-div.innerHTML=`
-
-<div class="shop-record-top">
-
-<div>
-
-<strong>
-💵 MVR ${Number(p.amount).toFixed(2)}
-</strong>
-
-<br>
-
-<small>${escapeHtml(p.date)}</small>
-
-</div>
-
-<span class="badge green">
-${escapeHtml(p.method)}
-</span>
-
-</div>
-
-${
-p.note
-?
-`<div style="font-size:12px;color:#777;margin-top:7px">
-${escapeHtml(p.note)}
-</div>`
-:
-""
-}
-
-<div class="shop-record-actions">
-
-<button
-class="danger"
-onclick="deleteShopPayment(${p.id})">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-/* =====================================================
-   DELETE PAYMENT
-===================================================== */
-
-function deleteShopPayment(id){
-
-const p=
-shopBuns.payments.find(
-x=>x.id===id
-);
-
-if(!p)return;
-
-if(!confirm(
-"Delete this shop payment?\n\n"+
-"MVR "+Number(p.amount).toFixed(2)+
-"\n\nThe shop's outstanding balance will increase again."
-))
-return;
-
-shopBuns.payments=
-shopBuns.payments.filter(
-x=>x.id!==id
-);
-
-saveAll();
-
-refresh();
-
-}
-
-
-/* =====================================================
-   SHOP STATEMENT
-===================================================== */
-
-function showShopStatement(shopId){
-
-const shop=getShop(shopId);
-
-if(!shop)return;
-
-const deliveries=
-shopDeliveries(shopId);
-
-const payments=
-shopPayments(shopId);
-
-const delivered=
-shopDeliveredTotal(shopId);
-
-const paid=
-shopPaidTotal(shopId);
-
-const balance=
-shopBalance(shopId);
-
-let html=`
-
-<div id="printArea">
-
-<div style="text-align:center">
-
-<h2>KANBULO BAKERY</h2>
-
-<h3 style="margin-bottom:4px">
-SHOP ACCOUNT STATEMENT
-</h3>
-
-</div>
-
-<hr>
-
-<div class="statement-header">
-
-<strong>
-🏪 ${escapeHtml(shop.name)}
-</strong>
-
-${
-shop.contact
-?
-`<br><small>📞 ${escapeHtml(shop.contact)}</small>`
-:
-""
-}
-
-<br>
-
-<small>
-Statement generated:
-${new Date().toLocaleString()}
-</small>
-
-</div>
-
-<h3>🥖 Bun Deliveries</h3>
-
-`;
-
-if(deliveries.length){
-
-deliveries.forEach(d=>{
-
-html+=`
-
-<div class="month-row">
-
-<div>
-
-<strong>${escapeHtml(d.date)}</strong>
-
-<br>
-
-<small>
-${d.quantity} buns × MVR ${Number(d.price).toFixed(2)}
-</small>
-
-</div>
-
-<strong>
-MVR ${Number(d.total).toFixed(2)}
-</strong>
-
-</div>
-
-`;
-
-});
-
-}else{
-
-html+=
-'<div class="empty">No deliveries.</div>';
-
-}
-
-html+=`
-
-<hr>
-
-<h3>💵 Payments</h3>
-
-`;
-
-if(payments.length){
-
-payments.forEach(p=>{
-
-html+=`
-
-<div class="month-row">
-
-<div>
-
-<strong>${escapeHtml(p.date)}</strong>
-
-<br>
-
-<small>
-${escapeHtml(p.method)}
-${p.note?" • "+escapeHtml(p.note):""}
-</small>
-
-</div>
-
-<strong style="color:#19734a">
-- MVR ${Number(p.amount).toFixed(2)}
-</strong>
-
-</div>
-
-`;
-
-});
-
-}else{
-
-html+=
-'<div class="empty">No payments recorded.</div>';
-
-}
-
-html+=`
-
-<hr>
-
-<div class="shop-stat-grid">
-
-<div class="shop-stat">
-Delivered
-<strong>MVR ${delivered.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Paid
-<strong>MVR ${paid.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Balance
-<strong>MVR ${balance.toFixed(2)}</strong>
-</div>
-
-</div>
-
-<div style="
-text-align:center;
-margin-top:20px;
-font-size:13px;
-color:#777">
-
-Thank you for doing business with
-<br>
-<strong>KANBULO BAKERY</strong>
-
-</div>
-
-</div>
-
-`;
-
-document.getElementById(
-"shopStatementContent"
-).innerHTML=html;
-
-document.getElementById(
-"shopStatementModal"
-).classList.add("show");
-
-}
-
-
-function closeShopStatement(){
-
-document.getElementById(
-"shopStatementModal"
-).classList.remove("show");
-
-}
-
-
-function printShopStatement(){
-
-window.print();
-
-}
-
-
-/* =====================================================
-   DASHBOARD SHOP BUNS
-===================================================== */
-
-function renderDashboardShopBuns(){
-
-const box=
-document.getElementById("dashboardShopBuns");
-
-if(!box)return;
-
-const today=localDate();
-
-const deliveries=
-shopBuns.deliveries.filter(
-d=>d.date===today
-);
-
-const deliveredToday=
-deliveries.reduce(
-(s,d)=>s+Number(d.total||0),
-0
-);
-
-const bunsToday=
-deliveries.reduce(
-(s,d)=>s+Number(d.quantity||0),
-0
-);
-
-const paymentsToday=
-shopBuns.payments
-.filter(p=>p.date===today)
-.reduce(
-(s,p)=>s+Number(p.amount||0),
-0
-);
-
-const outstanding=
-shopBuns.shops.reduce(
-(s,shop)=>s+shopBalance(shop.id),
-0
-);
-
-box.innerHTML=`
-
-<div class="shop-stat-grid">
-
-<div class="shop-stat">
-Today's Buns
-<strong>${bunsToday}</strong>
-</div>
-
-<div class="shop-stat">
-Today's Credit
-<strong>MVR ${deliveredToday.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Payments Today
-<strong>MVR ${paymentsToday.toFixed(2)}</strong>
-</div>
-
-<div class="shop-stat">
-Outstanding
-<strong>MVR ${outstanding.toFixed(2)}</strong>
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-function todayOrders(){
-
-const today=
-new Date().toDateString();
-
-return orders.filter(
-o=>new Date(o.date).toDateString()===today
-);
-
-}
-
-
-function renderDashboard(){
-
-const list=todayOrders();
-
-const sales=
-list.reduce((s,o)=>s+Number(o.total||0),0);
-
-const cash=
-list
-.filter(o=>o.payment==="Cash")
-.reduce((s,o)=>s+Number(o.total||0),0);
-
-const card=
-list
-.filter(o=>o.payment==="Card")
-.reduce((s,o)=>s+Number(o.total||0),0);
-
-const transfer=
-list
-.filter(o=>o.payment==="Transfer")
-.reduce((s,o)=>s+Number(o.total||0),0);
-
-const shopCredit=
-shopBuns.deliveries
-.filter(d=>d.date===localDate())
-.reduce((s,d)=>s+Number(d.total||0),0);
-
-document.getElementById("dashSales")
-.textContent=sales.toFixed(2);
-
-document.getElementById("dashOrders")
-.textContent=list.length;
-
-document.getElementById("dashCash")
-.textContent=cash.toFixed(2);
-
-document.getElementById("dashCard")
-.textContent=card.toFixed(2);
-
-document.getElementById("dashTransfer")
-.textContent=transfer.toFixed(2);
-
-document.getElementById("dashShopCredit")
-.textContent=shopCredit.toFixed(2);
-
-renderDashboardShopBuns();
-renderDashboardInventory();
-
-}
-
-
-/* =====================================================
-   REPORT DATE
-===================================================== */
-
-function getReportDates(period){
-
-const now=new Date();
-
-let start=new Date(now);
-let end=new Date(now);
-
-if(period==="day"){
-
-start.setHours(0,0,0,0);
-end.setHours(23,59,59,999);
-
-}
-
-if(period==="week"){
-
-const day=now.getDay();
-
-start.setDate(
-now.getDate()-day
-);
-
-start.setHours(0,0,0,0);
-
-end.setHours(23,59,59,999);
-
-}
-
-if(period==="month"){
-
-start=
-new Date(
-now.getFullYear(),
-now.getMonth(),
-1
-);
-
-end=
-new Date(
-now.getFullYear(),
-now.getMonth()+1,
-0,
-23,
-59,
-59,
-999
-);
-
-}
-
-return{start,end};
-
-}
-
-
-/* =====================================================
-   REPORTS
-===================================================== */
-
-function renderReports(){
-
-const period=
-document.getElementById("reportPeriod").value;
-
-const {start,end}=
-getReportDates(period);
-
-const list=
-orders.filter(o=>{
-
-const d=new Date(o.date);
-
-return d>=start&&d<=end;
-
-});
-
-const sales=
-list.reduce(
-(s,o)=>s+Number(o.total||0),
-0
-);
-
-const exp=
-expenses
-.filter(e=>{
-
-const d=
-new Date(e.date+"T00:00:00");
-
-return d>=start&&d<=end;
-
-})
-.reduce(
-(s,e)=>s+Number(e.amount||0),
-0
-);
-
-
-/* SHOP DELIVERIES */
-
-const shopDeliveriesInPeriod=
-shopBuns.deliveries.filter(d=>{
-
-const date=
-new Date(d.date+"T00:00:00");
-
-return date>=start&&date<=end;
-
-});
-
-const shopPaymentsInPeriod=
-shopBuns.payments.filter(p=>{
-
-const date=
-new Date(p.date+"T00:00:00");
-
-return date>=start&&date<=end;
-
-});
-
-const shopDelivered=
-shopDeliveriesInPeriod.reduce(
-(s,d)=>s+Number(d.total||0),
-0
-);
-
-const shopPaid=
-shopPaymentsInPeriod.reduce(
-(s,p)=>s+Number(p.amount||0),
-0
-);
-
-
-/*
-Outstanding is current outstanding,
-not only newly created credit in this period.
-*/
-
-const shopOutstanding=
-shopBuns.shops.reduce(
-(s,shop)=>s+shopBalance(shop.id),
-0
-);
-
-document.getElementById("reportSales")
-.textContent=sales.toFixed(2);
-
-document.getElementById("reportOrders")
-.textContent=list.length;
-
-document.getElementById("reportExpenses")
-.textContent=exp.toFixed(2);
-
-document.getElementById("reportProfit")
-.textContent=(sales-exp).toFixed(2);
-
-document.getElementById("reportShopDelivered")
-.textContent=shopDelivered.toFixed(2);
-
-document.getElementById("reportShopPayments")
-.textContent=shopPaid.toFixed(2);
-
-document.getElementById("reportShopCredit")
-.textContent=
-Math.max(
-0,
-shopDelivered-shopPaid
-).toFixed(2);
-
-document.getElementById("reportShopOutstanding")
-.textContent=
-shopOutstanding.toFixed(2);
-
-}
-
-
-/* =====================================================
-   HISTORY
-===================================================== */
-
-function renderHistory(){
-
-const box=
-document.getElementById("orderHistory");
-
-box.innerHTML="";
-
-if(!orders.length){
-
-box.innerHTML=
-'<div class="empty">No orders yet.</div>';
-
-return;
-
-}
-
-orders.forEach(o=>{
-
-const div=document.createElement("div");
-
-div.className="admin-product";
-
-const items=
-o.items.map(
-i=>`${escapeHtml(i.name)} x${i.qty}`
-).join(", ");
-
-let cashInfo="";
-
-if(o.payment==="Cash"){
-
-cashInfo=`
-
-<p>
-
-Received:
-MVR ${Number(o.cashReceived||0).toFixed(2)}
-
-<br>
-
-Change:
-MVR ${Number(o.change||0).toFixed(2)}
-
-</p>
-
-`;
-
-}
-
-div.innerHTML=`
-
-<strong>${o.number}</strong>
-
-<br>
-
-<small>
-${new Date(o.date).toLocaleString()}
-</small>
-
-<p>${items}</p>
-
-<strong>
-MVR ${Number(o.total).toFixed(2)}
-</strong>
-
-<p>
-Payment: ${escapeHtml(o.payment)}
-</p>
-
-${cashInfo}
-
-<div class="history-actions">
-
-<button
-class="primary"
-onclick="editOrder(${o.id})">
-
-✏️ Edit
-
-</button>
-
-<button
-class="secondary"
-onclick="showReceiptById(${o.id})">
-
-🧾 Receipt
-
-</button>
-
-<button
-class="danger"
-onclick="deleteOrder(${o.id})">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-/* =====================================================
-   EDIT ORDER
-===================================================== */
-
-function editOrder(id){
-
-const order=
-orders.find(o=>o.id===id);
-
-if(!order)return;
-
-const sale=createSale();
-
-sale.name="Edit "+order.number;
-
-sale.cart=
-JSON.parse(JSON.stringify(order.items));
-
-sale.payment=order.payment;
-
-sale.cashReceived=
-Number(order.cashReceived)||0;
-
-saleTabs.push(sale);
-
-activeSaleId=sale.id;
-
-editingOrderId=id;
-
-saveAll();
-
-document.querySelectorAll(".page")
-.forEach(
-p=>p.classList.remove("active")
-);
-
-document.getElementById("pos")
-.classList.add("active");
-
-document.querySelectorAll("nav button")
-.forEach(
-b=>b.classList.remove("active")
-);
-
-document.querySelector("nav button")
-.classList.add("active");
-
-refresh();
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-
-function showReceiptById(id){
-
-const order=
-orders.find(o=>o.id===id);
-
-if(order)
-showReceipt(order);
-
-}
-
-
-/* =====================================================
-   DELETE ORDER
-===================================================== */
-
-function deleteOrder(id){
-
-if(!confirm(
-"Delete this order?\n\n"+
-"If inventory tracking was active, the sold quantity will be returned."
-))
-return;
-
-const order=
-orders.find(o=>o.id===id);
-
-if(!order)return;
-
-removeInventorySale(order.items);
-
-orders=
-orders.filter(o=>o.id!==id);
-
-saveAll();
-refresh();
-
-}
-
-
-/* =====================================================
-   BACKUP
-===================================================== */
-
-function downloadBackup(){
-
-const backup={
-
-app:"Kanbulo Bakery POS",
-
-version:4,
-
-createdAt:
-new Date().toISOString(),
-
-data:getCurrentState()
-
-};
-
-const json=
-JSON.stringify(backup,null,2);
-
-const blob=
-new Blob(
-[json],
-{type:"application/json"}
-);
-
-const url=
-URL.createObjectURL(blob);
-
-const a=
-document.createElement("a");
-
-const date=new Date();
-
-const filename=
-"Kanbulo-Bakery-Backup-"+
-date.getFullYear()+
-"-"+
-String(date.getMonth()+1).padStart(2,"0")+
-"-"+
-String(date.getDate()).padStart(2,"0")+
-".json";
-
-a.href=url;
-a.download=filename;
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-URL.revokeObjectURL(url);
-
-alert(
-"✅ BACKUP DOWNLOADED!\n\n"+
-"Your Kanbulo Bakery data has been saved.\n\n"+
-"Shop Bun records are included."
-);
-
-}
-
-
-/* =====================================================
-   RESTORE
-===================================================== */
-
-function restoreBackup(event){
-
-const file=
-event.target.files[0];
-
-if(!file)return;
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-try{
-
-const backup=
-JSON.parse(e.target.result);
-
-if(
-!backup||
-!backup.data||
-!Array.isArray(backup.data.products)
-){
-
-throw new Error("Invalid backup");
-
-}
-
-const productCount=
-backup.data.products.length;
-
-const orderCount=
-Array.isArray(backup.data.orders)
-?
-backup.data.orders.length
-:
-0;
-
-const shopCount=
-backup.data.shopBuns&&
-Array.isArray(backup.data.shopBuns.shops)
-?
-backup.data.shopBuns.shops.length
-:
-0;
-
-if(!confirm(
-
-"⚠️ RESTORE BACKUP\n\n"+
-"Products: "+productCount+
-"\nSales: "+orderCount+
-"\nShops: "+shopCount+
-"\n\n"+
-"Restoring will replace current POS data.\n\n"+
-"Continue?"
-
-))
-{
-
-event.target.value="";
-return;
-
-}
-
-categories=
-Array.isArray(backup.data.categories)
-?
-backup.data.categories
-:
-[];
-
-products=
-Array.isArray(backup.data.products)
-?
-backup.data.products
-:
-[];
-
-orders=
-Array.isArray(backup.data.orders)
-?
-backup.data.orders
-:
-[];
-
-expenses=
-Array.isArray(backup.data.expenses)
-?
-backup.data.expenses
-:
-[];
-
-saleTabs=
-Array.isArray(backup.data.saleTabs)
-?
-backup.data.saleTabs
-:
-[];
-
-inventory=
-backup.data.inventory&&
-typeof backup.data.inventory==="object"
-?
-backup.data.inventory
-:
-{};
-
-shopBuns=
-backup.data.shopBuns&&
-typeof backup.data.shopBuns==="object"
-?
-backup.data.shopBuns
-:
-{
-shops:[],
-deliveries:[],
-payments:[]
-};
-
-if(!Array.isArray(shopBuns.shops))
-shopBuns.shops=[];
-
-if(!Array.isArray(shopBuns.deliveries))
-shopBuns.deliveries=[];
-
-if(!Array.isArray(shopBuns.payments))
-shopBuns.payments=[];
-
-activeSaleId=null;
-editingOrderId=null;
-selectedCategory="All";
-selectedShopId=null;
-
-ensureSale();
-
-saveAll();
-
-refresh();
-
-alert(
-"✅ BACKUP RESTORED!\n\n"+
-"Your Kanbulo Bakery data has been restored successfully.\n\n"+
-"Shop Bun records are also restored."
-);
-
-event.target.value="";
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"❌ BACKUP COULD NOT BE RESTORED.\n\n"+
-"Please select a valid Kanbulo Bakery backup file."
-);
-
-event.target.value="";
-
-}
-
-};
-
-reader.readAsText(file);
-
-}
-
-
-/* =====================================================
-   PRODUCTS BACKUP
-===================================================== */
-
-function downloadProductsBackup(){
-
-const backup={
-
-app:"Kanbulo Bakery POS",
-
-type:"products",
-
-version:4,
-
-createdAt:
-new Date().toISOString(),
-
-categories:categories,
-
-products:products
-
-};
-
-const json=
-JSON.stringify(backup,null,2);
-
-const blob=
-new Blob(
-[json],
-{type:"application/json"}
-);
-
-const url=
-URL.createObjectURL(blob);
-
-const a=
-document.createElement("a");
-
-const date=new Date();
-
-const filename=
-"Kanbulo-Bakery-Products-"+
-date.getFullYear()+
-"-"+
-String(date.getMonth()+1).padStart(2,"0")+
-"-"+
-String(date.getDate()).padStart(2,"0")+
-".json";
-
-a.href=url;
-a.download=filename;
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-URL.revokeObjectURL(url);
-
-alert(
-"✅ PRODUCTS BACKUP DOWNLOADED!"
-);
-
-}
-
-
-/* =====================================================
-   IMPORT PRODUCTS
-===================================================== */
-
-function importProductsBackup(event){
-
-const file=
-event.target.files[0];
-
-if(!file)return;
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-try{
-
-const backup=
-JSON.parse(e.target.result);
-
-let importedProducts=null;
-let importedCategories=null;
-
-if(
-backup&&
-backup.type==="products"&&
-Array.isArray(backup.products)
-){
-
-importedProducts=backup.products;
-
-importedCategories=
-Array.isArray(backup.categories)
-?
-backup.categories
-:
-[];
-
-}else if(
-backup&&
-backup.data&&
-Array.isArray(backup.data.products)
-){
-
-importedProducts=backup.data.products;
-
-importedCategories=
-Array.isArray(backup.data.categories)
-?
-backup.data.categories
-:
-[];
-
-}else{
-
-throw new Error("Invalid products backup");
-
-}
-
-if(!importedProducts.length){
-
-alert(
-"This backup does not contain any products."
-);
-
-event.target.value="";
-return;
-
-}
-
-if(!confirm(
-
-"IMPORT PRODUCTS\n\n"+
-"Products found: "+
-importedProducts.length+
-"\n\n"+
-"This will replace your current product list.\n\n"+
-"Continue?"
-
-))
-{
-
-event.target.value="";
-return;
-
-}
-
-if(importedCategories.length)
-categories=importedCategories;
-
-products=importedProducts;
-
-saveAll();
-refresh();
-
-alert(
-"✅ PRODUCTS IMPORTED!\n\n"+
-importedProducts.length+
-" product(s) restored successfully."
-);
-
-event.target.value="";
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"❌ PRODUCTS COULD NOT BE IMPORTED."
-);
-
-event.target.value="";
-
-}
-
-};
-
-reader.readAsText(file);
-
-}
-
-
-/* =====================================================
-   ESCAPE
-===================================================== */
-
-function escapeHtml(value){
-
-return String(value)
-
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-function escapeAttr(value){
-
-return escapeHtml(value);
-
-}
-
-
-/* =====================================================
-   INITIALISE
-===================================================== */
-
-function initialiseLocalState(){
-
-if(!saleTabs.length){
-
-const sale=createSale();
-
-saleTabs.push(sale);
-
-activeSaleId=sale.id;
-
-}else if(!activeSaleId){
-
-activeSaleId=
-saleTabs[0].id;
-
-}
-
-writeLocalState();
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-async function startApp(){
-
-document.getElementById("expenseDate")
-.value=localDate();
-
-document.getElementById("inventoryDate")
-.value=localDate();
-
-initialiseLocalState();
-
-refresh();
-
-await loadFromCloud();
-
-}
-
-
-/* START */
-
-startApp();
-
-</script>
-
-</body>
-</html>
+</div>  </div>  </section>  <!-- DASHBOARD -->  <section id="dashboard" class="page">  <div class="card">  <h2>📊 Today's Dashboard</h2>  <div class="stat-grid">  <div class="stat">  
+Sales  
+<strong>  
+MVR <span id="dashSales">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Orders  
+<strong id="dashOrders">0</strong>  
+</div>  <div class="stat">  
+Cash  
+<strong>  
+MVR <span id="dashCash">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Card  
+<strong>  
+MVR <span id="dashCard">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Transfer  
+<strong>  
+MVR <span id="dashTransfer">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Products  
+<strong id="dashProducts">0</strong>  
+</div>  </div>  </div>  <div class="card">  <h2>📦 Today's Stock</h2>  <div id="dashboardInventory"></div>  </div>  </section>  <!-- REPORTS -->  <section id="reports" class="page">  <div class="card">  <h2>📈 Reports</h2>  <select id="reportPeriod" onchange="renderReports()">  <option value="day">Today</option>  
+<option value="week">This Week</option>  
+<option value="month">This Month</option>  </select>  <div class="stat-grid" style="margin-top:12px">  <div class="stat">  
+Gross Sales  
+<strong>  
+MVR <span id="reportSales">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Orders  
+<strong id="reportOrders">0</strong>  
+</div>  <div class="stat">  
+Expenses  
+<strong>  
+MVR <span id="reportExpenses">0.00</span>  
+</strong>  
+</div>  <div class="stat">  
+Net Profit  
+<strong>  
+MVR <span id="reportProfit">0.00</span>  
+</strong>  
+</div>  </div>  </div>  </section>  <!-- HISTORY -->  <section id="history" class="page">  <div class="card">  <h2>🧾 Order History</h2>  <div id="orderHistory"></div>  </div>  </section>  <!-- RECEIPT -->  <div class="modal" id="receiptModal">  <div class="modal-box">  <div id="receiptContent"></div>  <br>  <button class="primary" onclick="window.print()">  
+🖨️ Print Receipt  
+</button>  <button class="secondary" onclick="closeReceipt()">  
+Close  
+</button>  </div>  </div>  <script>  
+  
+/* =====================================================  
+   SUPABASE  
+===================================================== */  
+  
+const SUPABASE_URL =  
+"https://sruykenacpcgsbvqujgg.supabase.co";  
+  
+const SUPABASE_PUBLISHABLE_KEY =  
+"sb_publishable_oZIJK_dLjNBOAzkdcsWXSQ_KkczNfb7";  
+  
+const supabaseClient =  
+window.supabase.createClient(  
+SUPABASE_URL,  
+SUPABASE_PUBLISHABLE_KEY  
+);  
+  
+let cloudReady=false;  
+let cloudLoading=false;  
+let cloudSaveTimer=null;  
+let lastCloudUpdatedAt="";  
+let lastLocalChangeAt=0;  
+let cloudErrorShown=false;  
+  
+  
+/* STORAGE */  
+  
+const categoryKey="kanbuloCategories";  
+const productKey="bakeryProducts";  
+const orderKey="bakeryOrders";  
+const expenseKey="bakeryExpenses";  
+const tabsKey="kanbuloSaleTabs";  
+const inventoryKey="kanbuloInventory";  
+  
+  
+/* SAFE LOCAL STORAGE */  
+  
+function readStorage(key,fallback){  
+  
+try{  
+  
+const value=  
+localStorage.getItem(key);  
+  
+if(value===null)  
+return fallback;  
+  
+return JSON.parse(value);  
+  
+}catch(error){  
+  
+console.error(  
+"Local storage error:",  
+key,  
+error  
+);  
+  
+return fallback;  
+  
+}  
+  
+}  
+  
+  
+/* DATA */  
+  
+let categories=  
+readStorage(  
+categoryKey,  
+[  
+"Pizza",  
+"Cakes",  
+"Bakery",  
+"Burgers",  
+"Snacks",  
+"Drinks"  
+]  
+);  
+  
+let products=  
+readStorage(  
+productKey,  
+[  
+{  
+id:1,  
+name:"Chicken Pizza",  
+price:150,  
+category:"Pizza",  
+emoji:"🍕",  
+available:true  
+},  
+{  
+id:2,  
+name:"Beef Pizza",  
+price:160,  
+category:"Pizza",  
+emoji:"🍕",  
+available:true  
+},  
+{  
+id:3,  
+name:"Tuna Pizza",  
+price:150,  
+category:"Pizza",  
+emoji:"🍕",  
+available:true  
+},  
+{  
+id:4,  
+name:"Chocolate Cake",  
+price:120,  
+category:"Cakes",  
+emoji:"🍰",  
+available:true  
+},  
+{  
+id:5,  
+name:"Croissant",  
+price:45,  
+category:"Bakery",  
+emoji:"🥐",  
+available:true  
+},  
+{  
+id:6,  
+name:"Chicken Burger",  
+price:95,  
+category:"Burgers",  
+emoji:"🍔",  
+available:true  
+},  
+{  
+id:7,  
+name:"French Fries",  
+price:55,  
+category:"Snacks",  
+emoji:"🍟",  
+available:true  
+},  
+{  
+id:8,  
+name:"Coffee",  
+price:35,  
+category:"Drinks",  
+emoji:"☕",  
+available:true  
+},  
+{  
+id:9,  
+name:"Fresh Juice",  
+price:50,  
+category:"Drinks",  
+emoji:"🥤",  
+available:true  
+}  
+]  
+);  
+  
+let orders=  
+readStorage(orderKey,[]);  
+  
+let expenses=  
+readStorage(expenseKey,[]);  
+  
+let saleTabs=  
+readStorage(tabsKey,[]);  
+  
+let inventory=  
+readStorage(inventoryKey,{});  
+  
+let activeSaleId=null;  
+let selectedCategory="All";  
+let editingOrderId=null;  
+  
+  
+/* =====================================================  
+   CLOUD HELPERS  
+===================================================== */  
+  
+function getCurrentState(){  
+  
+return{  
+categories,  
+products,  
+orders,  
+expenses,  
+saleTabs,  
+inventory  
+};  
+  
+}  
+  
+  
+function writeLocalState(){  
+  
+localStorage.setItem(  
+categoryKey,  
+JSON.stringify(categories)  
+);  
+  
+localStorage.setItem(  
+productKey,  
+JSON.stringify(products)  
+);  
+  
+localStorage.setItem(  
+orderKey,  
+JSON.stringify(orders)  
+);  
+  
+localStorage.setItem(  
+expenseKey,  
+JSON.stringify(expenses)  
+);  
+  
+localStorage.setItem(  
+tabsKey,  
+JSON.stringify(saleTabs)  
+);  
+  
+localStorage.setItem(  
+inventoryKey,  
+JSON.stringify(inventory)  
+);  
+  
+}  
+  
+  
+function hasMeaningfulLocalData(){  
+  
+return(  
+categories.length>0||  
+products.length>0||  
+orders.length>0||  
+expenses.length>0||  
+saleTabs.length>0||  
+Object.keys(inventory||{}).length>0  
+);  
+  
+}  
+  
+  
+function isCloudEmpty(data){  
+  
+if(!data||typeof data!=="object")  
+return true;  
+  
+return(  
+(!Array.isArray(data.categories)||data.categories.length===0)&&  
+(!Array.isArray(data.products)||data.products.length===0)&&  
+(!Array.isArray(data.orders)||data.orders.length===0)&&  
+(!Array.isArray(data.expenses)||data.expenses.length===0)&&  
+(!Array.isArray(data.saleTabs)||data.saleTabs.length===0)&&  
+(!data.inventory||  
+Object.keys(data.inventory).length===0)  
+);  
+  
+}  
+  
+  
+/* =====================================================  
+   SAVE CLOUD  
+===================================================== */  
+  
+async function saveToCloud(){  
+  
+if(  
+!cloudReady||  
+cloudLoading||  
+!navigator.onLine  
+)  
+return;  
+  
+try{  
+  
+const updatedAt=  
+new Date().toISOString();  
+  
+const payload={  
+id:1,  
+data:getCurrentState(),  
+updated_at:updatedAt  
+};  
+  
+const {error}=  
+await supabaseClient  
+.from("bakery_data")  
+.upsert(  
+payload,  
+{  
+onConflict:"id"  
+}  
+);  
+  
+if(error)  
+throw error;  
+  
+lastCloudUpdatedAt=  
+updatedAt;  
+  
+console.log(  
+"Kanbulo cloud sync: saved"  
+);  
+  
+}catch(error){  
+  
+console.error(  
+"Supabase save error:",  
+error  
+);  
+  
+}  
+  
+}  
+  
+  
+/* =====================================================  
+   SCHEDULE CLOUD SAVE  
+===================================================== */  
+  
+function scheduleCloudSave(){  
+  
+if(  
+!cloudReady||  
+cloudLoading  
+)  
+return;  
+  
+clearTimeout(cloudSaveTimer);  
+  
+cloudSaveTimer=  
+setTimeout(  
+saveToCloud,  
+700  
+);  
+  
+}  
+  
+  
+/* =====================================================  
+   LOAD CLOUD  
+===================================================== */  
+  
+async function loadFromCloud(){  
+  
+cloudLoading=true;  
+  
+let cloudSucceeded=false;  
+  
+try{  
+  
+const {data,error}=  
+await supabaseClient  
+.from("bakery_data")  
+.select("data,updated_at")  
+.eq("id",1)  
+.single();  
+  
+if(error)  
+throw error;  
+  
+const cloudData=  
+data?.data||null;  
+  
+  
+/*  
+IMPORTANT:  
+If Supabase is empty and this device  
+already contains data, upload the local  
+data instead of deleting it.  
+*/  
+  
+if(isCloudEmpty(cloudData)){  
+  
+if(hasMeaningfulLocalData()){  
+  
+const updatedAt=  
+new Date().toISOString();  
+  
+const payload={  
+id:1,  
+data:getCurrentState(),  
+updated_at:updatedAt  
+};  
+  
+const {error:uploadError}=  
+await supabaseClient  
+.from("bakery_data")  
+.upsert(  
+payload,  
+{  
+onConflict:"id"  
+}  
+);  
+  
+if(uploadError)  
+throw uploadError;  
+  
+lastCloudUpdatedAt=  
+updatedAt;  
+  
+console.log(  
+"Local data uploaded to empty cloud"  
+);  
+  
+}  
+  
+else{  
+  
+/*  
+Both cloud and local are empty.  
+Create the first sale.  
+*/  
+  
+if(!saleTabs.length){  
+  
+const sale=createSale();  
+  
+saleTabs.push(sale);  
+  
+activeSaleId=sale.id;  
+  
+}  
+  
+writeLocalState();  
+  
+const updatedAt=  
+new Date().toISOString();  
+  
+const payload={  
+id:1,  
+data:getCurrentState(),  
+updated_at:updatedAt  
+};  
+  
+const {error:emptyError}=  
+await supabaseClient  
+.from("bakery_data")  
+.upsert(  
+payload,  
+{  
+onConflict:"id"  
+}  
+);  
+  
+if(emptyError)  
+throw emptyError;  
+  
+lastCloudUpdatedAt=  
+updatedAt;  
+  
+}  
+  
+}else{  
+  
+/*  
+Cloud contains data.  
+Load cloud into this device.  
+*/  
+  
+categories=  
+Array.isArray(cloudData.categories)  
+?  
+cloudData.categories  
+:  
+[];  
+  
+products=  
+Array.isArray(cloudData.products)  
+?  
+cloudData.products  
+:  
+[];  
+  
+orders=  
+Array.isArray(cloudData.orders)  
+?  
+cloudData.orders  
+:  
+[];  
+  
+expenses=  
+Array.isArray(cloudData.expenses)  
+?  
+cloudData.expenses  
+:  
+[];  
+  
+saleTabs=  
+Array.isArray(cloudData.saleTabs)  
+?  
+cloudData.saleTabs  
+:  
+[];  
+  
+inventory=  
+cloudData.inventory&&  
+typeof cloudData.inventory==="object"  
+?  
+cloudData.inventory  
+:  
+{};  
+  
+lastCloudUpdatedAt=  
+data.updated_at||"";  
+  
+activeSaleId=null;  
+editingOrderId=null;  
+selectedCategory="All";  
+  
+writeLocalState();  
+  
+console.log(  
+"Cloud data loaded"  
+);  
+  
+}  
+  
+cloudSucceeded=true;  
+  
+}catch(error){  
+  
+console.error(  
+"Supabase load error:",  
+error  
+);  
+  
+if(!cloudErrorShown){  
+  
+cloudErrorShown=true;  
+  
+setTimeout(  
+()=>{  
+  
+alert(  
+"⚠️ Cloud sync could not connect.\n\n"+  
+"The POS will continue working normally on this device.\n\n"+  
+"Your local data is safe.\n\n"+  
+"Please check your internet connection and Supabase settings."  
+);  
+  
+},  
+300  
+);  
+  
+}  
+  
+}finally{  
+  
+cloudLoading=false;  
+cloudReady=true;  
+  
+}  
+  
+  
+/*  
+Always make sure there is an open sale.  
+*/  
+  
+ensureSale();  
+  
+writeLocalState();  
+  
+  
+/*  
+If the cloud worked, make sure the final  
+state is also stored there.  
+*/  
+  
+if(cloudSucceeded){  
+  
+await saveToCloud();  
+  
+}  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   SYNC CLOUD CHANGES  
+===================================================== */  
+  
+async function syncCloud(){  
+  
+if(  
+!cloudReady||  
+cloudLoading||  
+!navigator.onLine  
+)  
+return;  
+  
+try{  
+  
+const {data,error}=  
+await supabaseClient  
+.from("bakery_data")  
+.select("data,updated_at")  
+.eq("id",1)  
+.single();  
+  
+if(error)  
+throw error;  
+  
+if(!data||!data.data)  
+return;  
+  
+const remoteTime=  
+data.updated_at  
+?  
+new Date(data.updated_at).getTime()  
+:  
+0;  
+  
+const knownTime=  
+lastCloudUpdatedAt  
+?  
+new Date(lastCloudUpdatedAt).getTime()  
+:  
+0;  
+  
+  
+/*  
+Ignore the same version or an older version.  
+*/  
+  
+if(remoteTime<=knownTime)  
+return;  
+  
+  
+/*  
+If we recently changed this device,  
+do not replace our unsaved local work.  
+*/  
+  
+if(  
+lastLocalChangeAt &&  
+remoteTime<=lastLocalChangeAt  
+)  
+return;  
+  
+  
+/*  
+Load newer cloud data.  
+*/  
+  
+const cloudData=data.data;  
+  
+categories=  
+Array.isArray(cloudData.categories)  
+?  
+cloudData.categories  
+:  
+[];  
+  
+products=  
+Array.isArray(cloudData.products)  
+?  
+cloudData.products  
+:  
+[];  
+  
+orders=  
+Array.isArray(cloudData.orders)  
+?  
+cloudData.orders  
+:  
+[];  
+  
+expenses=  
+Array.isArray(cloudData.expenses)  
+?  
+cloudData.expenses  
+:  
+[];  
+  
+saleTabs=  
+Array.isArray(cloudData.saleTabs)  
+?  
+cloudData.saleTabs  
+:  
+[];  
+  
+inventory=  
+cloudData.inventory&&  
+typeof cloudData.inventory==="object"  
+?  
+cloudData.inventory  
+:  
+{};  
+  
+lastCloudUpdatedAt=  
+data.updated_at||"";  
+  
+activeSaleId=null;  
+editingOrderId=null;  
+selectedCategory="All";  
+  
+writeLocalState();  
+  
+ensureSale();  
+  
+writeLocalState();  
+  
+refresh();  
+  
+console.log(  
+"Kanbulo cloud sync: updated from cloud"  
+);  
+  
+}catch(error){  
+  
+console.error(  
+"Supabase sync error:",  
+error  
+);  
+  
+}  
+  
+}  
+  
+  
+/* EVENTS */  
+  
+document.addEventListener(  
+"visibilitychange",  
+()=>{  
+  
+if(  
+document.visibilityState==="visible"  
+)  
+syncCloud();  
+  
+}  
+);  
+  
+window.addEventListener(  
+"online",  
+()=>{  
+  
+syncCloud();  
+  
+}  
+);  
+  
+  
+/*  
+Check every 30 seconds.  
+*/  
+  
+setInterval(  
+syncCloud,  
+30000  
+);  
+  
+  
+/* =====================================================  
+   SAVE ALL  
+===================================================== */  
+  
+function saveAll(){  
+  
+writeLocalState();  
+  
+lastLocalChangeAt=  
+Date.now();  
+  
+scheduleCloudSave();  
+  
+}  
+  
+  
+/* =====================================================  
+   DATE  
+===================================================== */  
+  
+function localDate(){  
+  
+const d=new Date();  
+  
+return d.getFullYear()+"-"+  
+String(d.getMonth()+1).padStart(2,"0")+"-"+  
+String(d.getDate()).padStart(2,"0");  
+  
+}  
+  
+  
+/* =====================================================  
+   INVENTORY  
+===================================================== */  
+  
+function inventoryDay(date){  
+  
+if(!inventory[date])  
+inventory[date]={};  
+  
+return inventory[date];  
+  
+}  
+  
+  
+function getInvRecord(date,id){  
+  
+const day=inventoryDay(date);  
+  
+if(!day[id]){  
+  
+day[id]={  
+prepared:0,  
+sold:0,  
+waste:0,  
+wasteItems:[]  
+};  
+  
+}  
+  
+return day[id];  
+  
+}  
+  
+  
+function isInventoryTracked(date,id){  
+  
+return !!(  
+inventory[date]&&  
+inventory[date][id]  
+);  
+  
+}  
+  
+  
+function inventoryRemaining(date,id){  
+  
+if(!isInventoryTracked(date,id))  
+return Infinity;  
+  
+const r=  
+getInvRecord(date,id);  
+  
+return Math.max(  
+0,  
+Number(r.prepared||0)-  
+Number(r.sold||0)-  
+Number(r.waste||0)  
+);  
+  
+}  
+  
+  
+/* =====================================================  
+   SALES  
+===================================================== */  
+  
+function createSale(){  
+  
+return{  
+  
+id:  
+Date.now()+  
+Math.floor(Math.random()*1000),  
+  
+name:  
+"Sale "+(saleTabs.length+1),  
+  
+cart:[],  
+  
+payment:"Cash",  
+  
+cashReceived:0  
+  
+};  
+  
+}  
+  
+  
+function ensureSale(){  
+  
+if(!saleTabs.length){  
+  
+const sale=createSale();  
+  
+saleTabs.push(sale);  
+  
+activeSaleId=sale.id;  
+  
+saveAll();  
+  
+}else if(!activeSaleId){  
+  
+activeSaleId=saleTabs[0].id;  
+  
+}  
+  
+}  
+  
+  
+function activeSale(){  
+  
+ensureSale();  
+  
+return saleTabs.find(  
+s=>s.id===activeSaleId  
+);  
+  
+}  
+  
+  
+/* =====================================================  
+   PAGE NAVIGATION  
+===================================================== */  
+  
+function showPage(page,button){  
+  
+document.querySelectorAll(".page")  
+.forEach(  
+p=>p.classList.remove("active")  
+);  
+  
+document.getElementById(page)  
+.classList.add("active");  
+  
+document.querySelectorAll("nav button")  
+.forEach(  
+b=>b.classList.remove("active")  
+);  
+  
+if(button)  
+button.classList.add("active");  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   REFRESH  
+===================================================== */  
+  
+function refresh(){  
+  
+ensureSale();  
+  
+renderSalesTabs();  
+renderCategoryButtons();  
+renderProducts();  
+renderCart();  
+renderAdminCategories();  
+renderAdminProducts();  
+renderCategorySelect();  
+renderExpenses();  
+renderDashboard();  
+renderReports();  
+renderHistory();  
+renderInventorySelects();  
+renderInventory();  
+calculateChange();  
+  
+}  
+  
+  
+/* =====================================================  
+   SALES TABS  
+===================================================== */  
+  
+function renderSalesTabs(){  
+  
+const box=  
+document.getElementById("salesTabs");  
+  
+box.innerHTML="";  
+  
+saleTabs.forEach(sale=>{  
+  
+const wrapper=  
+document.createElement("div");  
+  
+wrapper.className="sale-tab-wrap";  
+  
+const button=  
+document.createElement("button");  
+  
+button.className=  
+"sale-tab"+  
+(sale.id===activeSaleId?" active":"");  
+  
+button.innerHTML=  
+`<span class="sale-label">${  
+escapeHtml(sale.name)  
+}</span>`+  
+(sale.cart.length?  
+" • "+sale.cart.length:  
+"");  
+  
+button.onclick=()=>  
+switchSale(sale.id);  
+  
+const close=  
+document.createElement("button");  
+  
+close.className="close-sale";  
+  
+close.textContent="✕";  
+  
+close.onclick=e=>{  
+  
+e.stopPropagation();  
+  
+deleteSale(sale.id);  
+  
+};  
+  
+wrapper.appendChild(button);  
+wrapper.appendChild(close);  
+  
+box.appendChild(wrapper);  
+  
+});  
+  
+const newButton=  
+document.createElement("button");  
+  
+newButton.className="new-sale";  
+  
+newButton.textContent="＋ New Sale";  
+  
+newButton.onclick=newSale;  
+  
+box.appendChild(newButton);  
+  
+}  
+  
+  
+function newSale(){  
+  
+const sale=createSale();  
+  
+saleTabs.push(sale);  
+  
+activeSaleId=sale.id;  
+  
+editingOrderId=null;  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function switchSale(id){  
+  
+activeSaleId=id;  
+  
+editingOrderId=null;  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function deleteSale(id){  
+  
+if(saleTabs.length<=1){  
+  
+alert(  
+"You must keep at least one sale open."  
+);  
+  
+return;  
+  
+}  
+  
+const sale=  
+saleTabs.find(s=>s.id===id);  
+  
+if(!sale)return;  
+  
+if(  
+sale.cart.length &&  
+!confirm(  
+"This sale has items.\n\n"+  
+"Close this sale and discard the current items?"  
+)  
+)  
+return;  
+  
+if(activeSaleId===id)  
+editingOrderId=null;  
+  
+saleTabs=  
+saleTabs.filter(  
+s=>s.id!==id  
+);  
+  
+if(activeSaleId===id){  
+  
+activeSaleId=  
+saleTabs[  
+Math.max(  
+0,  
+saleTabs.length-1  
+)  
+].id;  
+  
+}  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   CATEGORIES  
+===================================================== */  
+  
+function renderCategoryButtons(){  
+  
+const box=  
+document.getElementById(  
+"categoryButtons"  
+);  
+  
+box.innerHTML="";  
+  
+const all=  
+document.createElement("button");  
+  
+all.textContent="✨ All";  
+  
+all.className=  
+selectedCategory==="All"  
+?  
+"active"  
+:  
+"";  
+  
+all.onclick=()=>{  
+  
+selectedCategory="All";  
+  
+renderCategoryButtons();  
+renderProducts();  
+  
+};  
+  
+box.appendChild(all);  
+  
+const categoryIcons={  
+  
+Pizza:"🍕",  
+Cakes:"🍰",  
+Bakery:"🥐",  
+Burgers:"🍔",  
+Snacks:"🍟",  
+Drinks:"🥤"  
+  
+};  
+  
+categories.forEach(cat=>{  
+  
+const b=  
+document.createElement("button");  
+  
+b.textContent=  
+(categoryIcons[cat]||"🍽️")+  
+" "+cat;  
+  
+b.className=  
+selectedCategory===cat  
+?  
+"active"  
+:  
+"";  
+  
+b.onclick=()=>{  
+  
+selectedCategory=cat;  
+  
+renderCategoryButtons();  
+renderProducts();  
+  
+};  
+  
+box.appendChild(b);  
+  
+});  
+  
+}  
+  
+  
+function renderAdminCategories(){  
+  
+const box=  
+document.getElementById(  
+"categoryManager"  
+);  
+  
+box.innerHTML="";  
+  
+if(!categories.length){  
+  
+box.innerHTML=  
+'<div class="empty">No categories yet.</div>';  
+  
+return;  
+  
+}  
+  
+categories.forEach(  
+(cat,index)=>{  
+  
+const row=  
+document.createElement("div");  
+  
+row.className="category-row";  
+  
+const input=  
+document.createElement("input");  
+  
+input.value=cat;  
+  
+const save=  
+document.createElement("button");  
+  
+save.className="secondary";  
+  
+save.textContent="💾";  
+  
+save.onclick=()=>  
+renameCategory(  
+index,  
+input.value  
+);  
+  
+const del=  
+document.createElement("button");  
+  
+del.className="danger";  
+  
+del.textContent="🗑";  
+  
+del.onclick=()=>  
+deleteCategory(index);  
+  
+row.appendChild(input);  
+row.appendChild(save);  
+row.appendChild(del);  
+  
+box.appendChild(row);  
+  
+});  
+  
+}  
+  
+  
+function addCategory(){  
+  
+const input=  
+document.getElementById(  
+"newCategory"  
+);  
+  
+const name=  
+input.value.trim();  
+  
+if(!name){  
+  
+alert(  
+"Please enter a category name."  
+);  
+  
+return;  
+  
+}  
+  
+if(  
+categories.some(  
+c=>  
+c.toLowerCase()===  
+name.toLowerCase()  
+)  
+){  
+  
+alert(  
+"This category already exists."  
+);  
+  
+return;  
+  
+}  
+  
+categories.push(name);  
+  
+input.value="";  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function renameCategory(index,newName){  
+  
+newName=newName.trim();  
+  
+if(!newName){  
+  
+alert(  
+"Category name cannot be empty."  
+);  
+  
+renderAdminCategories();  
+  
+return;  
+  
+}  
+  
+const oldName=  
+categories[index];  
+  
+if(  
+categories.some(  
+(c,i)=>  
+i!==index &&  
+c.toLowerCase()===  
+newName.toLowerCase()  
+)  
+){  
+  
+alert(  
+"Another category already has this name."  
+);  
+  
+renderAdminCategories();  
+  
+return;  
+  
+}  
+  
+categories[index]=newName;  
+  
+products.forEach(p=>{  
+  
+if(p.category===oldName)  
+p.category=newName;  
+  
+});  
+  
+if(selectedCategory===oldName)  
+selectedCategory=newName;  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function deleteCategory(index){  
+  
+const category=  
+categories[index];  
+  
+const used=  
+products.filter(  
+p=>p.category===category  
+);  
+  
+if(used.length){  
+  
+alert(  
+`Cannot delete "${category}".\n\n`+  
+`${used.length} product(s) are using it.\n\n`+  
+`Change those products first.`  
+);  
+  
+return;  
+  
+}  
+  
+if(  
+!confirm(  
+`Delete category "${category}"?`  
+)  
+)  
+return;  
+  
+categories.splice(index,1);  
+  
+if(selectedCategory===category)  
+selectedCategory="All";  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   PRODUCTS  
+===================================================== */  
+  
+function renderProducts(){  
+  
+const box=  
+document.getElementById("products");  
+  
+const search=(  
+document.getElementById("search").value||""  
+).toLowerCase();  
+  
+const list=  
+products.filter(p=>{  
+  
+const cat=  
+selectedCategory==="All"||  
+p.category===selectedCategory;  
+  
+const text=  
+p.name  
+.toLowerCase()  
+.includes(search);  
+  
+return cat&&text;  
+  
+});  
+  
+box.innerHTML="";  
+  
+if(!list.length){  
+  
+box.innerHTML=  
+'<div class="empty">No products found.</div>';  
+  
+return;  
+  
+}  
+  
+const today=localDate();  
+  
+list.forEach(p=>{  
+  
+const tracked=  
+isInventoryTracked(  
+today,  
+p.id  
+);  
+  
+const remaining=  
+inventoryRemaining(  
+today,  
+p.id  
+);  
+  
+let stockHTML="";  
+  
+if(tracked){  
+  
+if(remaining<=0){  
+  
+stockHTML=  
+`<div class="stock-label stock-out">  
+● Sold Out — 0 left  
+</div>`;  
+  
+}else{  
+  
+stockHTML=  
+`<div class="stock-label">  
+● ${remaining} left  
+</div>`;  
+  
+}  
+  
+}else{  
+  
+stockHTML=  
+`<div class="stock-label" style="color:#777">  
+Inventory not set  
+</div>`;  
+  
+}  
+  
+const canSell=  
+p.available &&  
+(!tracked||remaining>0);  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="product";  
+  
+div.innerHTML=`  
+  
+<div class="emoji">  
+${escapeHtml(p.emoji)}  
+</div>  
+  
+<h3>  
+${escapeHtml(p.name)}  
+</h3>  
+  
+<small>  
+${escapeHtml(p.category)}  
+</small>  
+  
+<div class="price">  
+MVR ${Number(p.price).toFixed(2)}  
+</div>  
+  
+${stockHTML}  
+  
+<br>  
+  
+${  
+canSell  
+?  
+`<button  
+class="primary add-btn"  
+onclick="addToCart(${p.id})">  
+＋ Add to Sale  
+</button>`  
+:  
+`<button  
+class="secondary add-btn"  
+disabled>  
+${p.available?"Sold Out":"Unavailable"}  
+</button>`  
+}  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+}  
+  
+  
+function addToCart(id){  
+  
+const p=  
+products.find(  
+x=>x.id===id  
+);  
+  
+if(!p||!p.available)  
+return;  
+  
+const sale=activeSale();  
+  
+const existing=  
+sale.cart.find(  
+x=>x.id===id  
+);  
+  
+const currentQty=  
+existing?  
+existing.qty:  
+0;  
+  
+const remaining=  
+inventoryRemaining(  
+localDate(),  
+id  
+);  
+  
+if(  
+remaining!==Infinity &&  
+currentQty>=remaining  
+){  
+  
+alert(  
+`No more ${p.name} available.\n\n`+  
+`Remaining stock: ${remaining}`  
+);  
+  
+return;  
+  
+}  
+  
+if(existing){  
+  
+existing.qty++;  
+  
+}else{  
+  
+sale.cart.push({  
+  
+id:p.id,  
+name:p.name,  
+price:Number(p.price),  
+qty:1  
+  
+});  
+  
+}  
+  
+saveAll();  
+  
+renderSalesTabs();  
+renderProducts();  
+renderCart();  
+calculateChange();  
+  
+}  
+  
+  
+function changeQty(id,amount){  
+  
+const sale=activeSale();  
+  
+const item=  
+sale.cart.find(  
+x=>x.id===id  
+);  
+  
+if(!item)return;  
+  
+if(amount>0){  
+  
+const remaining=  
+inventoryRemaining(  
+localDate(),  
+id  
+);  
+  
+if(  
+remaining!==Infinity &&  
+item.qty>=remaining  
+){  
+  
+alert(  
+"You cannot add more than the available stock."  
+);  
+  
+return;  
+  
+}  
+  
+}  
+  
+item.qty+=amount;  
+  
+if(item.qty<=0){  
+  
+sale.cart=  
+sale.cart.filter(  
+x=>x.id!==id  
+);  
+  
+}  
+  
+saveAll();  
+  
+renderSalesTabs();  
+renderProducts();  
+renderCart();  
+calculateChange();  
+  
+}  
+  
+  
+/* =====================================================  
+   EDIT SALE PRICE  
+===================================================== */  
+  
+function updateItemPrice(id,value){  
+  
+const sale=activeSale();  
+  
+const item=  
+sale.cart.find(  
+x=>x.id===id  
+);  
+  
+if(!item)return;  
+  
+const price=Number(value);  
+  
+if(  
+!Number.isFinite(price)||  
+price<0  
+){  
+  
+alert(  
+"Price cannot be negative."  
+);  
+  
+renderCart();  
+  
+return;  
+  
+}  
+  
+item.price=price;  
+  
+saveAll();  
+  
+renderSalesTabs();  
+renderCart();  
+calculateChange();  
+  
+}  
+  
+  
+function resetItemPrice(id){  
+  
+const sale=activeSale();  
+  
+const item=  
+sale.cart.find(  
+x=>x.id===id  
+);  
+  
+const product=  
+products.find(  
+x=>x.id===id  
+);  
+  
+if(!item||!product)  
+return;  
+  
+item.price=  
+Number(product.price);  
+  
+saveAll();  
+  
+renderSalesTabs();  
+renderCart();  
+calculateChange();  
+  
+}  
+  
+  
+/* =====================================================  
+   CART  
+===================================================== */  
+  
+function renderCart(){  
+  
+const sale=activeSale();  
+  
+const box=  
+document.getElementById("cart");  
+  
+box.innerHTML="";  
+  
+document.getElementById(  
+"currentSaleTitle"  
+).textContent=  
+"🛒 "+sale.name+  
+(editingOrderId?  
+" ✏️ EDITING":  
+"");  
+  
+if(!sale.cart.length){  
+  
+box.innerHTML=  
+'<div class="empty">'+  
+'🛍️ Your sale is empty.<br>'+  
+'<small>Tap a product to add it.</small>'+  
+'</div>';  
+  
+}  
+  
+sale.cart.forEach(item=>{  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="cart-item";  
+  
+div.innerHTML=`  
+  
+<div class="cart-main">  
+  
+<span class="cart-name">  
+${escapeHtml(item.name)}  
+</span>  
+  
+<div class="price-editor">  
+  
+<span>Price:</span>  
+  
+<input  
+type="number"  
+min="0"  
+step="0.01"  
+value="${Number(item.price).toFixed(2)}"  
+onchange="updateItemPrice(${item.id},this.value)"  
+aria-label="Price for ${escapeAttr(item.name)}"  
+>  
+  
+<button  
+class="price-reset"  
+type="button"  
+onclick="resetItemPrice(${item.id})">  
+  
+↺ Reset  
+  
+</button>  
+  
+</div>  
+  
+<div class="line-total">  
+  
+${item.qty}  
+× MVR ${Number(item.price).toFixed(2)}  
+=  
+  
+<strong>  
+MVR ${(item.price*item.qty).toFixed(2)}  
+</strong>  
+  
+</div>  
+  
+</div>  
+  
+<div class="qty">  
+  
+<button  
+type="button"  
+onclick="changeQty(${item.id},-1)">  
+−  
+</button>  
+  
+<strong>  
+${item.qty}  
+</strong>  
+  
+<button  
+type="button"  
+onclick="changeQty(${item.id},1)">  
++  
+</button>  
+  
+</div>  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+const total=  
+sale.cart.reduce(  
+(sum,item)=>  
+sum+(item.price*item.qty),  
+0  
+);  
+  
+document.getElementById(  
+"cartTotal"  
+).textContent=  
+total.toFixed(2);  
+  
+document.getElementById(  
+"cashReceived"  
+).value=  
+sale.cashReceived||"";  
+  
+document.querySelectorAll(  
+".payments button"  
+)  
+.forEach(  
+b=>b.classList.remove("active")  
+);  
+  
+if(sale.payment==="Cash")  
+document.getElementById(  
+"payCash"  
+).classList.add("active");  
+  
+if(sale.payment==="Card")  
+document.getElementById(  
+"payCard"  
+).classList.add("active");  
+  
+if(sale.payment==="Transfer")  
+document.getElementById(  
+"payTransfer"  
+).classList.add("active");  
+  
+document.getElementById(  
+"cashBox"  
+).style.display=  
+sale.payment==="Cash"  
+?  
+"block"  
+:  
+"none";  
+  
+}  
+  
+  
+function calculateChange(){  
+  
+const sale=activeSale();  
+  
+const total=  
+sale.cart.reduce(  
+(sum,item)=>  
+sum+(item.price*item.qty),  
+0  
+);  
+  
+const input=  
+document.getElementById(  
+"cashReceived"  
+);  
+  
+let received=  
+Number(input.value)||0;  
+  
+sale.cashReceived=received;  
+  
+const change=  
+received-total;  
+  
+const display=  
+document.getElementById(  
+"changeAmount"  
+);  
+  
+display.textContent=  
+Math.max(  
+change,  
+0  
+).toFixed(2);  
+  
+display.classList.remove(  
+"insufficient"  
+);  
+  
+if(  
+received>0 &&  
+received<total  
+){  
+  
+display.classList.add(  
+"insufficient"  
+);  
+  
+display.textContent=  
+"Need "+  
+(total-received).toFixed(2)+  
+" more";  
+  
+}  
+  
+saveAll();  
+  
+}  
+  
+  
+function selectPayment(type){  
+  
+const sale=activeSale();  
+  
+sale.payment=type;  
+  
+saveAll();  
+  
+renderCart();  
+calculateChange();  
+  
+}  
+  
+  
+/* =====================================================  
+   INVENTORY SALES  
+===================================================== */  
+  
+function validateSaleStock(  
+cart,  
+excludeOrder  
+){  
+  
+const date=localDate();  
+  
+for(const item of cart){  
+  
+const tracked=  
+isInventoryTracked(  
+date,  
+item.id  
+);  
+  
+if(!tracked)  
+continue;  
+  
+let soldAlready=  
+getInvRecord(  
+date,  
+item.id  
+).sold;  
+  
+if(excludeOrder){  
+  
+const oldItem=  
+excludeOrder.items.find(  
+x=>x.id===item.id  
+);  
+  
+if(oldItem)  
+soldAlready-=oldItem.qty;  
+  
+}  
+  
+const record=  
+getInvRecord(  
+date,  
+item.id  
+);  
+  
+const remaining=  
+Number(record.prepared||0)-  
+Number(record.waste||0)-  
+soldAlready;  
+  
+if(item.qty>remaining){  
+  
+const p=  
+products.find(  
+x=>x.id===item.id  
+);  
+  
+alert(  
+`Not enough stock for ${  
+p?p.name:item.name  
+}.\n\n`+  
+`Available: ${remaining}\n`+  
+`Requested: ${item.qty}`  
+);  
+  
+return false;  
+  
+}  
+  
+}  
+  
+return true;  
+  
+}  
+  
+  
+function addInventorySale(cart){  
+  
+const date=localDate();  
+  
+cart.forEach(item=>{  
+  
+if(  
+!isInventoryTracked(  
+date,  
+item.id  
+)  
+)  
+return;  
+  
+const record=  
+getInvRecord(  
+date,  
+item.id  
+);  
+  
+record.sold=  
+Number(record.sold||0)+  
+Number(item.qty);  
+  
+});  
+  
+saveAll();  
+  
+}  
+  
+  
+function removeInventorySale(cart){  
+  
+const date=localDate();  
+  
+cart.forEach(item=>{  
+  
+if(  
+!isInventoryTracked(  
+date,  
+item.id  
+)  
+)  
+return;  
+  
+const record=  
+getInvRecord(  
+date,  
+item.id  
+);  
+  
+record.sold=  
+Math.max(  
+0,  
+Number(record.sold||0)-  
+Number(item.qty)  
+);  
+  
+});  
+  
+saveAll();  
+  
+}  
+  
+  
+/* =====================================================  
+   COMPLETE SALE  
+===================================================== */  
+  
+function completeOrder(){  
+  
+const sale=activeSale();  
+  
+if(!sale.cart.length){  
+  
+alert("Cart is empty.");  
+  
+return;  
+  
+}  
+  
+const total=  
+sale.cart.reduce(  
+(sum,item)=>  
+sum+(item.price*item.qty),  
+0  
+);  
+  
+if(sale.payment==="Cash"){  
+  
+const received=  
+Number(sale.cashReceived)||0;  
+  
+if(received<total){  
+  
+alert(  
+"Customer has not given enough cash.\n\n"+  
+"Total: MVR "+total.toFixed(2)+"\n"+  
+"Received: MVR "+received.toFixed(2)+"\n"+  
+"Still needed: MVR "+  
+(total-received).toFixed(2)  
+);  
+  
+return;  
+  
+}  
+  
+}  
+  
+if(editingOrderId){  
+  
+const order=  
+orders.find(  
+o=>o.id===editingOrderId  
+);  
+  
+if(!order)return;  
+  
+if(  
+!validateSaleStock(  
+sale.cart,  
+order  
+)  
+)  
+return;  
+  
+removeInventorySale(  
+order.items  
+);  
+  
+order.items=  
+JSON.parse(  
+JSON.stringify(  
+sale.cart  
+)  
+);  
+  
+order.total=total;  
+  
+order.payment=  
+sale.payment;  
+  
+order.cashReceived=  
+Number(  
+sale.cashReceived  
+)||0;  
+  
+order.change=  
+sale.payment==="Cash"  
+?  
+Math.max(  
+0,  
+sale.cashReceived-total  
+)  
+:  
+0;  
+  
+order.editedAt=  
+new Date().toISOString();  
+  
+addInventorySale(  
+order.items  
+);  
+  
+showReceipt(order);  
+  
+editingOrderId=null;  
+  
+sale.cart=[];  
+  
+sale.payment="Cash";  
+  
+sale.cashReceived=0;  
+  
+saveAll();  
+  
+refresh();  
+  
+return;  
+  
+}  
+  
+if(  
+!validateSaleStock(  
+sale.cart,  
+null  
+)  
+)  
+return;  
+  
+const order={  
+  
+id:Date.now(),  
+  
+number:  
+"KB-"+  
+String(  
+orders.length+1  
+).padStart(4,"0"),  
+  
+date:  
+new Date().toISOString(),  
+  
+items:  
+JSON.parse(  
+JSON.stringify(  
+sale.cart  
+)  
+),  
+  
+total:total,  
+  
+payment:  
+sale.payment,  
+  
+cashReceived:  
+Number(  
+sale.cashReceived  
+)||0,  
+  
+change:  
+sale.payment==="Cash"  
+?  
+Math.max(  
+0,  
+sale.cashReceived-total  
+)  
+:  
+0  
+  
+};  
+  
+orders.unshift(order);  
+  
+addInventorySale(  
+order.items  
+);  
+  
+showReceipt(order);  
+  
+sale.cart=[];  
+sale.payment="Cash";  
+sale.cashReceived=0;  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   INVENTORY SELECTS  
+===================================================== */  
+  
+function renderInventorySelects(){  
+  
+const stock=  
+document.getElementById(  
+"stockProduct"  
+);  
+  
+const waste=  
+document.getElementById(  
+"wasteProduct"  
+);  
+  
+if(!stock||!waste)  
+return;  
+  
+stock.innerHTML="";  
+waste.innerHTML="";  
+  
+products.forEach(p=>{  
+  
+const a=  
+document.createElement("option");  
+  
+a.value=p.id;  
+a.textContent=p.name;  
+  
+const b=  
+document.createElement("option");  
+  
+b.value=p.id;  
+b.textContent=p.name;  
+  
+stock.appendChild(a);  
+waste.appendChild(b);  
+  
+});  
+  
+}  
+  
+  
+/* ADD STOCK */  
+  
+function addStock(){  
+  
+const date=  
+document.getElementById(  
+"inventoryDate"  
+).value||  
+localDate();  
+  
+const id=  
+Number(  
+document.getElementById(  
+"stockProduct"  
+).value  
+);  
+  
+const qty=  
+Number(  
+document.getElementById(  
+"stockQuantity"  
+).value  
+);  
+  
+if(!qty||qty<1){  
+  
+alert(  
+"Enter a valid stock quantity."  
+);  
+  
+return;  
+  
+}  
+  
+const record=  
+getInvRecord(  
+date,  
+id  
+);  
+  
+record.prepared=  
+Number(record.prepared||0)+qty;  
+  
+document.getElementById(  
+"stockQuantity"  
+).value="";  
+  
+saveAll();  
+  
+renderInventory();  
+renderProducts();  
+renderDashboard();  
+  
+alert(  
+"Stock added successfully.\n\n"+  
+"Prepared quantity added: "+qty  
+);  
+  
+}  
+  
+  
+/* WASTE */  
+  
+function addWaste(){  
+  
+const date=  
+document.getElementById(  
+"inventoryDate"  
+).value||  
+localDate();  
+  
+const id=  
+Number(  
+document.getElementById(  
+"wasteProduct"  
+).value  
+);  
+  
+const qty=  
+Number(  
+document.getElementById(  
+"wasteQuantity"  
+).value  
+);  
+  
+const reason=  
+document.getElementById(  
+"wasteReason"  
+).value.trim()||  
+"Waste";  
+  
+if(!qty||qty<1){  
+  
+alert(  
+"Enter a valid waste quantity."  
+);  
+  
+return;  
+  
+}  
+  
+const record=  
+getInvRecord(  
+date,  
+id  
+);  
+  
+const remaining=  
+Number(record.prepared||0)-  
+Number(record.sold||0)-  
+Number(record.waste||0);  
+  
+if(qty>remaining){  
+  
+alert(  
+"Cannot record that much waste.\n\n"+  
+"Available remaining: "+remaining  
+);  
+  
+return;  
+  
+}  
+  
+record.waste=  
+Number(record.waste||0)+qty;  
+  
+record.wasteItems=  
+record.wasteItems||[];  
+  
+record.wasteItems.push({  
+  
+qty:qty,  
+reason:reason,  
+time:new Date().toISOString()  
+  
+});  
+  
+document.getElementById(  
+"wasteQuantity"  
+).value="";  
+  
+document.getElementById(  
+"wasteReason"  
+).value="";  
+  
+saveAll();  
+  
+renderInventory();  
+renderProducts();  
+renderDashboard();  
+  
+}  
+  
+  
+/* DELETE INVENTORY */  
+  
+function deleteInventoryItem(  
+date,  
+id  
+){  
+  
+const product=  
+products.find(  
+p=>p.id===id  
+);  
+  
+if(!product)return;  
+  
+if(  
+!inventory[date]||  
+!inventory[date][id]  
+){  
+  
+alert(  
+"No inventory record found for this item."  
+);  
+  
+return;  
+  
+}  
+  
+const record=  
+inventory[date][id];  
+  
+let message=  
+`Delete inventory for "${product.name}" on ${date}?\n\n`+  
+`Prepared: ${Number(record.prepared||0)}\n`+  
+`Sold: ${Number(record.sold||0)}\n`+  
+`Waste: ${Number(record.waste||0)}\n\n`+  
+`This will remove only this item's inventory record.`;  
+  
+if(  
+Number(record.sold||0)>0  
+){  
+  
+message+=  
+`\n\n⚠️ This item already has ${record.sold} recorded sale(s) in inventory.`;  
+  
+}  
+  
+if(!confirm(message))  
+return;  
+  
+delete inventory[date][id];  
+  
+if(  
+inventory[date] &&  
+Object.keys(  
+inventory[date]  
+).length===0  
+){  
+  
+delete inventory[date];  
+  
+}  
+  
+saveAll();  
+  
+renderInventory();  
+renderProducts();  
+renderDashboard();  
+  
+}  
+  
+  
+/* RENDER INVENTORY */  
+  
+function renderInventory(){  
+  
+const dateInput=  
+document.getElementById(  
+"inventoryDate"  
+);  
+  
+if(!dateInput)return;  
+  
+const date=  
+dateInput.value||  
+localDate();  
+  
+if(!dateInput.value)  
+dateInput.value=localDate();  
+  
+const box=  
+document.getElementById(  
+"inventoryList"  
+);  
+  
+box.innerHTML="";  
+  
+let prepared=0;  
+let sold=0;  
+let waste=0;  
+let remaining=0;  
+  
+products.forEach(p=>{  
+  
+if(  
+!isInventoryTracked(  
+date,  
+p.id  
+)  
+)  
+return;  
+  
+const r=  
+getInvRecord(  
+date,  
+p.id  
+);  
+  
+const rem=  
+Number(r.prepared||0)-  
+Number(r.sold||0)-  
+Number(r.waste||0);  
+  
+prepared+=Number(r.prepared||0);  
+sold+=Number(r.sold||0);  
+waste+=Number(r.waste||0);  
+remaining+=Math.max(0,rem);  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="inventory-row";  
+  
+div.innerHTML=`  
+  
+<div  
+style="  
+display:flex;  
+justify-content:space-between;  
+align-items:center;  
+gap:8px  
+">  
+  
+<strong>  
+${escapeHtml(p.emoji)}  
+${escapeHtml(p.name)}  
+</strong>  
+  
+<span  
+class="badge ${rem>0?"green":"red"}">  
+  
+${  
+rem>0  
+?  
+rem+" remaining"  
+:  
+"SOLD OUT"  
+}  
+  
+</span>  
+  
+</div>  
+  
+<div class="inventory-grid">  
+  
+<div class="inv-stat">  
+Prepared  
+<strong>${r.prepared||0}</strong>  
+</div>  
+  
+<div class="inv-stat">  
+Sold  
+<strong>${r.sold||0}</strong>  
+</div>  
+  
+<div class="inv-stat">  
+Waste  
+<strong>${r.waste||0}</strong>  
+</div>  
+  
+<div class="inv-stat">  
+Remaining  
+<strong  
+class="${  
+rem>0  
+?  
+"remaining-good"  
+:  
+"remaining-zero"  
+}">  
+${Math.max(0,rem)}  
+</strong>  
+</div>  
+  
+</div>  
+  
+${  
+r.wasteItems&&r.wasteItems.length  
+?  
+`<small  
+style="display:block;margin-top:8px;color:#777">  
+  
+Waste:  
+  
+${  
+r.wasteItems.map(  
+w=>  
+escapeHtml(w.reason)+  
+" ("+w.qty+")"  
+).join(", ")  
+}  
+  
+</small>`  
+:  
+""  
+}  
+  
+<div class="inventory-actions">  
+  
+<button  
+class="danger"  
+onclick="deleteInventoryItem('${date}',${p.id})">  
+  
+🗑 Delete Inventory  
+  
+</button>  
+  
+</div>  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+if(!box.innerHTML){  
+  
+box.innerHTML=  
+'<div class="empty">'+  
+'No inventory has been added for this date yet.'+  
+'</div>';  
+  
+}  
+  
+document.getElementById(  
+"invPrepared"  
+).textContent=prepared;  
+  
+document.getElementById(  
+"invSold"  
+).textContent=sold;  
+  
+document.getElementById(  
+"invWaste"  
+).textContent=waste;  
+  
+document.getElementById(  
+"invRemaining"  
+).textContent=remaining;  
+  
+}  
+  
+  
+/* DASHBOARD INVENTORY */  
+  
+function renderDashboardInventory(){  
+  
+const box=  
+document.getElementById(  
+"dashboardInventory"  
+);  
+  
+if(!box)return;  
+  
+const date=localDate();  
+  
+let html="";  
+  
+products.forEach(p=>{  
+  
+if(  
+!isInventoryTracked(  
+date,  
+p.id  
+)  
+)  
+return;  
+  
+const r=  
+getInvRecord(  
+date,  
+p.id  
+);  
+  
+const rem=  
+Number(r.prepared||0)-  
+Number(r.sold||0)-  
+Number(r.waste||0);  
+  
+html+=`  
+  
+<div class="cart-item">  
+  
+<div>  
+  
+<strong>  
+${escapeHtml(p.emoji)}  
+${escapeHtml(p.name)}  
+</strong>  
+  
+<br>  
+  
+<small>  
+Prepared ${r.prepared||0}  
+· Sold ${r.sold||0}  
+· Waste ${r.waste||0}  
+</small>  
+  
+</div>  
+  
+<strong  
+class="${  
+rem>0  
+?  
+"remaining-good"  
+:  
+"remaining-zero"  
+}">  
+  
+${Math.max(0,rem)}  
+left  
+  
+</strong>  
+  
+</div>  
+  
+`;  
+  
+});  
+  
+box.innerHTML=  
+html||  
+'<div class="empty">'+  
+'No inventory added today.'+  
+'</div>';  
+  
+}  
+  
+  
+/* =====================================================  
+   RECEIPT  
+===================================================== */  
+  
+function showReceipt(order){  
+  
+const box=  
+document.getElementById(  
+"receiptContent"  
+);  
+  
+let rows="";  
+  
+order.items.forEach(item=>{  
+  
+rows+=`  
+  
+<tr>  
+  
+<td>  
+${escapeHtml(item.name)}  
+x${item.qty}  
+</td>  
+  
+<td>  
+MVR ${(item.price*item.qty).toFixed(2)}  
+</td>  
+  
+</tr>  
+  
+`;  
+  
+});  
+  
+let cashInfo="";  
+  
+if(order.payment==="Cash"){  
+  
+cashInfo=`  
+  
+<p>  
+Cash Received:  
+<strong>  
+MVR ${Number(  
+order.cashReceived||0  
+).toFixed(2)}  
+</strong>  
+</p>  
+  
+<p>  
+Change:  
+<strong>  
+MVR ${Number(  
+order.change||0  
+).toFixed(2)}  
+</strong>  
+</p>  
+  
+`;  
+  
+}  
+  
+box.innerHTML=`  
+  
+<div style="text-align:center">  
+  
+<h2>KANBULO BAKERY</h2>  
+  
+<small>  
+${new Date(order.date).toLocaleString()}  
+</small>  
+  
+<br>  
+  
+<strong>${order.number}</strong>  
+  
+</div>  
+  
+<hr>  
+  
+<table>  
+  
+${rows}  
+  
+</table>  
+  
+<hr>  
+  
+<h3 style="text-align:right">  
+  
+Total:  
+MVR ${order.total.toFixed(2)}  
+  
+</h3>  
+  
+<p>  
+  
+Payment:  
+<strong>${order.payment}</strong>  
+  
+</p>  
+  
+${cashInfo}  
+  
+<p style="text-align:center">  
+Thank you!  
+</p>  
+  
+`;  
+  
+document.getElementById(  
+"receiptModal"  
+).classList.add("show");  
+  
+}  
+  
+  
+function closeReceipt(){  
+  
+document.getElementById(  
+"receiptModal"  
+).classList.remove("show");  
+  
+}  
+  
+  
+/* CATEGORY SELECT */  
+  
+function renderCategorySelect(){  
+  
+const select=  
+document.getElementById(  
+"newProductCategory"  
+);  
+  
+select.innerHTML="";  
+  
+categories.forEach(cat=>{  
+  
+const option=  
+document.createElement("option");  
+  
+option.value=cat;  
+option.textContent=cat;  
+  
+select.appendChild(option);  
+  
+});  
+  
+}  
+  
+  
+/* ADD PRODUCT */  
+  
+function addProduct(){  
+  
+if(!categories.length){  
+  
+alert(  
+"Please create a category first."  
+);  
+  
+return;  
+  
+}  
+  
+const name=  
+document.getElementById(  
+"newProductName"  
+).value.trim();  
+  
+const price=  
+Number(  
+document.getElementById(  
+"newProductPrice"  
+).value  
+);  
+  
+const category=  
+document.getElementById(  
+"newProductCategory"  
+).value;  
+  
+const emoji=  
+document.getElementById(  
+"newProductEmoji"  
+).value.trim()||  
+"🍽️";  
+  
+if(!name||!price||!category){  
+  
+alert(  
+"Please fill in product name, price and category."  
+);  
+  
+return;  
+  
+}  
+  
+products.push({  
+  
+id:Date.now(),  
+  
+name:name,  
+  
+price:price,  
+  
+category:category,  
+  
+emoji:emoji,  
+  
+available:true  
+  
+});  
+  
+document.getElementById(  
+"newProductName"  
+).value="";  
+  
+document.getElementById(  
+"newProductPrice"  
+).value="";  
+  
+document.getElementById(  
+"newProductEmoji"  
+).value="";  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* ADMIN PRODUCTS */  
+  
+function renderAdminProducts(){  
+  
+const box=  
+document.getElementById(  
+"adminProducts"  
+);  
+  
+box.innerHTML="";  
+  
+if(!products.length){  
+  
+box.innerHTML=  
+'<div class="empty">No products yet.</div>';  
+  
+return;  
+  
+}  
+  
+products.forEach(p=>{  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="admin-product";  
+  
+div.innerHTML=`  
+  
+<label>  
+  
+Product Name  
+  
+<input  
+value="${escapeAttr(p.name)}"  
+onchange="updateProduct(${p.id},'name',this.value)"  
+>  
+  
+</label>  
+  
+<label>  
+  
+Price (MVR)  
+  
+<input  
+type="number"  
+value="${p.price}"  
+onchange="updateProduct(${p.id},'price',this.value)"  
+>  
+  
+</label>  
+  
+<label>  
+  
+Category  
+  
+<select  
+onchange="updateProduct(${p.id},'category',this.value)">  
+  
+${categories.map(c=>`  
+  
+<option  
+value="${escapeAttr(c)}"  
+${c===p.category?"selected":""}>  
+  
+${escapeHtml(c)}  
+  
+</option>  
+  
+`).join("")}  
+  
+</select>  
+  
+</label>  
+  
+<label>  
+  
+Emoji  
+  
+<input  
+value="${escapeAttr(p.emoji)}"  
+onchange="updateProduct(${p.id},'emoji',this.value)"  
+>  
+  
+</label>  
+  
+<div class="admin-actions">  
+  
+<button  
+class="${  
+p.available  
+?  
+"success"  
+:  
+"secondary"  
+}"  
+onclick="toggleProduct(${p.id})">  
+  
+${  
+p.available  
+?  
+"✅ Available"  
+:  
+"❌ Sold Out"  
+}  
+  
+</button>  
+  
+<button  
+class="danger"  
+onclick="deleteProduct(${p.id})">  
+  
+🗑 Delete  
+  
+</button>  
+  
+</div>  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+}  
+  
+  
+function updateProduct(  
+id,  
+field,  
+value  
+){  
+  
+const p=  
+products.find(  
+x=>x.id===id  
+);  
+  
+if(!p)return;  
+  
+if(field==="price"){  
+  
+value=Number(value);  
+  
+if(value<0){  
+  
+alert(  
+"Price cannot be negative."  
+);  
+  
+renderAdminProducts();  
+  
+return;  
+  
+}  
+  
+}  
+  
+p[field]=value;  
+  
+saveAll();  
+  
+renderProducts();  
+renderDashboard();  
+  
+}  
+  
+  
+function toggleProduct(id){  
+  
+const p=  
+products.find(  
+x=>x.id===id  
+);  
+  
+if(!p)return;  
+  
+p.available=!p.available;  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function deleteProduct(id){  
+  
+const p=  
+products.find(  
+x=>x.id===id  
+);  
+  
+if(!p)return;  
+  
+if(  
+!confirm(  
+`Delete "${p.name}"?`  
+)  
+)  
+return;  
+  
+products=  
+products.filter(  
+x=>x.id!==id  
+);  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   EXPENSES  
+===================================================== */  
+  
+function addExpense(){  
+  
+const name=  
+document.getElementById(  
+"expenseName"  
+).value.trim();  
+  
+const amount=  
+Number(  
+document.getElementById(  
+"expenseAmount"  
+).value  
+);  
+  
+const date=  
+document.getElementById(  
+"expenseDate"  
+).value;  
+  
+if(!name||!amount||!date){  
+  
+alert(  
+"Please fill in all expense fields."  
+);  
+  
+return;  
+  
+}  
+  
+expenses.unshift({  
+  
+id:Date.now(),  
+  
+name:name,  
+  
+amount:amount,  
+  
+date:date  
+  
+});  
+  
+document.getElementById(  
+"expenseName"  
+).value="";  
+  
+document.getElementById(  
+"expenseAmount"  
+).value="";  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+function renderExpenses(){  
+  
+const box=  
+document.getElementById(  
+"expenseList"  
+);  
+  
+box.innerHTML="";  
+  
+if(!expenses.length){  
+  
+box.innerHTML=  
+'<div class="empty">No expenses yet.</div>';  
+  
+return;  
+  
+}  
+  
+expenses.forEach(e=>{  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="cart-item";  
+  
+div.innerHTML=`  
+  
+<div>  
+  
+<strong>  
+${escapeHtml(e.name)}  
+</strong>  
+  
+<br>  
+  
+${e.date}  
+  
+</div>  
+  
+<div>  
+  
+<strong>  
+MVR ${Number(e.amount).toFixed(2)}  
+</strong>  
+  
+<br>  
+  
+<button  
+class="danger"  
+onclick="deleteExpense(${e.id})">  
+  
+Delete  
+  
+</button>  
+  
+</div>  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+}  
+  
+  
+function deleteExpense(id){  
+  
+if(  
+!confirm(  
+"Delete this expense?"  
+)  
+)  
+return;  
+  
+expenses=  
+expenses.filter(  
+e=>e.id!==id  
+);  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   DASHBOARD  
+===================================================== */  
+  
+function todayOrders(){  
+  
+const today=  
+new Date().toDateString();  
+  
+return orders.filter(  
+o=>  
+new Date(o.date).toDateString()===  
+today  
+);  
+  
+}  
+  
+  
+function renderDashboard(){  
+  
+const list=  
+todayOrders();  
+  
+const sales=  
+list.reduce(  
+(s,o)=>s+o.total,  
+0  
+);  
+  
+const cash=  
+list  
+.filter(  
+o=>o.payment==="Cash"  
+)  
+.reduce(  
+(s,o)=>s+o.total,  
+0  
+);  
+  
+const card=  
+list  
+.filter(  
+o=>o.payment==="Card"  
+)  
+.reduce(  
+(s,o)=>s+o.total,  
+0  
+);  
+  
+const transfer=  
+list  
+.filter(  
+o=>o.payment==="Transfer"  
+)  
+.reduce(  
+(s,o)=>s+o.total,  
+0  
+);  
+  
+document.getElementById(  
+"dashSales"  
+).textContent=  
+sales.toFixed(2);  
+  
+document.getElementById(  
+"dashOrders"  
+).textContent=  
+list.length;  
+  
+document.getElementById(  
+"dashCash"  
+).textContent=  
+cash.toFixed(2);  
+  
+document.getElementById(  
+"dashCard"  
+).textContent=  
+card.toFixed(2);  
+  
+document.getElementById(  
+"dashTransfer"  
+).textContent=  
+transfer.toFixed(2);  
+  
+document.getElementById(  
+"dashProducts"  
+).textContent=  
+products.length;  
+  
+renderDashboardInventory();  
+  
+}  
+  
+  
+/* =====================================================  
+   REPORTS  
+===================================================== */  
+  
+function getReportDates(period){  
+  
+const now=new Date();  
+  
+let start=new Date(now);  
+let end=new Date(now);  
+  
+if(period==="day"){  
+  
+start.setHours(0,0,0,0);  
+end.setHours(23,59,59,999);  
+  
+}  
+  
+if(period==="week"){  
+  
+const day=now.getDay();  
+  
+start.setDate(  
+now.getDate()-day  
+);  
+  
+start.setHours(0,0,0,0);  
+  
+end.setHours(23,59,59,999);  
+  
+}  
+  
+if(period==="month"){  
+  
+start=  
+new Date(  
+now.getFullYear(),  
+now.getMonth(),  
+1  
+);  
+  
+end=  
+new Date(  
+now.getFullYear(),  
+now.getMonth()+1,  
+0,  
+23,  
+59,  
+59,  
+999  
+);  
+  
+}  
+  
+return{  
+start,  
+end  
+};  
+  
+}  
+  
+  
+function renderReports(){  
+  
+const period=  
+document.getElementById(  
+"reportPeriod"  
+).value;  
+  
+const {  
+start,  
+end  
+}=  
+getReportDates(period);  
+  
+const list=  
+orders.filter(o=>{  
+  
+const d=  
+new Date(o.date);  
+  
+return d>=start&&d<=end;  
+  
+});  
+  
+const sales=  
+list.reduce(  
+(s,o)=>s+o.total,  
+0  
+);  
+  
+const exp=  
+expenses  
+.filter(e=>{  
+  
+const d=  
+new Date(  
+e.date+  
+"T00:00:00"  
+);  
+  
+return d>=start&&d<=end;  
+  
+})  
+.reduce(  
+(s,e)=>  
+s+Number(e.amount),  
+0  
+);  
+  
+document.getElementById(  
+"reportSales"  
+).textContent=  
+sales.toFixed(2);  
+  
+document.getElementById(  
+"reportOrders"  
+).textContent=  
+list.length;  
+  
+document.getElementById(  
+"reportExpenses"  
+).textContent=  
+exp.toFixed(2);  
+  
+document.getElementById(  
+"reportProfit"  
+).textContent=  
+(sales-exp).toFixed(2);  
+  
+}  
+  
+  
+/* =====================================================  
+   HISTORY  
+===================================================== */  
+  
+function renderHistory(){  
+  
+const box=  
+document.getElementById(  
+"orderHistory"  
+);  
+  
+box.innerHTML="";  
+  
+if(!orders.length){  
+  
+box.innerHTML=  
+'<div class="empty">No orders yet.</div>';  
+  
+return;  
+  
+}  
+  
+orders.forEach(o=>{  
+  
+const div=  
+document.createElement("div");  
+  
+div.className="admin-product";  
+  
+const items=  
+o.items.map(  
+i=>  
+`${escapeHtml(i.name)} x${i.qty}`  
+).join(", ");  
+  
+let cashInfo="";  
+  
+if(o.payment==="Cash"){  
+  
+cashInfo=`  
+  
+<p>  
+  
+Received:  
+MVR ${  
+Number(  
+o.cashReceived||0  
+).toFixed(2)  
+}  
+  
+<br>  
+  
+Change:  
+MVR ${  
+Number(  
+o.change||0  
+).toFixed(2)  
+}  
+  
+</p>  
+  
+`;  
+  
+}  
+  
+div.innerHTML=`  
+  
+<strong>  
+${o.number}  
+</strong>  
+  
+<br>  
+  
+<small>  
+${new Date(o.date).toLocaleString()}  
+</small>  
+  
+<p>  
+${items}  
+</p>  
+  
+<strong>  
+MVR ${o.total.toFixed(2)}  
+</strong>  
+  
+<p>  
+Payment: ${o.payment}  
+</p>  
+  
+${cashInfo}  
+  
+<div class="history-actions">  
+  
+<button  
+class="primary"  
+onclick="editOrder(${o.id})">  
+  
+✏️ Edit  
+  
+</button>  
+  
+<button  
+class="secondary"  
+onclick="showReceiptById(${o.id})">  
+  
+🧾 Receipt  
+  
+</button>  
+  
+<button  
+class="danger"  
+onclick="deleteOrder(${o.id})">  
+  
+🗑 Delete  
+  
+</button>  
+  
+</div>  
+  
+`;  
+  
+box.appendChild(div);  
+  
+});  
+  
+}  
+  
+  
+/* EDIT ORDER */  
+  
+function editOrder(id){  
+  
+const order=  
+orders.find(  
+o=>o.id===id  
+);  
+  
+if(!order)return;  
+  
+const sale=createSale();  
+  
+sale.name=  
+"Edit "+order.number;  
+  
+sale.cart=  
+JSON.parse(  
+JSON.stringify(  
+order.items  
+)  
+);  
+  
+sale.payment=  
+order.payment;  
+  
+sale.cashReceived=  
+Number(  
+order.cashReceived  
+)||0;  
+  
+saleTabs.push(sale);  
+  
+activeSaleId=sale.id;  
+  
+editingOrderId=id;  
+  
+saveAll();  
+  
+document.querySelectorAll(  
+".page"  
+)  
+.forEach(  
+p=>p.classList.remove("active")  
+);  
+  
+document.getElementById(  
+"pos"  
+).classList.add("active");  
+  
+document.querySelectorAll(  
+"nav button"  
+)  
+.forEach(  
+b=>b.classList.remove("active")  
+);  
+  
+document.querySelector(  
+"nav button"  
+).classList.add("active");  
+  
+refresh();  
+  
+window.scrollTo({  
+top:0,  
+behavior:"smooth"  
+});  
+  
+}  
+  
+  
+function showReceiptById(id){  
+  
+const order=  
+orders.find(  
+o=>o.id===id  
+);  
+  
+if(order)  
+showReceipt(order);  
+  
+}  
+  
+  
+/* DELETE ORDER */  
+  
+function deleteOrder(id){  
+  
+if(  
+!confirm(  
+"Delete this order?\n\n"+  
+"If inventory tracking was active, the sold quantity will be returned to inventory."  
+)  
+)  
+return;  
+  
+const order=  
+orders.find(  
+o=>o.id===id  
+);  
+  
+if(!order)return;  
+  
+removeInventorySale(  
+order.items  
+);  
+  
+orders=  
+orders.filter(  
+o=>o.id!==id  
+);  
+  
+saveAll();  
+  
+refresh();  
+  
+}  
+  
+  
+/* =====================================================  
+   ESCAPE  
+===================================================== */  
+  
+function escapeHtml(value){  
+  
+return String(value)  
+  
+.replace(/&/g,"&amp;")  
+.replace(/</g,"&lt;")  
+.replace(/>/g,"&gt;")  
+.replace(/"/g,"&quot;")  
+.replace(/'/g,"&#039;");  
+  
+}  
+  
+  
+function escapeAttr(value){  
+  
+return escapeHtml(value);  
+  
+}  
+  
+  
+/* =====================================================  
+   FULL BACKUP  
+===================================================== */  
+  
+function downloadBackup(){  
+  
+const backup={  
+  
+app:"Kanbulo Bakery POS",  
+  
+version:3,  
+  
+createdAt:  
+new Date().toISOString(),  
+  
+data:getCurrentState()  
+  
+};  
+  
+const json=  
+JSON.stringify(  
+backup,  
+null,  
+2  
+);  
+  
+const blob=  
+new Blob(  
+[json],  
+{  
+type:"application/json"  
+}  
+);  
+  
+const url=  
+URL.createObjectURL(blob);  
+  
+const a=  
+document.createElement("a");  
+  
+const date=new Date();  
+  
+const filename=  
+"Kanbulo-Bakery-Backup-"+  
+date.getFullYear()+  
+"-"+  
+String(  
+date.getMonth()+1  
+).padStart(2,"0")+  
+"-"+  
+String(  
+date.getDate()  
+).padStart(2,"0")+  
+".json";  
+  
+a.href=url;  
+a.download=filename;  
+  
+document.body.appendChild(a);  
+  
+a.click();  
+  
+a.remove();  
+  
+URL.revokeObjectURL(url);  
+  
+alert(  
+  
+"✅ BACKUP DOWNLOADED!\n\n"+  
+"Your Kanbulo Bakery data has been saved.\n\n"+  
+"Keep this file somewhere safe."  
+  
+);  
+  
+}  
+  
+  
+/* RESTORE */  
+  
+function restoreBackup(event){  
+  
+const file=  
+event.target.files[0];  
+  
+if(!file)return;  
+  
+const reader=  
+new FileReader();  
+  
+reader.onload=function(e){  
+  
+try{  
+  
+const backup=  
+JSON.parse(  
+e.target.result  
+);  
+  
+if(  
+!backup||  
+!backup.data||  
+!Array.isArray(  
+backup.data.products  
+)  
+){  
+  
+throw new Error(  
+"Invalid backup"  
+);  
+  
+}  
+  
+const productCount=  
+backup.data.products.length;  
+  
+const orderCount=  
+Array.isArray(  
+backup.data.orders  
+)  
+?  
+backup.data.orders.length  
+:  
+0;  
+  
+if(  
+!confirm(  
+  
+"⚠️ RESTORE BACKUP\n\n"+  
+"This backup contains:\n\n"+  
+"Products: "+productCount+  
+"\n"+  
+"Sales: "+orderCount+  
+"\n\n"+  
+"Restoring will replace the current POS data.\n\n"+  
+"Continue?"  
+  
+)  
+){  
+  
+event.target.value="";  
+  
+return;  
+  
+}  
+  
+categories=  
+Array.isArray(  
+backup.data.categories  
+)  
+?  
+backup.data.categories  
+:  
+[];  
+  
+products=  
+Array.isArray(  
+backup.data.products  
+)  
+?  
+backup.data.products  
+:  
+[];  
+  
+orders=  
+Array.isArray(  
+backup.data.orders  
+)  
+?  
+backup.data.orders  
+:  
+[];  
+  
+expenses=  
+Array.isArray(  
+backup.data.expenses  
+)  
+?  
+backup.data.expenses  
+:  
+[];  
+  
+saleTabs=  
+Array.isArray(  
+backup.data.saleTabs  
+)  
+?  
+backup.data.saleTabs  
+:  
+[];  
+  
+inventory=  
+backup.data.inventory&&  
+typeof backup.data.inventory==="object"  
+?  
+backup.data.inventory  
+:  
+{};  
+  
+activeSaleId=null;  
+editingOrderId=null;  
+selectedCategory="All";  
+  
+ensureSale();  
+  
+saveAll();  
+  
+refresh();  
+  
+alert(  
+  
+"✅ BACKUP RESTORED!\n\n"+  
+"Your Kanbulo Bakery data has been restored successfully."  
+  
+);  
+  
+event.target.value="";  
+  
+}catch(error){  
+  
+console.error(error);  
+  
+alert(  
+  
+"❌ BACKUP COULD NOT BE RESTORED.\n\n"+  
+"Please select a valid Kanbulo Bakery backup file."  
+  
+);  
+  
+event.target.value="";  
+  
+}  
+  
+};  
+  
+reader.readAsText(file);  
+  
+}  
+  
+  
+/* =====================================================  
+   PRODUCTS BACKUP  
+===================================================== */  
+  
+function downloadProductsBackup(){  
+  
+const backup={  
+  
+app:"Kanbulo Bakery POS",  
+  
+type:"products",  
+  
+version:3,  
+  
+createdAt:  
+new Date().toISOString(),  
+  
+categories:categories,  
+  
+products:products  
+  
+};  
+  
+const json=  
+JSON.stringify(  
+backup,  
+null,  
+2  
+);  
+  
+const blob=  
+new Blob(  
+[json],  
+{  
+type:"application/json"  
+}  
+);  
+  
+const url=  
+URL.createObjectURL(blob);  
+  
+const a=  
+document.createElement("a");  
+  
+const date=new Date();  
+  
+const filename=  
+"Kanbulo-Bakery-Products-"+  
+date.getFullYear()+  
+"-"+  
+String(  
+date.getMonth()+1  
+).padStart(2,"0")+  
+"-"+  
+String(  
+date.getDate()  
+).padStart(2,"0")+  
+".json";  
+  
+a.href=url;  
+a.download=filename;  
+  
+document.body.appendChild(a);  
+  
+a.click();  
+  
+a.remove();  
+  
+URL.revokeObjectURL(url);  
+  
+alert(  
+  
+"✅ PRODUCTS BACKUP DOWNLOADED!\n\n"+  
+"Your product list has been saved."  
+  
+);  
+  
+}  
+  
+  
+/* IMPORT PRODUCTS */  
+  
+function importProductsBackup(event){  
+  
+const file=  
+event.target.files[0];  
+  
+if(!file)return;  
+  
+const reader=  
+new FileReader();  
+  
+reader.onload=function(e){  
+  
+try{  
+  
+const backup=  
+JSON.parse(  
+e.target.result  
+);  
+  
+let importedProducts=null;  
+let importedCategories=null;  
+  
+if(  
+backup&&  
+backup.type==="products"&&  
+Array.isArray(  
+backup.products  
+)  
+){  
+  
+importedProducts=  
+backup.products;  
+  
+importedCategories=  
+Array.isArray(  
+backup.categories  
+)  
+?  
+backup.categories  
+:  
+[];  
+  
+}else if(  
+backup&&  
+backup.data&&  
+Array.isArray(  
+backup.data.products  
+)  
+){  
+  
+importedProducts=  
+backup.data.products;  
+  
+importedCategories=  
+Array.isArray(  
+backup.data.categories  
+)  
+?  
+backup.data.categories  
+:  
+[];  
+  
+}else{  
+  
+throw new Error(  
+"Invalid products backup"  
+);  
+  
+}  
+  
+if(  
+!importedProducts.length  
+){  
+  
+alert(  
+"This backup does not contain any products."  
+);  
+  
+event.target.value="";  
+  
+return;  
+  
+}  
+  
+if(  
+!confirm(  
+  
+"IMPORT PRODUCTS\n\n"+  
+"Products found: "+  
+importedProducts.length+  
+"\n\n"+  
+"This will replace your current product list.\n\n"+  
+"Continue?"  
+  
+)  
+){  
+  
+event.target.value="";  
+  
+return;  
+  
+}  
+  
+if(  
+importedCategories.length  
+){  
+  
+categories=  
+importedCategories;  
+  
+}  
+  
+products=  
+importedProducts;  
+  
+saveAll();  
+  
+refresh();  
+  
+alert(  
+  
+"✅ PRODUCTS IMPORTED!\n\n"+  
+importedProducts.length+  
+" product(s) restored successfully."  
+  
+);  
+  
+event.target.value="";  
+  
+}catch(error){  
+  
+console.error(error);  
+  
+alert(  
+  
+"❌ PRODUCTS COULD NOT BE IMPORTED.\n\n"+  
+"Please select a valid Kanbulo Bakery product backup."  
+  
+);  
+  
+event.target.value="";  
+  
+}  
+  
+};  
+  
+reader.readAsText(file);  
+  
+}  
+  
+  
+/* =====================================================  
+   START APP  
+===================================================== */  
+  
+function initialiseLocalState(){  
+  
+/*  
+Create a local sale without triggering  
+a cloud save before cloud loading.  
+*/  
+  
+if(!saleTabs.length){  
+  
+const sale=createSale();  
+  
+saleTabs.push(sale);  
+  
+activeSaleId=sale.id;  
+  
+}else if(!activeSaleId){  
+  
+activeSaleId=  
+saleTabs[0].id;  
+  
+}  
+  
+writeLocalState();  
+  
+}  
+  
+  
+async function startApp(){  
+  
+document.getElementById(  
+"expenseDate"  
+).value=  
+localDate();  
+  
+document.getElementById(  
+"inventoryDate"  
+).value=  
+localDate();  
+  
+  
+/*  
+Show the POS immediately.  
+*/  
+  
+initialiseLocalState();  
+  
+refresh();  
+  
+  
+/*  
+Then load the cloud.  
+If cloud has data, use it.  
+If cloud is empty, preserve/upload  
+the local data.  
+*/  
+  
+await loadFromCloud();  
+  
+}  
+  
+  
+/*  
+Start the application.  
+*/  
+  
+startApp();  
+  
+</script>  </body>  
+</html>  Send me the full replacement
 
 
