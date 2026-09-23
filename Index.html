@@ -2976,43 +2976,46 @@ document
 async function shareCurrentBill(){
 
 if(!currentReceipt)return;
-
 const o=currentReceipt;
-
-const text=
-`KANBULO BAKERY
-Bill: ${o.number}
-${new Date(o.date).toLocaleString()}
-
-${o.items.map(
-i=>
-`${i.name} x${i.qty} - MVR ${(i.price*i.qty).toFixed(2)}`
-).join("\n")}
-
-Total: MVR ${o.total.toFixed(2)}
-Payment: ${o.payment}
-
-Thank you! ❤️`;
-
-try{
-
-if(navigator.share){
-
-await navigator.share({
-title:"Kanbulo Bakery Bill "+o.number,
-text
-});
-
-}else{
-
-await navigator.clipboard.writeText(text);
-
-if(confirm("Share menu not available. Open WhatsApp/Viber manually and paste copied bill?")){}
-
-
-}
-
-}catch(e){}
+const canvas=document.createElement("canvas");
+canvas.width=900; canvas.height=1200;
+const ctx=canvas.getContext("2d");
+ctx.fillStyle="#fff"; ctx.fillRect(0,0,900,1200);
+ctx.fillStyle="#111";
+ctx.font="bold 48px Arial";
+ctx.fillText("KANBULO BAKERY",70,90);
+ctx.font="28px Arial";
+ctx.fillText("Bill: "+o.number,70,150);
+ctx.fillText(new Date(o.date).toLocaleString(),70,195);
+let y=270;
+ctx.font="26px Arial";
+if(o.customerName){ctx.fillText("Customer: "+o.customerName,70,y);y+=40;}
+if(o.customerPhone){ctx.fillText("Phone: "+o.customerPhone,70,y);y+=40;}
+y+=30;
+o.items.forEach(i=>{ctx.fillText(`${i.name} x${i.qty} - MVR ${(i.price*i.qty).toFixed(2)}`,70,y);y+=40;});
+ctx.font="bold 32px Arial";
+ctx.fillText("Total: MVR "+o.total.toFixed(2),70,y);y+=60;
+ctx.font="26px Arial";
+ctx.fillText("Payment: "+o.payment,70,y);y+=70;
+ctx.font="bold 30px Arial";
+ctx.fillText("Transfer Details",70,y);y+=45;
+ctx.font="26px Arial";
+ctx.fillText("Kanbulo Bakery",70,y);y+=40;
+ctx.fillText("Account: 7770000049905",70,y);y+=55;
+ctx.fillText("Please complete transfer and send confirmation.",70,y);
+canvas.toBlob(async blob=>{
+ if(!blob)return;
+ const file=new File([blob],"Kanbulo-Bill.png",{type:"image/png"});
+ try{
+  if(navigator.share && navigator.canShare({files:[file]})){
+   await navigator.share({title:"Kanbulo Bakery Bill",files:[file]});
+  }else{
+   await navigator.clipboard.writeText("KANBULO BAKERY
+Account: 7770000049905");
+   alert("Bill image sharing is not supported on this device.");
+  }
+ }catch(e){}
+},"image/png");
 
 }
 
@@ -5819,4 +5822,4 @@ startApp();
 </script>
 
 </body>
-  </html>
+   </html>
